@@ -1,5 +1,6 @@
 # AtlasSoft
-This is where we should be putting important information, i.e. compiling instructions
+##Current Active Project:
+LIQUID - 2D Fluid Simulator
 
-# Revision History:
-10/29/2015     Added: Project Packages, Began UI.     Rafael Zamora  
+## Revision History:
+10/29/2015 Added: Project Packages, Began UI. Rafael Zamora  
