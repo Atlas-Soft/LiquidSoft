@@ -5,14 +5,15 @@ import java.awt.event.*;
 
 public class LiquidGUI extends Frame{
 	
-	private UIPanel ui;
+	private ParameterPanel param;
 	private SimulationPanel sim;
 	private ConsolePanel console;
+	private LiquidMenuBar menubar;
 	
 	public LiquidGUI(){
 		super("LIQUID - 2D Fluid Simulator");
 		initComponents();
-		setSize(800,600);
+		setSize(800,610);
 		setResizable(false);
 		setLayout(null);
 		setLocationRelativeTo(null);
@@ -25,9 +26,11 @@ public class LiquidGUI extends Frame{
 	}
 	
 	private void initComponents(){
-		add(ui = new UIPanel(this));
+		add(console = new ConsolePanel());
+		add(param = new ParameterPanel());
 		add(sim = new SimulationPanel());
-		add(console = new ConsolePanel(this));
+		setMenuBar(menubar = new LiquidMenuBar());
+		
 	}
 	
 	public ConsolePanel getConsolePanel(){

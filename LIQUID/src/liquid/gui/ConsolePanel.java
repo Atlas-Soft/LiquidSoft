@@ -1,5 +1,6 @@
 package liquid.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.Panel;
@@ -8,16 +9,14 @@ import java.awt.TextArea;
 
 public class ConsolePanel extends Panel {
 	
-	private LiquidGUI parent;
-	
 	private TextArea console;
 	
-	public ConsolePanel(LiquidGUI gui){
+	public ConsolePanel(){
 		super();
-		parent = gui;
 		initComponents();
 		setLayout(null);
-		setBounds(0,400,500,200);
+		setBackground(Color.lightGray);
+		setBounds(0,410,500,200);
 		setVisible(true);
 	}
 	
