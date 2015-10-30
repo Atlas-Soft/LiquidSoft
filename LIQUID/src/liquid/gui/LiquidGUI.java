@@ -30,11 +30,22 @@ public class LiquidGUI extends Frame{
 		add(param = new ParameterPanel());
 		add(sim = new SimulationPanel());
 		setMenuBar(menubar = new LiquidMenuBar());
-		
 	}
 	
 	public ConsolePanel getConsolePanel(){
 		return console;
+	}
+	
+	public ParameterPanel getParameterPanel(){
+		return param;
+	}
+	
+	public SimulationPanel getSimulationPanel(){
+		return sim;
+	}
+	
+	public LiquidMenuBar getLiquidMenuBar(){
+		return menubar;
 	}
 
 }

@@ -6,18 +6,18 @@ import liquid.logger.LiquidLogger;
 
 public class LiquidApplication {
 	
-	private static LiquidGUI ui;
+	private static LiquidGUI gui;
 	private static LiquidLogger logger;
 	private static LiquidEngine engine;
 	
 	public LiquidApplication(){
-		ui = new LiquidGUI();
 		logger = new LiquidLogger();
 		engine = new LiquidEngine();
+		gui = new LiquidGUI();
 	}
 	
-	public static LiquidGUI getUI(){
-		return ui;
+	public static LiquidGUI getGUI(){
+		return gui;
 	}
 	
 	public static LiquidLogger getLogger(){

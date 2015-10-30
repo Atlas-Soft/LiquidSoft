@@ -14,11 +14,12 @@ import liquid.core.LiquidApplication;
 
 public class ParameterPanel extends Panel {
 	
+	private static final long serialVersionUID = 1L;
 	private Button run;
 	private Button pause;
 	private Button step;
 	private Button end;
-	private List liquids;
+	private List liqs;
 	private TextField flow;
 	private TextField temp;
 	private TextField visc;
@@ -65,7 +66,7 @@ public class ParameterPanel extends Panel {
 		run.setBounds(25,495,115,25);
 		run.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console("RUN\n");
+				LiquidApplication.getGUI().getConsolePanel().print_to_Console(getParameters()[0]);
 				pause.setEnabled(true);
 				run.setEnabled(false);
 			    step.setEnabled(false);
@@ -78,7 +79,7 @@ public class ParameterPanel extends Panel {
 		pause.setEnabled(false);
 		pause.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console("Paused\n");
+				LiquidApplication.getGUI().getConsolePanel().print_to_Console("Paused\n");
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);
@@ -90,7 +91,7 @@ public class ParameterPanel extends Panel {
 		step.setBounds(25,530,115,25);
 		step.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console("Step\n");
+				LiquidApplication.getGUI().getConsolePanel().print_to_Console("Step\n");
 			}
         });
 		add(step);
@@ -99,7 +100,7 @@ public class ParameterPanel extends Panel {
 		end.setBounds(155,530,115,25);
 		end.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console("end\n");
+				LiquidApplication.getGUI().getConsolePanel().print_to_Console("End\n");
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);
@@ -107,15 +108,17 @@ public class ParameterPanel extends Panel {
         });
 		add(end);
 		
-		liquids = new List();
-		liquids.setBounds(25,5,125,150);
-		add(liquids);
+		liqs = new List();
+		liqs.setBounds(25,5,125,150);
+		liqs.add("Water");
+		liqs.add("Glycerin");
+		liqs.select(0);
+		add(liqs);
 		
 		flow = new TextField("0 to ?");
 		flow.setBounds(160, 30, 115, 25);
 		flow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console(flow.getText());
 			    flow.setFocusable(false);
 			    flow.setFocusable(true);
 			}
@@ -126,7 +129,6 @@ public class ParameterPanel extends Panel {
 		temp.setBounds(160, 80, 115, 25);
 		temp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console(temp.getText());
 			    temp.setFocusable(false);
 			    temp.setFocusable(true);
 			}
@@ -137,7 +139,6 @@ public class ParameterPanel extends Panel {
 		visc.setBounds(160, 130, 115, 25);
 		visc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console(visc.getText());
 			    visc.setFocusable(false);
 			    visc.setFocusable(true);
 			}
@@ -148,12 +149,16 @@ public class ParameterPanel extends Panel {
 		time.setBounds(100, 460, 125, 25);
 		time.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getUI().getConsolePanel().print_to_Console(time.getText());
 			    time.setFocusable(false);
 			    time.setFocusable(true);
 			}
         });
 		add(time);
 		
+	}
+	
+	public String[] getParameters(){
+		String[] args = {liqs.getSelectedItem(),flow.getText(),temp.getText(),visc.getText(),time.getText()};
+		return args;
 	}
 }

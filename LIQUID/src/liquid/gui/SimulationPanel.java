@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 
 public class SimulationPanel extends Panel implements MouseListener, MouseMotionListener {
 	
+	private static final long serialVersionUID = 1L;
 	private int x;
 	private int y;
 	private Label xLabel;
@@ -19,6 +20,7 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 		initComponents();
 		setLayout(null);
 		setBounds(0,45,500,365);
+		addMouseListener(this);
 		addMouseMotionListener(this);
 		setVisible(true);
 	}
@@ -43,7 +45,10 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent arg0) {
+		xLabel.setText("X: -");
+		yLabel.setText("Y: -");
+	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {}
