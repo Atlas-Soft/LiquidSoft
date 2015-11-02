@@ -7,6 +7,8 @@ import java.awt.Panel;
 import java.awt.ScrollPane;
 import java.awt.TextArea;
 
+import javax.swing.ScrollPaneConstants;
+
 public class ConsolePanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
@@ -19,6 +21,7 @@ public class ConsolePanel extends Panel {
 		setBackground(Color.lightGray);
 		setBounds(0,410,500,200);
 		setVisible(true);
+		
 	}
 	
 	private void initComponents(){
@@ -30,12 +33,11 @@ public class ConsolePanel extends Panel {
 		add(l);
 		
 		console = new TextArea(); 
-		console.setText ("Welcome to LIQUID!\n");
+		console.setBounds(0, 20, 500, 175);
+		console.append ("Welcome to LIQUID!\n");
 		console.setEditable(false);
-		ScrollPane sc = new ScrollPane();
-		sc.setBounds(0, 20, 500, 175);
-		sc.add(console);
-		add(sc);
+		add(console);
+		System.out.println(console.isVisible());
 	}
 	
 	public void print_to_Console(String str){

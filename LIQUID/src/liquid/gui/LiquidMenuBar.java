@@ -48,6 +48,7 @@ public class LiquidMenuBar extends MenuBar{
 		mi.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				 LiquidApplication.getGUI().getLiquidFrame().dispose();
+				 System.exit(0);
 			}
         });
 		m.add(mi);
