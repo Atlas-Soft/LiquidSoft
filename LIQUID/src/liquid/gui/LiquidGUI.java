@@ -1,51 +1,70 @@
 package liquid.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import liquid.core.Interfaceable;
+import liquid.logger.LiquidLogger;
 
-public class LiquidGUI extends Frame{
+public class LiquidGUI implements Interfaceable{
 	
+	public static final int REQUEST_LOADLOG = 0;
+	
+	private LiquidFrame frame;
+	private LiquidMenuBar menubar;
 	private ParameterPanel param;
 	private SimulationPanel sim;
 	private ConsolePanel console;
-	private LiquidMenuBar menubar;
 	
 	public LiquidGUI(){
-		super("LIQUID - 2D Fluid Simulator");
 		initComponents();
-		setSize(800,610);
-		setResizable(false);
-		setLayout(null);
-		setLocationRelativeTo(null);
-		setVisible(true);
-		addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent we){
-                dispose();
-            }
-        });
+	}
+	
+	@Override
+	public void send(Interfaceable i, int arg0) {
+		if(i instanceof LiquidLogger){
+			switch(arg0){
+			case REQUEST_LOADLOG:
+				String[] args = new String[1];
+				args[0] = menubar.getLoadLogFile();
+				i.recieve(this, LiquidLogger.LOADLOG, args);
+			}
+		}
+	}
+
+	@Override
+	public void recieve(Interfaceable i, int arg0, String[] args) {
+		if(i instanceof LiquidLogger){
+			switch(arg0){
+			case REQUEST_LOADLOG:
+				console.print_to_Console("Log File Loaded.");
+			}
+		}
 	}
 	
 	private void initComponents(){
-		add(console = new ConsolePanel());
-		add(param = new ParameterPanel());
-		add(sim = new SimulationPanel());
-		setMenuBar(menubar = new LiquidMenuBar());
+		frame = new LiquidFrame();
+		frame.setMenuBar(menubar = new LiquidMenuBar());
+		frame.add(console = new ConsolePanel());
+		frame.add(param = new ParameterPanel());
+		frame.add(sim = new SimulationPanel());	
 	}
 	
-	public ConsolePanel getConsolePanel(){
-		return console;
+	LiquidFrame getLiquidFrame(){
+		return frame;
 	}
 	
-	public ParameterPanel getParameterPanel(){
+	LiquidMenuBar getLiquidMenuBar(){
+		return menubar;
+	}
+	
+	ParameterPanel getParameterPanel(){
 		return param;
 	}
 	
-	public SimulationPanel getSimulationPanel(){
+	ConsolePanel getConsolePanel(){
+		return console;
+	}
+	
+	SimulationPanel getSimulationPanel(){
 		return sim;
 	}
 	
-	public LiquidMenuBar getLiquidMenuBar(){
-		return menubar;
-	}
-
 }

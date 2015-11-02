@@ -9,6 +9,7 @@ import java.awt.TextArea;
 
 public class ConsolePanel extends Panel {
 	
+	private static final long serialVersionUID = 1L;
 	private TextArea console;
 	
 	public ConsolePanel(){
