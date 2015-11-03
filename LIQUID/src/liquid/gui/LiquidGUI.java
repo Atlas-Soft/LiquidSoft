@@ -6,6 +6,7 @@ import liquid.logger.LiquidLogger;
 public class LiquidGUI implements Interfaceable{
 	
 	public static final int REQUEST_LOADLOG = 0;
+	public static final int SETLOGPARAM = 0;
 	
 	private LiquidFrame frame;
 	private LiquidMenuBar menubar;
@@ -33,8 +34,8 @@ public class LiquidGUI implements Interfaceable{
 	public void recieve(Interfaceable i, int arg0, String[] args) {
 		if(i instanceof LiquidLogger){
 			switch(arg0){
-			case REQUEST_LOADLOG:
-				console.print_to_Console("Log File Loaded.");
+			case SETLOGPARAM:
+				console.print_to_Console("Log File Loaded.\n");
 			}
 		}
 	}

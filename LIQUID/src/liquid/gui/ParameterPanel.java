@@ -66,7 +66,6 @@ public class ParameterPanel extends Panel {
 		run.setBounds(25,495,115,25);
 		run.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().getConsolePanel().print_to_Console(getParameters()[0]);
 				pause.setEnabled(true);
 				run.setEnabled(false);
 			    step.setEnabled(false);
@@ -79,7 +78,6 @@ public class ParameterPanel extends Panel {
 		pause.setEnabled(false);
 		pause.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().getConsolePanel().print_to_Console("Paused\n");
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);
@@ -91,7 +89,7 @@ public class ParameterPanel extends Panel {
 		step.setBounds(25,530,115,25);
 		step.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().getConsolePanel().print_to_Console("Step\n");
+
 			}
         });
 		add(step);
@@ -100,7 +98,6 @@ public class ParameterPanel extends Panel {
 		end.setBounds(155,530,115,25);
 		end.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().getConsolePanel().print_to_Console("End\n");
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);
@@ -161,4 +158,6 @@ public class ParameterPanel extends Panel {
 		String[] args = {liqs.getSelectedItem(),flow.getText(),temp.getText(),visc.getText(),time.getText()};
 		return args;
 	}
+	
 }
+

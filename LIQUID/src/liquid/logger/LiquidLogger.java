@@ -8,6 +8,7 @@ import liquid.gui.LiquidGUI;
 public class LiquidLogger implements Interfaceable{
 
 	public static final int LOADLOG = 0;
+	public static final int REQUEST_SETLOGPARAM = 0;
 	
 	private LiquidFileLoader fileLoader;
 	private LiquidFileWriter fileWriter;
@@ -22,9 +23,9 @@ public class LiquidLogger implements Interfaceable{
 	public void send(Interfaceable i, int arg0) {
 		if(i instanceof LiquidGUI){
 			switch(arg0){
-			case LOADLOG:
+			case REQUEST_SETLOGPARAM:
 				String[] args = new String[1];
-				i.recieve(this, LiquidGUI.REQUEST_LOADLOG, args);
+				i.recieve(this, LiquidGUI.SETLOGPARAM, args);
 			}
 		}
 	}
@@ -36,7 +37,7 @@ public class LiquidLogger implements Interfaceable{
 			case LOADLOG:
 				currentFile = args[0];
 				fileLoader.loadLogFile(currentFile);
-				send(i, LOADLOG);
+				send(i, REQUEST_SETLOGPARAM);
 			case 1:
 					
 			}
