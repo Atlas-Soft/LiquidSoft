@@ -8,12 +8,13 @@ public class LiquidGUI implements Interfaceable{
 	public static final int REQUEST_LOADLOG = 0;
 	public static final int SETLOGPARAM = 0;
 	
-	private LiquidFrame frame;
-	private LiquidMenuBar menubar;
-	private ParameterPanel param;
-	private EnvironmentEditorPanel eeditor;
-	private SimulationPanel sim;
-	private ConsolePanel console;
+	LiquidGuiVariables variables;
+	LiquidFrame frame;
+	LiquidMenuBar menubar;
+	ParameterPanel param;
+	EnvironmentEditorPanel eeditor;
+	SimulationPanel sim;
+	ConsolePanel console;
 	
 	public LiquidGUI(){
 		initComponents();
@@ -42,36 +43,13 @@ public class LiquidGUI implements Interfaceable{
 	}
 	
 	private void initComponents(){
+		variables = new LiquidGuiVariables();
 		frame = new LiquidFrame();
 		frame.setMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());
 		frame.add(param = new ParameterPanel());
 		param.add(eeditor = new EnvironmentEditorPanel());
 		frame.add(sim = new SimulationPanel());	
-	}
-	
-	LiquidFrame getLiquidFrame(){
-		return frame;
-	}
-	
-	LiquidMenuBar getLiquidMenuBar(){
-		return menubar;
-	}
-	
-	ParameterPanel getParameterPanel(){
-		return param;
-	}
-	
-	EnvironmentEditorPanel getEnvironmentEditorPanel(){
-		return eeditor;
-	}
-	
-	ConsolePanel getConsolePanel(){
-		return console;
-	}
-	
-	SimulationPanel getSimulationPanel(){
-		return sim;
 	}
 	
 }

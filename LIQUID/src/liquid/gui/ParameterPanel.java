@@ -9,6 +9,10 @@ import java.awt.Panel;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import liquid.core.LiquidApplication;
 
 public class ParameterPanel extends Panel {
 	
@@ -36,11 +40,11 @@ public class ParameterPanel extends Panel {
 		setFont(font);
 		
 		Label l = new Label("Temperature:");
-		l.setBounds(160,0,115,25);
+		l.setBounds(155,0,120,25);
 		add(l);
 		
 		l = new Label("Viscocity:");
-		l.setBounds(160,50,115,25);
+		l.setBounds(155,50,120,25);
 		add(l);
 		
 		l = new Label("Environment Editor:");
@@ -99,16 +103,23 @@ public class ParameterPanel extends Panel {
 		add(end);
 		
 		liqs = new List();
-		liqs.setBounds(25,0,125,150);
+		liqs.setBounds(25,0,120,150);
 		liqs.add("Water");
 		liqs.add("Glycerin");
+		liqs.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				LiquidApplication.getGUI().variables.liquid = arg0.getItem().toString();			
+			}
+        });
 		liqs.select(0);
 		add(liqs);
 		
 		temp = new TextField("-100 to 100");
-		temp.setBounds(160, 25, 115, 25);
+		temp.setBounds(155, 25, 120, 25);
 		temp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
 			    temp.setFocusable(false);
 			    temp.setFocusable(true);
 			}
@@ -116,9 +127,10 @@ public class ParameterPanel extends Panel {
 		add(temp);
 		
 		visc = new TextField("0 to ?");
-		visc.setBounds(160, 75, 115, 25);
+		visc.setBounds(155, 75, 120, 25);
 		visc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
 			    visc.setFocusable(false);
 			    visc.setFocusable(true);
 			}
@@ -129,17 +141,13 @@ public class ParameterPanel extends Panel {
 		time.setBounds(100, 460, 125, 25);
 		time.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.runtime = Integer.parseInt(temp.getText());
 			    time.setFocusable(false);
 			    time.setFocusable(true);
 			}
         });
 		add(time);
 		
-	}
-	
-	public String[] getParameters(){
-		String[] args = {liqs.getSelectedItem(),temp.getText(),visc.getText(),time.getText()};
-		return args;
 	}
 	
 }

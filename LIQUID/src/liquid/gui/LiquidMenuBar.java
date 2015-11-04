@@ -45,7 +45,7 @@ public class LiquidMenuBar extends MenuBar{
 				JFileChooser  fileDialog = new JFileChooser("../logs");
 				fileDialog.setDialogTitle("Load Log File");
 				fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
-				int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().getLiquidFrame());
+				int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().frame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		              logfile = fileDialog.getSelectedFile().getName();
 		              LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidGUI.REQUEST_LOADLOG);
@@ -57,7 +57,7 @@ public class LiquidMenuBar extends MenuBar{
 		exit = new MenuItem("Exit");
 		exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().getLiquidFrame().dispose();
+				LiquidApplication.getGUI().frame.dispose();
 				System.exit(0);
 			}
         });
