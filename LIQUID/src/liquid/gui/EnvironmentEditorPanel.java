@@ -14,7 +14,6 @@ public class EnvironmentEditorPanel extends Panel{
 		initComponents();
 		setLayout(null);
 		setBackground(Color.gray);
-		setForeground(Color.white);
 		setBounds(25,180,250,270);
 		setVisible(true);
 	}

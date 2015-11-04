@@ -36,15 +36,15 @@ public class ParameterPanel extends Panel {
 		setFont(font);
 		
 		Label l = new Label("Temperature:");
-		l.setBounds(160,5,115,25);
+		l.setBounds(160,0,115,25);
 		add(l);
 		
 		l = new Label("Viscocity:");
-		l.setBounds(160,55,115,25);
+		l.setBounds(160,50,115,25);
 		add(l);
 		
 		l = new Label("Environment Editor:");
-		l.setBounds(25,155,140,25);
+		l.setBounds(25,150,140,25);
 		add(l);
 		
 		l = new Label("Run For:");
@@ -99,14 +99,14 @@ public class ParameterPanel extends Panel {
 		add(end);
 		
 		liqs = new List();
-		liqs.setBounds(25,5,125,150);
+		liqs.setBounds(25,0,125,150);
 		liqs.add("Water");
 		liqs.add("Glycerin");
 		liqs.select(0);
 		add(liqs);
 		
 		temp = new TextField("-100 to 100");
-		temp.setBounds(160, 30, 115, 25);
+		temp.setBounds(160, 25, 115, 25);
 		temp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 			    temp.setFocusable(false);
@@ -116,7 +116,7 @@ public class ParameterPanel extends Panel {
 		add(temp);
 		
 		visc = new TextField("0 to ?");
-		visc.setBounds(160, 80, 115, 25);
+		visc.setBounds(160, 75, 115, 25);
 		visc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 			    visc.setFocusable(false);

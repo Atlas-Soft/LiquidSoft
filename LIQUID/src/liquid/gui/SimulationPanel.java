@@ -1,5 +1,6 @@
 package liquid.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.Panel;
@@ -19,6 +20,7 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 		super();
 		initComponents();
 		setLayout(null);
+		setBackground(Color.white);
 		setBounds(0,60,500,365);
 		addMouseListener(this);
 		addMouseMotionListener(this);

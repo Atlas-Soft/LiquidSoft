@@ -1,5 +1,6 @@
 package liquid.gui;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -11,7 +12,8 @@ public class LiquidFrame extends Frame {
 	public LiquidFrame(){
 		super("LIQUID - 2D Fluid Simulator");
 		setSize(800,625);
-		setResizable(true);
+		setBackground(Color.lightGray);
+		setResizable(false);
 		setLayout(null);
 		setLocationRelativeTo(null);
 		setVisible(true);
