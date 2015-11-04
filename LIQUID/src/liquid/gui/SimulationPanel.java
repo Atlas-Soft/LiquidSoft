@@ -19,7 +19,7 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 		super();
 		initComponents();
 		setLayout(null);
-		setBounds(0,45,500,365);
+		setBounds(0,60,500,365);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setVisible(true);

@@ -17,7 +17,7 @@ public class ConsolePanel extends Panel {
 		initComponents();
 		setLayout(null);
 		setBackground(Color.lightGray);
-		setBounds(0,410,500,200);
+		setBounds(0,425,500,200);
 		setVisible(true);
 		
 	}
@@ -35,7 +35,6 @@ public class ConsolePanel extends Panel {
 		console.append ("Welcome to LIQUID!\n");
 		console.setEditable(false);
 		add(console);
-		System.out.println(console.isVisible());
 	}
 	
 	public void print_to_Console(String str){

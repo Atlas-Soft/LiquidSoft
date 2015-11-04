@@ -10,8 +10,8 @@ public class LiquidFrame extends Frame {
 	
 	public LiquidFrame(){
 		super("LIQUID - 2D Fluid Simulator");
-		setSize(800,610);
-		setResizable(false);
+		setSize(800,625);
+		setResizable(true);
 		setLayout(null);
 		setLocationRelativeTo(null);
 		setVisible(true);

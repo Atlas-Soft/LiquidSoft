@@ -24,8 +24,9 @@ public class LiquidLogger implements Interfaceable{
 		if(i instanceof LiquidGUI){
 			switch(arg0){
 			case REQUEST_SETLOGPARAM:
-				String[] args = new String[1];
+				String[] args = fileLoader.loadLogFile(currentFile);
 				i.recieve(this, LiquidGUI.SETLOGPARAM, args);
+				break;
 			}
 		}
 	}
@@ -35,11 +36,11 @@ public class LiquidLogger implements Interfaceable{
 		if(i instanceof LiquidGUI){
 			switch(arg0){
 			case LOADLOG:
-				currentFile = args[0];
-				fileLoader.loadLogFile(currentFile);
+				currentFile = args[0];	
 				send(i, REQUEST_SETLOGPARAM);
+				break;
 			case 1:
-					
+				break;
 			}
 		}
 	}

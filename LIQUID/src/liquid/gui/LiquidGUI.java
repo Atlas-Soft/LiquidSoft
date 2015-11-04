@@ -11,6 +11,7 @@ public class LiquidGUI implements Interfaceable{
 	private LiquidFrame frame;
 	private LiquidMenuBar menubar;
 	private ParameterPanel param;
+	private EnvironmentEditorPanel eeditor;
 	private SimulationPanel sim;
 	private ConsolePanel console;
 	
@@ -45,6 +46,7 @@ public class LiquidGUI implements Interfaceable{
 		frame.setMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());
 		frame.add(param = new ParameterPanel());
+		param.add(eeditor = new EnvironmentEditorPanel());
 		frame.add(sim = new SimulationPanel());	
 	}
 	
@@ -58,6 +60,10 @@ public class LiquidGUI implements Interfaceable{
 	
 	ParameterPanel getParameterPanel(){
 		return param;
+	}
+	
+	EnvironmentEditorPanel getEnvironmentEditorPanel(){
+		return eeditor;
 	}
 	
 	ConsolePanel getConsolePanel(){

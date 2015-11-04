@@ -10,8 +10,6 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import liquid.core.LiquidApplication;
-
 public class ParameterPanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,7 +18,6 @@ public class ParameterPanel extends Panel {
 	private Button step;
 	private Button end;
 	private List liqs;
-	private TextField flow;
 	private TextField temp;
 	private TextField visc;
 	private TextField time;
@@ -30,7 +27,7 @@ public class ParameterPanel extends Panel {
 		initComponents();
 		setLayout(null);
 		setBackground(Color.lightGray);
-		setBounds(500,45,300,565);
+		setBounds(500,60,300,565);
 		setVisible(true);
 	}
 	
@@ -38,20 +35,16 @@ public class ParameterPanel extends Panel {
 		Font font = new Font("Verdana", Font.BOLD, 12);
 		setFont(font);
 		
-		Label l = new Label("Flow Speed:");
+		Label l = new Label("Temperature:");
 		l.setBounds(160,5,115,25);
 		add(l);
 		
-		l = new Label("Temperature:");
+		l = new Label("Viscocity:");
 		l.setBounds(160,55,115,25);
 		add(l);
 		
-		l = new Label("Viscocity:");
-		l.setBounds(160,105,115,25);
-		add(l);
-		
-		l = new Label("Environment:");
-		l.setBounds(25,155,90,25);
+		l = new Label("Environment Editor:");
+		l.setBounds(25,155,140,25);
 		add(l);
 		
 		l = new Label("Run For:");
@@ -112,18 +105,8 @@ public class ParameterPanel extends Panel {
 		liqs.select(0);
 		add(liqs);
 		
-		flow = new TextField("0 to ?");
-		flow.setBounds(160, 30, 115, 25);
-		flow.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent actionEvent) {
-			    flow.setFocusable(false);
-			    flow.setFocusable(true);
-			}
-        });
-		add(flow);
-		
 		temp = new TextField("-100 to 100");
-		temp.setBounds(160, 80, 115, 25);
+		temp.setBounds(160, 30, 115, 25);
 		temp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 			    temp.setFocusable(false);
@@ -133,7 +116,7 @@ public class ParameterPanel extends Panel {
 		add(temp);
 		
 		visc = new TextField("0 to ?");
-		visc.setBounds(160, 130, 115, 25);
+		visc.setBounds(160, 80, 115, 25);
 		visc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 			    visc.setFocusable(false);
@@ -155,7 +138,7 @@ public class ParameterPanel extends Panel {
 	}
 	
 	public String[] getParameters(){
-		String[] args = {liqs.getSelectedItem(),flow.getText(),temp.getText(),visc.getText(),time.getText()};
+		String[] args = {liqs.getSelectedItem(),temp.getText(),visc.getText(),time.getText()};
 		return args;
 	}
 	
