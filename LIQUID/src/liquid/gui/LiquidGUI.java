@@ -37,6 +37,10 @@ public class LiquidGUI implements Interfaceable{
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case SETLOGPARAM:
+				String[] tokens = args[0].split(" ");
+				variables.enviroLength = Integer.parseInt(tokens[0]);
+				variables.enviroWidth = Integer.parseInt(tokens[1]);
+				sim.repaint();
 				console.print_to_Console("Log File Loaded.\n");
 			}
 		}
@@ -44,6 +48,7 @@ public class LiquidGUI implements Interfaceable{
 	
 	private void initComponents(){
 		variables = new LiquidGUIVariables();
+		variables.saveState();
 		frame = new LiquidFrame();
 		frame.setMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());

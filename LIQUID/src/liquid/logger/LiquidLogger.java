@@ -49,12 +49,8 @@ public class LiquidLogger implements Interfaceable{
 		fileLoader = new LiquidFileLoader();
 		fileWriter = new LiquidFileWriter();
 		File f = new File("../logs");
-		if (f.exists() && f.isDirectory()) {
-			
-		}
-		else{
-			f.mkdirs();
-		}
+		if (!(f.exists() && f.isDirectory())) f.mkdirs();
+		
 		f = new File("../configs");
 		if (f.exists() && f.isDirectory()) {
 			

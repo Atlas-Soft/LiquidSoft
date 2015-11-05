@@ -50,15 +50,19 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 	
 	public void paint(Graphics g) {
         super.paint(g); 
-              
+			
         int len = LiquidApplication.getGUI().variables.enviroLength;
         int wid = LiquidApplication.getGUI().variables.enviroWidth;
         enviroment.setBounds((500/2)-(len/2), (365/2)-(wid/2), len, wid);
+        g.setColor(Color.black);
         g.drawRect(enviroment.x,enviroment.y,len,wid);
         
         int x,y,l,w;
-        for(String obj : LiquidApplication.getGUI().variables.obstacles){
-        	String[] tokens = obj.split(" ");      	
+        for(int i = 0; i < LiquidApplication.getGUI().variables.objects.size(); i++){
+        	String[] tokens = LiquidApplication.getGUI().variables.objects.get(i).split(" ");
+        	if(i == LiquidApplication.getGUI().variables.selectedObjects) g.setColor(Color.blue);
+        	else g.setColor(Color.black);
+        	
         	if(tokens[0].equals("Rectangular")){
         		x = enviroment.x+Integer.parseInt(tokens[1]);
         		y = enviroment.y+Integer.parseInt(tokens[2]);
@@ -72,6 +76,21 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
         		l = Integer.parseInt(tokens[3]);
         		w = Integer.parseInt(tokens[4]);
         		g.fillOval(x,y,l,w);
+        	}
+        	if(tokens[0].equals("Source")){
+        		x = enviroment.x+Integer.parseInt(tokens[1]);
+        		y = enviroment.y+Integer.parseInt(tokens[2]);
+        		l = Integer.parseInt(tokens[3]);
+        		w = Integer.parseInt(tokens[4]);
+        		g.drawOval(x-10,y-10,20,20);
+        		g.drawString("S", x-3, y+5);
+        		g.drawLine(x, y, x+l, y+w);
+        	}
+        	if(tokens[0].equals("Flowmeter")){
+        		x = enviroment.x+Integer.parseInt(tokens[1]);
+        		y = enviroment.y+Integer.parseInt(tokens[2]);
+        		g.drawOval(x-10,y-10,20,20);
+        		g.drawString("F", x-3, y+5);
         	}
         }
     }

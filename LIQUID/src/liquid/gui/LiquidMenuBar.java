@@ -67,10 +67,22 @@ public class LiquidMenuBar extends MenuBar{
 		m = new Menu("Edit");
 		
 		undo = new MenuItem("Undo");
+		undo.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.undo();
+				LiquidApplication.getGUI().sim.repaint();
+			}
+        });
 		m.add(undo);
 		
 		redo = new MenuItem("Redo");
 		m.add(redo);
+		redo.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.redo();
+				LiquidApplication.getGUI().sim.repaint();
+			}
+        });
 		add(m);
 		
 		m = new Menu("Help");
