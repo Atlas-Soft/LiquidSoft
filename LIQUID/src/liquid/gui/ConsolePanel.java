@@ -19,7 +19,6 @@ public class ConsolePanel extends Panel {
 		setBackground(Color.lightGray);
 		setBounds(0,425,500,200);
 		setVisible(true);
-		
 	}
 	
 	private void initComponents(){

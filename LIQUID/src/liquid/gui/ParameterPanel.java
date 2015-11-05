@@ -17,14 +17,14 @@ import liquid.core.LiquidApplication;
 public class ParameterPanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
-	private Button run;
-	private Button pause;
-	private Button step;
-	private Button end;
-	private List liqs;
-	private TextField temp;
-	private TextField visc;
-	private TextField time;
+	Button run;
+	Button pause;
+	Button step;
+	Button end;
+	List liqs;
+	TextField temp;
+	TextField visc;
+	TextField time;
 	
 	public ParameterPanel(){
 		super();
@@ -115,7 +115,7 @@ public class ParameterPanel extends Panel {
 		liqs.select(0);
 		add(liqs);
 		
-		temp = new TextField("-100 to 100");
+		temp = new TextField("-100-100");
 		temp.setBounds(155, 25, 120, 25);
 		temp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -126,7 +126,7 @@ public class ParameterPanel extends Panel {
         });
 		add(temp);
 		
-		visc = new TextField("0 to ?");
+		visc = new TextField("0-?");
 		visc.setBounds(155, 75, 120, 25);
 		visc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -137,7 +137,7 @@ public class ParameterPanel extends Panel {
         });
 		add(visc);
 		
-		time = new TextField("0 to 300");
+		time = new TextField("0-300");
 		time.setBounds(100, 460, 125, 25);
 		time.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -147,8 +147,6 @@ public class ParameterPanel extends Panel {
 			}
         });
 		add(time);
-		
 	}
 	
 }
-

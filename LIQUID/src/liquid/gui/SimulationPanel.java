@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.Panel;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,11 +15,12 @@ import liquid.core.LiquidApplication;
 public class SimulationPanel extends Panel implements MouseListener, MouseMotionListener {
 	
 	private static final long serialVersionUID = 1L;
-	private Rectangle anchor;
 	private int x;
 	private int y;
 	private Label xLabel;
 	private Label yLabel;
+	
+	private Rectangle enviroment;
 	
 	public SimulationPanel(){
 		super();
@@ -37,23 +37,43 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 		Font font = new Font("Verdana", Font.BOLD, 12);
 		setFont(font);
 		
-		anchor = new Rectangle(0,0);
+		enviroment = new Rectangle(0,0);
 		
 		xLabel = new Label("X: -");
-		xLabel.setBounds(5,0,50,20);
+		xLabel.setBounds(5,0,40,20);
 		add(xLabel);
 		
 		yLabel = new Label("Y: -");
-		yLabel.setBounds(5,20,50,20);
+		yLabel.setBounds(5,20,40,20);
 		add(yLabel);
 	}
 	
 	public void paint(Graphics g) {
-        super.paint(g);       
+        super.paint(g); 
+              
         int len = LiquidApplication.getGUI().variables.enviroLength;
         int wid = LiquidApplication.getGUI().variables.enviroWidth;
-        anchor.setBounds((500/2)-(len/2), (365/2)-(wid/2), len, wid);
-        g.drawRect(anchor.x,anchor.y,len,wid);
+        enviroment.setBounds((500/2)-(len/2), (365/2)-(wid/2), len, wid);
+        g.drawRect(enviroment.x,enviroment.y,len,wid);
+        
+        int x,y,l,w;
+        for(String obj : LiquidApplication.getGUI().variables.obstacles){
+        	String[] tokens = obj.split(" ");      	
+        	if(tokens[0].equals("Rectangular")){
+        		x = enviroment.x+Integer.parseInt(tokens[1]);
+        		y = enviroment.y+Integer.parseInt(tokens[2]);
+        		l = Integer.parseInt(tokens[3]);
+        		w = Integer.parseInt(tokens[4]);
+        		g.fillRect(x,y,l,w);
+        	}
+        	if(tokens[0].equals("Circular")){
+        		x = enviroment.x+Integer.parseInt(tokens[1]);
+        		y = enviroment.y+Integer.parseInt(tokens[2]);
+        		l = Integer.parseInt(tokens[3]);
+        		w = Integer.parseInt(tokens[4]);
+        		g.fillOval(x,y,l,w);
+        	}
+        }
     }
 
 	@Override
@@ -79,12 +99,12 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		if(!anchor.contains(arg0.getPoint())){
+		if(!enviroment.contains(arg0.getPoint())){
 			xLabel.setText("X: -");
 			yLabel.setText("Y: -");
 		}else{
-			x = arg0.getX() - anchor.x ;
-			y = arg0.getY() - anchor.y ;
+			x = arg0.getX() - enviroment.x ;
+			y = arg0.getY() - enviroment.y ;
 			xLabel.setText("X: "+ x );
 			yLabel.setText("Y: "+ y );	
 		}
