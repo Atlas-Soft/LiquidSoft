@@ -47,8 +47,8 @@ public class LiquidMenuBar extends JMenuBar{
 				fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
 				int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().frame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-		              log_filename = fileDialog.getSelectedFile().getName();
-		              LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidGUI.REQUEST_LOADLOG);
+					LiquidApplication.getGUI().variables.filename = fileDialog.getSelectedFile().getPath();
+		            LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidGUI.REQUEST_LOADLOG);
 		        }
 			}
         });

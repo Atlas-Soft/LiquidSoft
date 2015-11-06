@@ -7,8 +7,10 @@ import liquid.gui.LiquidGUI;
 
 public class LiquidLogger implements Interfaceable{
 
-	public static final int LOADLOG = 0;
 	public static final int REQUEST_SETLOGPARAM = 0;
+	public static final int LOADLOG = 0;
+	public static final int WRITELOG = 1;
+	
 	
 	private LiquidFileLoader fileLoader;
 	private LiquidFileWriter fileWriter;
@@ -39,7 +41,9 @@ public class LiquidLogger implements Interfaceable{
 				currentFile = args[0];	
 				send(i, REQUEST_SETLOGPARAM);
 				break;
-			case 1:
+			case WRITELOG:
+				currentFile = args[0];
+				fileWriter.appendtoLogFile(currentFile, args[1] + " " + args[2]);
 				break;
 			}
 		}

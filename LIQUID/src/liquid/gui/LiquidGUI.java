@@ -10,11 +10,12 @@ import liquid.logger.LiquidLogger;
  * 
  * All variables in this package are friendly.
  * 
- *
+ *@version	1.0
  */
 public class LiquidGUI implements Interfaceable{
 	
 	public static final int REQUEST_LOADLOG = 0;
+	public static final int REQUEST_WRITELOG = 1;
 	public static final int SETLOGPARAM = 0;
 	
 	LiquidGUIVariables variables;
@@ -41,12 +42,20 @@ public class LiquidGUI implements Interfaceable{
 	 */
 	@Override
 	public void send(Interfaceable i, int arg0) {
+		String[] args;
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case REQUEST_LOADLOG:
-				String[] args = new String[1];
-				args[0] = menubar.log_filename;
+				args = new String[1];
+				args[0] = variables.filename;
 				i.receive(this, LiquidLogger.LOADLOG, args);
+			break;
+			case REQUEST_WRITELOG:
+				args = new String[3];
+				args[0] = variables.filename;
+				args[1] = "" + variables.enviroLength;
+				args[2] = "" + variables.enviroWidth;
+				i.receive(this, LiquidLogger.WRITELOG, args);
 			break;
 			}
 		}

@@ -2,10 +2,13 @@ package liquid.gui;
 
 import javax.swing.JFrame;
 
+/**
+ * @version 1.0
+ */
 public class LiquidFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public LiquidFrame(){
 		super("LIQUID - 2D Fluid Simulator");
 		setSize(800,640);

@@ -8,9 +8,9 @@ public class LiquidFileWriter {
 
 	public void appendtoLogFile(String fileName, String arg){
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter("../logs/"+fileName));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
 			bw.write(arg);
-			
+			bw.close();		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

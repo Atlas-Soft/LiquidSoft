@@ -8,9 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 /**
- * 
+ * ConsolePanel contains a TextArea used
+ * to print textual information.
  *
- *
+ *@version 1.0
  */
 public class ConsolePanel extends JPanel {
 	

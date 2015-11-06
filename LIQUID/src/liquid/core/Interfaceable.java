@@ -5,9 +5,9 @@ package liquid.core;
  * to interact with other components that have implemented
  * this interface.
  * 
- * 
  * @author Rafael Zamora
  *
+ * @version 1.0
  */
 public interface Interfaceable {
 

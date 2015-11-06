@@ -1,24 +1,16 @@
 package liquid.gui;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Label;
-import java.awt.List;
-import java.awt.Panel;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import liquid.core.LiquidApplication;
 
@@ -67,13 +59,43 @@ public class ParameterPanel extends JPanel {
 		l.setBounds(225,475,50,25);
 		add(l);
 		
+		String[] options = {"Water","Glycerin"};
+		liqs = new JList<String>(options);
+		liqs.setBounds(25,15,120,150);
+		liqs.setSelectedIndex(0);
+		add(liqs);
+		
+		temp = new JTextField("-100-100");
+		temp.setBounds(155, 40, 120, 25);
+		add(temp);
+		
+		visc = new JTextField("0-?");
+		visc.setBounds(155, 90, 120, 25);
+		add(visc);
+		
+		time = new JTextField("0-300");
+		time.setBounds(100, 475, 125, 25);
+		add(time);
+		
 		run = new JButton("Run");
 		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				pause.setEnabled(true);
-				run.setEnabled(false);
-			    step.setEnabled(false);
+				try{
+					LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
+					LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
+					LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
+					LiquidApplication.getGUI().variables.runtime = Integer.parseInt(temp.getText());
+					if(LiquidApplication.getGUI().variables.filename == null){
+						LiquidApplication.getGUI().variables.filename = "../logs/" + JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:") + ".log";
+					}
+					pause.setEnabled(true);
+					run.setEnabled(false);
+					step.setEnabled(false);
+					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidApplication.getLogger().WRITELOG);
+				}catch(Exception e){
+					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
+				}
 			}
         });
 		add(run);
@@ -109,50 +131,6 @@ public class ParameterPanel extends JPanel {
 			}
         });
 		add(end);
-		
-		String[] options = {"Water","Glycerin"};
-		liqs = new JList<String>(options);
-		liqs.setBounds(25,15,120,150);
-		liqs.setSelectedIndex(0);
-		liqs.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                if (!arg0.getValueIsAdjusting()) {
-                	LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
-                }
-            }
-        });
-		add(liqs);
-		
-		temp = new JTextField("-100-100");
-		temp.setBounds(155, 40, 120, 25);
-		temp.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
-			    temp.transferFocus();
-			}
-        });
-		add(temp);
-		
-		visc = new JTextField("0-?");
-		visc.setBounds(155, 90, 120, 25);
-		visc.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
-			    visc.transferFocus();
-			}
-        });
-		add(visc);
-		
-		time = new JTextField("0-300");
-		time.setBounds(100, 475, 125, 25);
-		time.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.runtime = Integer.parseInt(temp.getText());
-			    time.transferFocus();
-			}
-        });
-		add(time);
 	}
 	
 }

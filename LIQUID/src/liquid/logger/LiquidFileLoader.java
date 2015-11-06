@@ -1,17 +1,15 @@
 package liquid.logger;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class LiquidFileLoader {
 	
 	public String[] loadLogFile(String fileName){
 		String[] args = new String[1];
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("../logs/"+fileName));
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			
 			int i = 0;
 			String line = br.readLine();
@@ -24,6 +22,7 @@ public class LiquidFileLoader {
 	        	line = br.readLine();
 	            i += 1;
 	        }
+	        br.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

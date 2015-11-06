@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class LiquidGUIVariables {
 	
+	String filename;
 	String liquid;
 	float temperature;
 	float viscosity;
