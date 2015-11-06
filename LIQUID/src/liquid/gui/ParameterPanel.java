@@ -12,26 +12,34 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import liquid.core.LiquidApplication;
 
-public class ParameterPanel extends Panel {
+public class ParameterPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
-	Button run;
-	Button pause;
-	Button step;
-	Button end;
-	List liqs;
-	TextField temp;
-	TextField visc;
-	TextField time;
+	JButton run;
+	JButton pause;
+	JButton step;
+	JButton end;
+	JList<String> liqs;
+	JTextField temp;
+	JTextField visc;
+	JTextField time;
 	
 	public ParameterPanel(){
 		super();
 		initComponents();
 		setLayout(null);
 		setBackground(Color.lightGray);
-		setBounds(500,60,300,565);
+		setBounds(500,0,300,640);
 		setVisible(true);
 	}
 	
@@ -39,28 +47,28 @@ public class ParameterPanel extends Panel {
 		Font font = new Font("Verdana", Font.BOLD, 12);
 		setFont(font);
 		
-		Label l = new Label("Temperature:");
-		l.setBounds(155,0,120,25);
+		JLabel l = new JLabel("Temperature:");
+		l.setBounds(155,15,120,25);
 		add(l);
 		
-		l = new Label("Viscocity:");
-		l.setBounds(155,50,120,25);
+		l = new JLabel("Viscocity:");
+		l.setBounds(155,65,120,25);
 		add(l);
 		
-		l = new Label("Environment Editor:");
-		l.setBounds(25,150,140,25);
+		l = new JLabel("Environment Editor:");
+		l.setBounds(25,165,140,25);
 		add(l);
 		
-		l = new Label("Run For:");
-		l.setBounds(25,460,75,25);
+		l = new JLabel("Run For:");
+		l.setBounds(25,475,75,25);
 		add(l);
 		
-		l = new Label("Sec.");
-		l.setBounds(225,460,50,25);
+		l = new JLabel("Sec.");
+		l.setBounds(225,475,50,25);
 		add(l);
 		
-		run = new Button("Run");
-		run.setBounds(25,495,115,25);
+		run = new JButton("Run");
+		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				pause.setEnabled(true);
@@ -70,8 +78,8 @@ public class ParameterPanel extends Panel {
         });
 		add(run);
 		
-		pause = new Button("Pause");
-		pause.setBounds(155,495,115,25);
+		pause = new JButton("Pause");
+		pause.setBounds(155,510,115,25);
 		pause.setEnabled(false);
 		pause.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -82,8 +90,8 @@ public class ParameterPanel extends Panel {
         });
 		add(pause);
 		
-		step = new Button("Step");
-		step.setBounds(25,530,115,25);
+		step = new JButton("Step");
+		step.setBounds(25,545,115,25);
 		step.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 
@@ -91,8 +99,8 @@ public class ParameterPanel extends Panel {
         });
 		add(step);
 		
-		end = new Button("End");
-		end.setBounds(155,530,115,25);
+		end = new JButton("End");
+		end.setBounds(155,545,115,25);
 		end.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 			    pause.setEnabled(false);
@@ -102,48 +110,46 @@ public class ParameterPanel extends Panel {
         });
 		add(end);
 		
-		liqs = new List();
-		liqs.setBounds(25,0,120,150);
-		liqs.add("Water");
-		liqs.add("Glycerin");
-		liqs.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent arg0) {
-				LiquidApplication.getGUI().variables.liquid = arg0.getItem().toString();			
-			}
+		String[] options = {"Water","Glycerin"};
+		liqs = new JList<String>(options);
+		liqs.setBounds(25,15,120,150);
+		liqs.setSelectedIndex(0);
+		liqs.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent arg0) {
+                if (!arg0.getValueIsAdjusting()) {
+                	LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
+                }
+            }
         });
-		liqs.select(0);
 		add(liqs);
 		
-		temp = new TextField("-100-100");
-		temp.setBounds(155, 25, 120, 25);
+		temp = new JTextField("-100-100");
+		temp.setBounds(155, 40, 120, 25);
 		temp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
-			    temp.setFocusable(false);
-			    temp.setFocusable(true);
+			    temp.transferFocus();
 			}
         });
 		add(temp);
 		
-		visc = new TextField("0-?");
-		visc.setBounds(155, 75, 120, 25);
+		visc = new JTextField("0-?");
+		visc.setBounds(155, 90, 120, 25);
 		visc.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
-			    visc.setFocusable(false);
-			    visc.setFocusable(true);
+			    visc.transferFocus();
 			}
         });
 		add(visc);
 		
-		time = new TextField("0-300");
-		time.setBounds(100, 460, 125, 25);
+		time = new JTextField("0-300");
+		time.setBounds(100, 475, 125, 25);
 		time.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.runtime = Integer.parseInt(temp.getText());
-			    time.setFocusable(false);
-			    time.setFocusable(true);
+			    time.transferFocus();
 			}
         });
 		add(time);

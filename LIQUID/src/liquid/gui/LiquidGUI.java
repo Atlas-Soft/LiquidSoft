@@ -3,6 +3,15 @@ package liquid.gui;
 import liquid.core.Interfaceable;
 import liquid.logger.LiquidLogger;
 
+/**
+ * LiquidGUI is the central class of the GUI.
+ * This class interfaces between the Logger and Engine.
+ * This class initializes all the components of the GUI.
+ * 
+ * All variables in this package are friendly.
+ * 
+ *
+ */
 public class LiquidGUI implements Interfaceable{
 	
 	public static final int REQUEST_LOADLOG = 0;
@@ -12,28 +21,45 @@ public class LiquidGUI implements Interfaceable{
 	LiquidFrame frame;
 	LiquidMenuBar menubar;
 	ParameterPanel param;
-	EnvironmentEditorPanel eeditor;
+	EnvironmentEditorPanel enviroeditor;
 	SimulationPanel sim;
 	ConsolePanel console;
 	
+	/**
+	 * Constructor initializes components of GUI
+	 */
 	public LiquidGUI(){
 		initComponents();
 	}
 	
+	/**
+	 * Method defines requested interactions to the Logger and Engine.
+	 * 
+	 * Current Send Interactions:
+	 * Request_Loadlog - sends the logger the filename of the log file needed to be loaded.
+	 * 
+	 */
 	@Override
 	public void send(Interfaceable i, int arg0) {
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case REQUEST_LOADLOG:
 				String[] args = new String[1];
-				args[0] = menubar.getLoadLogFile();
-				i.recieve(this, LiquidLogger.LOADLOG, args);
+				args[0] = menubar.log_filename;
+				i.receive(this, LiquidLogger.LOADLOG, args);
+			break;
 			}
 		}
 	}
-
+	
+	/**
+	 * Method defines requested interactions from the Logger and Engine.
+	 * 
+	 * Current Receive Interaction:
+	 * SetLogParam - Receives information from logger used to set parameters and environment.
+	 */
 	@Override
-	public void recieve(Interfaceable i, int arg0, String[] args) {
+	public void receive(Interfaceable i, int arg0, String[] args) {
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case SETLOGPARAM:
@@ -42,19 +68,23 @@ public class LiquidGUI implements Interfaceable{
 				variables.enviroWidth = Integer.parseInt(tokens[1]);
 				sim.repaint();
 				console.print_to_Console("Log File Loaded.\n");
+			break;
 			}
 		}
 	}
 	
+	/**
+	 * Method defines the components in the GUI.
+	 */
 	private void initComponents(){
 		variables = new LiquidGUIVariables();
-		variables.saveState();
 		frame = new LiquidFrame();
-		frame.setMenuBar(menubar = new LiquidMenuBar());
+		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());
 		frame.add(param = new ParameterPanel());
-		param.add(eeditor = new EnvironmentEditorPanel());
+		param.add(enviroeditor = new EnvironmentEditorPanel());
 		frame.add(sim = new SimulationPanel());	
+		frame.setVisible(true);
 	}
 	
 }

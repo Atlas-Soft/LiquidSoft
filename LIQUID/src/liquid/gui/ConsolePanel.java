@@ -2,40 +2,54 @@ package liquid.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Label;
-import java.awt.Panel;
-import java.awt.TextArea;
 
-public class ConsolePanel extends Panel {
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+/**
+ * 
+ *
+ *
+ */
+public class ConsolePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private TextArea console;
+	private JTextArea console;
 	
+	/**
+	 * 
+	 */
 	public ConsolePanel(){
 		super();
 		initComponents();
 		setLayout(null);
 		setBackground(Color.lightGray);
-		setBounds(0,425,500,200);
+		setBounds(0,400,500,240);
 		setVisible(true);
 	}
 	
+	/**
+	 * 
+	 */
 	private void initComponents(){
-		Font font = new Font("Verdana", Font.BOLD, 12);
-		setFont(font);
-		
-		Label l = new Label("Console");
+		JLabel l = new JLabel("Console");
 		l.setBounds(205,0,90,20);
 		add(l);
 		
-		console = new TextArea(); 
+		console = new JTextArea(); 
+		console.setFont(new Font("Verdana", Font.BOLD, 12));
 		console.setBounds(0, 20, 500, 175);
 		console.append ("Welcome to LIQUID!\n");
 		console.setEditable(false);
 		add(console);
 	}
 	
+	/**
+	 * Method appends inputed string to textArea.
+	 * @param str
+	 */
 	public void print_to_Console(String str){
 		console.append(str);
 	}

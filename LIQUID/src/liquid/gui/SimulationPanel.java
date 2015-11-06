@@ -3,22 +3,23 @@ package liquid.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Label;
-import java.awt.Panel;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import liquid.core.LiquidApplication;
 
-public class SimulationPanel extends Panel implements MouseListener, MouseMotionListener {
+public class SimulationPanel extends JPanel implements MouseListener, MouseMotionListener {
 	
 	private static final long serialVersionUID = 1L;
 	private int x;
 	private int y;
-	private Label xLabel;
-	private Label yLabel;
+	private JLabel xLabel;
+	private JLabel yLabel;
 	
 	private Rectangle enviroment;
 	
@@ -27,7 +28,7 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 		initComponents();
 		setLayout(null);
 		setBackground(Color.white);
-		setBounds(0,60,500,365);
+		setBounds(0,0,500,400);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setVisible(true);
@@ -39,21 +40,21 @@ public class SimulationPanel extends Panel implements MouseListener, MouseMotion
 		
 		enviroment = new Rectangle(0,0);
 		
-		xLabel = new Label("X: -");
+		xLabel = new JLabel("X: -");
 		xLabel.setBounds(5,0,40,20);
 		add(xLabel);
 		
-		yLabel = new Label("Y: -");
+		yLabel = new JLabel("Y: -");
 		yLabel.setBounds(5,20,40,20);
 		add(yLabel);
 	}
 	
-	public void paint(Graphics g) {
-        super.paint(g); 
+	public void paintComponent(Graphics g) {
+        super.paintComponent(g); 
 			
         int len = LiquidApplication.getGUI().variables.enviroLength;
         int wid = LiquidApplication.getGUI().variables.enviroWidth;
-        enviroment.setBounds((500/2)-(len/2), (365/2)-(wid/2), len, wid);
+        enviroment.setBounds((500/2)-(len/2), (400/2)-(wid/2), len, wid);
         g.setColor(Color.black);
         g.drawRect(enviroment.x,enviroment.y,len,wid);
         

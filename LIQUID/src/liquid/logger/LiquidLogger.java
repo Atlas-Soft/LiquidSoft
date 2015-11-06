@@ -25,14 +25,14 @@ public class LiquidLogger implements Interfaceable{
 			switch(arg0){
 			case REQUEST_SETLOGPARAM:
 				String[] args = fileLoader.loadLogFile(currentFile);
-				i.recieve(this, LiquidGUI.SETLOGPARAM, args);
+				i.receive(this, LiquidGUI.SETLOGPARAM, args);
 				break;
 			}
 		}
 	}
 
 	@Override
-	public void recieve(Interfaceable i, int arg0, String[] args) {
+	public void receive(Interfaceable i, int arg0, String[] args) {
 		if(i instanceof LiquidGUI){
 			switch(arg0){
 			case LOADLOG:

@@ -1,29 +1,29 @@
 package liquid.gui;
 
 import java.awt.Font;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.LiquidApplication;
 
-public class LiquidMenuBar extends MenuBar{
+public class LiquidMenuBar extends JMenuBar{
 
 	private static final long serialVersionUID = 1L;
 	
-	private MenuItem New;
-	private MenuItem load;
-	private MenuItem exit;
-	private MenuItem undo;
-	private MenuItem redo;
-	private MenuItem about;
+	JMenuItem New;
+	JMenuItem load;
+	JMenuItem exit;
+	JMenuItem undo;
+	JMenuItem redo;
+	JMenuItem about;
 	
-	private String logfile;
+	String log_filename;
 
 	public LiquidMenuBar(){
 		super();
@@ -34,12 +34,12 @@ public class LiquidMenuBar extends MenuBar{
 		Font font = new Font("Verdana", Font.BOLD, 12);
 		setFont(font);
 		
-		Menu m = new Menu("File");
+		JMenu m = new JMenu("File");
 		
-		New = new MenuItem("New");
+		New = new JMenuItem("New");
 		m.add(New);
 		
-		load = new MenuItem("Load...");
+		load = new JMenuItem("Load...");
 		load.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				JFileChooser  fileDialog = new JFileChooser("../logs");
@@ -47,14 +47,14 @@ public class LiquidMenuBar extends MenuBar{
 				fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
 				int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().frame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-		              logfile = fileDialog.getSelectedFile().getName();
+		              log_filename = fileDialog.getSelectedFile().getName();
 		              LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidGUI.REQUEST_LOADLOG);
 		        }
 			}
         });
 		m.add(load);
 		
-		exit = new MenuItem("Exit");
+		exit = new JMenuItem("Exit");
 		exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().frame.dispose();
@@ -64,35 +64,29 @@ public class LiquidMenuBar extends MenuBar{
 		m.add(exit);
 		add(m);
 		
-		m = new Menu("Edit");
+		m = new JMenu("Edit");
 		
-		undo = new MenuItem("Undo");
+		undo = new JMenuItem("Undo");
 		undo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.undo();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
 		m.add(undo);
 		
-		redo = new MenuItem("Redo");
+		redo = new JMenuItem("Redo");
 		m.add(redo);
 		redo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.redo();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
 		add(m);
 		
-		m = new Menu("Help");
+		m = new JMenu("Help");
 		
-		about = new MenuItem("About");
+		about = new JMenuItem("About");
 		m.add(about);
 		add(m);
-	}
-	
-	public String getLoadLogFile(){
-		return logfile;
 	}
 }

@@ -14,7 +14,7 @@ public class LiquidEngine implements Interfaceable{
 	}
 
 	@Override
-	public void recieve(Interfaceable i, int arg0, String[] args) {
+	public void receive(Interfaceable i, int arg0, String[] args) {
 		
 	}
 }
