@@ -96,28 +96,28 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         }
     }
 
-	@Override
+	//@Override
 	public void mouseClicked(MouseEvent arg0) {}
 
-	@Override
+	//@Override
 	public void mouseEntered(MouseEvent arg0) {}
 
-	@Override
+	//@Override
 	public void mouseExited(MouseEvent arg0) {
 		xLabel.setText("X: -");
 		yLabel.setText("Y: -");
 	}
 
-	@Override
+	//@Override
 	public void mousePressed(MouseEvent arg0) {}
 
-	@Override
+	//@Override
 	public void mouseReleased(MouseEvent arg0) {}
 
-	@Override
+	//@Override
 	public void mouseDragged(MouseEvent arg0) {}
 
-	@Override
+	//@Override
 	public void mouseMoved(MouseEvent arg0) {
 		if(!enviroment.contains(arg0.getPoint())){
 			xLabel.setText("X: -");
