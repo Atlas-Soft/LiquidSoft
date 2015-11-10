@@ -21,7 +21,7 @@ public class LiquidLogger implements Interfaceable{
 		init();
 	}
 
-	@Override
+	//@Override
 	public void send(Interfaceable i, int arg0) {
 		if(i instanceof LiquidGUI){
 			switch(arg0){
@@ -33,12 +33,12 @@ public class LiquidLogger implements Interfaceable{
 		}
 	}
 
-	@Override
+	//@Override
 	public void receive(Interfaceable i, int arg0, String[] args) {
 		if(i instanceof LiquidGUI){
 			switch(arg0){
 			case LOADLOG:
-				currentFile = args[0];	
+				currentFile = args[0];
 				send(i, REQUEST_SETLOGPARAM);
 				break;
 			case WRITELOG:
