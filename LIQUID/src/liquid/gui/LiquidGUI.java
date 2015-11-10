@@ -18,7 +18,7 @@ public class LiquidGUI implements Interfaceable{
 	public static final int REQUEST_WRITELOG = 1;
 	public static final int SETLOGPARAM = 0;
 	
-	LiquidGUIVariables variables;
+	LiquidGuiVariables variables;
 	LiquidFrame frame;
 	LiquidMenuBar menubar;
 	ParameterPanel param;
@@ -46,8 +46,9 @@ public class LiquidGUI implements Interfaceable{
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case REQUEST_LOADLOG:
-				args = new String[1];
-				args[0] = variables.filename;
+				args = new String[variables.storeArray().length];
+				//args[0] = variables.filename;
+				args = variables.storeArray();
 				i.receive(this, LiquidLogger.LOADLOG, args);
 			break;
 			case REQUEST_WRITELOG:
@@ -86,7 +87,7 @@ public class LiquidGUI implements Interfaceable{
 	 * Method defines the components in the GUI.
 	 */
 	private void initComponents(){
-		variables = new LiquidGUIVariables();
+		variables = new LiquidGuiVariables();
 		frame = new LiquidFrame();
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());

@@ -6,11 +6,25 @@ import java.io.IOException;
 
 public class LiquidFileWriter {
 
+	public void writetoLogFile(String fileName, String args[]){
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+			
+			for (int i = 0; i < args.length; i++) {
+				bw.write(args[i]);
+			}
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void appendtoLogFile(String fileName, String arg){
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
 			bw.write(arg);
-			bw.close();		
+			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
