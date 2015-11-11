@@ -38,10 +38,10 @@ public class EnvironmentEditorPanel extends JPanel{
 		setFont(font);
 		
 		String[] options = {"Environment","Obstacles","Forces","Sensors"};
-		final JComboBox<String> select = new JComboBox<String>(options);//***
+		JComboBox<String> select = new JComboBox<String>(options);
 		select.setBounds(5, 5, 240, 25);
 		select.addItemListener(new ItemListener(){
-			//@Override
+			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if(arg0.getItem().toString() == "Environment") enviro.setVisible(true);
 				else enviro.setVisible(false);
@@ -68,11 +68,11 @@ public class EnvironmentEditorPanel extends JPanel{
 		l.setBounds(5,50,110,25);
 		enviro.add(l);
 		
-		final JTextField enviroLen = new JTextField("500");//***
+		JTextField enviroLen = new JTextField("500");
 		enviroLen.setBounds(5, 25, 110, 25);
 		enviro.add(enviroLen);
 		
-		final JTextField enviroWid = new JTextField("400");//***
+		JTextField enviroWid = new JTextField("400");
 		enviroWid.setBounds(5, 75, 110, 25);
 		enviro.add(enviroWid);
 		
@@ -130,23 +130,23 @@ public class EnvironmentEditorPanel extends JPanel{
 		obstacles.add(l);
 		
 		String[] obstype = {"Rectangular","Circular"};
-		final JComboBox<String> obstacleType = new JComboBox<String>(obstype);//***
+		JComboBox<String> obstacleType = new JComboBox<String>(obstype);
 		obstacleType.setBounds(5, 25, 110, 25);
 		obstacles.add(obstacleType);
 			
-		final JTextField obstacleX = new JTextField("0");//***
+		JTextField obstacleX = new JTextField("0");
 		obstacleX.setBounds(125, 25, 110, 25);
 		obstacles.add(obstacleX);
 		
-		final JTextField obstacleY = new JTextField("0");//***
+		JTextField obstacleY = new JTextField("0");
 		obstacleY.setBounds(125, 75, 110, 25);
 		obstacles.add(obstacleY);
 		
-		final JTextField obstacleL = new JTextField("50");//***
+		JTextField obstacleL = new JTextField("50");
 		obstacleL.setBounds(125, 125, 110, 25);
 		obstacles.add(obstacleL);
 		
-		final JTextField obstacleW = new JTextField("50");//***
+		JTextField obstacleW = new JTextField("50");
 		obstacleW.setBounds(125, 175, 110, 25);
 		obstacles.add(obstacleW);
 		
@@ -169,6 +169,17 @@ public class EnvironmentEditorPanel extends JPanel{
 			}
         });
 		obstacles.add(create);
+		
+		JButton delete = new JButton("Delete");
+		delete.setBounds(5,175,110,25);
+		delete.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects);
+				LiquidApplication.getGUI().variables.selectedObjects = 0;
+				LiquidApplication.getGUI().sim.repaint();
+			}
+        });
+		obstacles.add(delete);
 		
 		JButton selectUpdate = new JButton("Update Selected");
 		selectUpdate.setBounds(5,210,110,25);
@@ -219,23 +230,23 @@ public class EnvironmentEditorPanel extends JPanel{
 		forces.add(l);
 		
 		String[] fotype = {"Source"};
-		final JComboBox<String> forceType = new JComboBox<String>(fotype);//***
+		JComboBox<String> forceType = new JComboBox<String>(fotype);
 		forceType.setBounds(5, 25, 110, 25);
 		forces.add(forceType);
 			
-		final JTextField forceX = new JTextField("0");//***
+		JTextField forceX = new JTextField("0");
 		forceX.setBounds(125, 25, 110, 25);
 		forces.add(forceX);
 		
-		final JTextField forceY = new JTextField("0");//***
+		JTextField forceY = new JTextField("0");
 		forceY.setBounds(125, 75, 110, 25);
 		forces.add(forceY);
 		
-		final JTextField forceXComp = new JTextField("10");//***
+		JTextField forceXComp = new JTextField("10");
 		forceXComp.setBounds(125, 125, 110, 25);
 		forces.add(forceXComp);
 		
-		final JTextField forceYComp = new JTextField("10");//***
+		JTextField forceYComp = new JTextField("10");
 		forceYComp.setBounds(125, 175, 110, 25);
 		forces.add(forceYComp);
 		
@@ -258,6 +269,17 @@ public class EnvironmentEditorPanel extends JPanel{
 			}
         });
 		forces.add(create);
+		
+		delete = new JButton("Delete");
+		delete.setBounds(5,175,110,25);
+		delete.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects);
+				LiquidApplication.getGUI().variables.selectedObjects = 0;
+				LiquidApplication.getGUI().sim.repaint();
+			}
+        });
+		forces.add(delete);
 		
 		selectUpdate = new JButton("Update Selected");
 		selectUpdate.setBounds(5,210,110,25);
@@ -300,15 +322,15 @@ public class EnvironmentEditorPanel extends JPanel{
 		sensors.add(l);
 		
 		String[] sentype = {"Flowmeter"};
-		final JComboBox<String> sensorType = new JComboBox<String>(sentype);//***
+		JComboBox<String> sensorType = new JComboBox<String>(sentype);
 		sensorType.setBounds(5, 25, 110, 25);
 		sensors.add(sensorType);
 			
-		final JTextField sensorX = new JTextField("0");//***
+		JTextField sensorX = new JTextField("0");
 		sensorX.setBounds(125, 25, 110, 25);
 		sensors.add(sensorX);
 		
-		final JTextField sensorY = new JTextField("0");//***
+		JTextField sensorY = new JTextField("0");
 		sensorY.setBounds(125, 75, 110, 25);
 		sensors.add(sensorY);
 		
@@ -328,6 +350,17 @@ public class EnvironmentEditorPanel extends JPanel{
 				}
 			}
         });
+		
+		delete = new JButton("Delete");
+		delete.setBounds(5,175,110,25);
+		delete.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects);
+				LiquidApplication.getGUI().variables.selectedObjects = 0;
+				LiquidApplication.getGUI().sim.repaint();
+			}
+        });
+		sensors.add(delete);
 		
 		sensors.add(create);
 		
@@ -436,32 +469,32 @@ public class EnvironmentEditorPanel extends JPanel{
 		};
 			
 		JButton selectNext = new JButton("Select Next");
-		selectNext.setBounds(5,150,110,25);
+		selectNext.setBounds(5,125,110,25);
 		selectNext.addActionListener(snext);
 		obstacles.add(selectNext);
 		
 		JButton selectPrev = new JButton("Select Prev");
-		selectPrev.setBounds(5,175,110,25);
+		selectPrev.setBounds(5,150,110,25);
 		selectPrev.addActionListener(sprev);
 		obstacles.add(selectPrev);
 		
 		selectNext = new JButton("Select Next");
-		selectNext.setBounds(5,150,110,25);
+		selectNext.setBounds(5,125,110,25);
 		selectNext.addActionListener(snext);
 		forces.add(selectNext);
 		
 		selectPrev = new JButton("Select Prev");
-		selectPrev.setBounds(5,175,110,25);
+		selectPrev.setBounds(5,150,110,25);
 		selectPrev.addActionListener(sprev);
 		forces.add(selectPrev);
 		
 		selectNext = new JButton("Select Next");
-		selectNext.setBounds(5,150,110,25);
+		selectNext.setBounds(5,125,110,25);
 		selectNext.addActionListener(snext);
 		sensors.add(selectNext);
 		
 		selectPrev = new JButton("Select Prev");
-		selectPrev.setBounds(5,175,110,25);
+		selectPrev.setBounds(5,150,110,25);
 		selectPrev.addActionListener(sprev);
 		sensors.add(selectPrev);
 		

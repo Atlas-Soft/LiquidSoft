@@ -37,6 +37,11 @@ public class LiquidMenuBar extends JMenuBar{
 		JMenu m = new JMenu("File");
 		
 		New = new JMenuItem("New");
+		New.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().reset();
+			}
+        });
 		m.add(New);
 		
 		load = new JMenuItem("Load...");

@@ -46,9 +46,8 @@ public class LiquidGUI implements Interfaceable{
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case REQUEST_LOADLOG:
-				args = new String[variables.storeArray().length];
-				//args[0] = variables.filename;
-				args = variables.storeArray();
+				args = new String[1];
+				args[0] = variables.filename;
 				i.receive(this, LiquidLogger.LOADLOG, args);
 			break;
 			case REQUEST_WRITELOG:
@@ -95,6 +94,11 @@ public class LiquidGUI implements Interfaceable{
 		param.add(enviroeditor = new EnvironmentEditorPanel());
 		frame.add(sim = new SimulationPanel());	
 		frame.setVisible(true);
+	}
+	
+	public void reset(){
+		variables = new LiquidGUIVariables();
+		param.reset();
 	}
 	
 }

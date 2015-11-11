@@ -66,15 +66,15 @@ public class ParameterPanel extends JPanel {
 		liqs.setSelectedIndex(0);
 		add(liqs);
 		
-		temp = new JTextField("-100-100");
+		temp = new JTextField("-100 -100");
 		temp.setBounds(155, 40, 120, 25);
 		add(temp);
 		
-		visc = new JTextField("0-?");
+		visc = new JTextField("0 -?");
 		visc.setBounds(155, 90, 120, 25);
 		add(visc);
 		
-		time = new JTextField("0-300");
+		time = new JTextField("0 -300");
 		time.setBounds(100, 475, 125, 25);
 		add(time);
 		
@@ -132,6 +132,13 @@ public class ParameterPanel extends JPanel {
 			}
         });
 		add(end);
+	}
+	
+	public void reset(){
+		liqs.setSelectedIndex(0);
+		temp.setText("-100 -100");
+		visc.setText("0 - ?");
+		time.setText("0 - 300");
 	}
 	
 }
