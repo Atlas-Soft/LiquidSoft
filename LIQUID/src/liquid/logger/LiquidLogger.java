@@ -21,7 +21,7 @@ public class LiquidLogger implements Interfaceable{
 		init();
 	}
 
-	//@Override
+	@Override
 	public void send(Interfaceable i, int arg0) {
 		if(i instanceof LiquidGUI){
 			switch(arg0){
@@ -33,7 +33,7 @@ public class LiquidLogger implements Interfaceable{
 		}
 	}
 
-	//@Override
+	@Override
 	public void receive(Interfaceable i, int arg0, String[] args) {
 		if(i instanceof LiquidGUI){
 			switch(arg0){

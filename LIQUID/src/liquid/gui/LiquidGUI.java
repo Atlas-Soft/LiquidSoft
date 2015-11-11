@@ -40,7 +40,7 @@ public class LiquidGUI implements Interfaceable{
 	 * Request_Loadlog - sends the logger the filename of the log file needed to be loaded.
 	 * 
 	 */
-	//@Override
+	@Override
 	public void send(Interfaceable i, int arg0) {
 		String[] args;
 		if(i instanceof LiquidLogger){
@@ -68,7 +68,7 @@ public class LiquidGUI implements Interfaceable{
 	 * Current Receive Interaction:
 	 * SetLogParam - Receives information from logger used to set parameters and environment.
 	 */
-	//@Override
+	@Override
 	public void receive(Interfaceable i, int arg0, String[] args) {
 		if(i instanceof LiquidLogger){
 			switch(arg0){

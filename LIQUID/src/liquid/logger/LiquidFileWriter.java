@@ -13,6 +13,7 @@ public class LiquidFileWriter {
 			for (int i = 0; i < args.length; i++) {
 				bw.write(args[i]);
 			}
+			
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
