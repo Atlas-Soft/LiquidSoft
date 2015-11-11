@@ -5,6 +5,7 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
@@ -41,10 +42,13 @@ public class ConsolePanel extends JPanel {
 		
 		console = new JTextArea(); 
 		console.setFont(new Font("Verdana", Font.PLAIN, 12));
-		console.setBounds(0, 20, 500, 175);
+		console.setBounds(0, 20, 500, 160);
 		console.append ("Welcome to LIQUID!\n");
 		console.setEditable(false);
-		add(console);
+		JScrollPane sp = new JScrollPane(console);
+		sp.setBounds(0, 20, 500, 160);
+		sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		add(sp);
 	}
 	
 	/**

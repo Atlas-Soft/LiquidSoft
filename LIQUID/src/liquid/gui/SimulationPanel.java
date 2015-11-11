@@ -41,11 +41,11 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
 		enviroment = new Rectangle(0,0);
 		
 		xLabel = new JLabel("X: -");
-		xLabel.setBounds(5,0,40,20);
+		xLabel.setBounds(5,0,50,20);
 		add(xLabel);
 		
 		yLabel = new JLabel("Y: -");
-		yLabel.setBounds(5,20,40,20);
+		yLabel.setBounds(5,20,50,20);
 		add(yLabel);
 	}
 	
