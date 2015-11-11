@@ -40,7 +40,7 @@ public class ConsolePanel extends JPanel {
 		add(l);
 		
 		console = new JTextArea(); 
-		console.setFont(new Font("Verdana", Font.BOLD, 12));
+		console.setFont(new Font("Verdana", Font.PLAIN, 12));
 		console.setBounds(0, 20, 500, 175);
 		console.append ("Welcome to LIQUID!\n");
 		console.setEditable(false);

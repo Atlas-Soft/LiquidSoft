@@ -11,7 +11,9 @@ public class LiquidFileWriter {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
 			
 			for (int i = 0; i < args.length; i++) {
+				System.out.println(args[i]);
 				bw.write(args[i]);
+				bw.newLine();
 			}
 			
 			bw.close();

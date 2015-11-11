@@ -3,22 +3,19 @@ package liquid.logger;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LiquidFileLoader {
 	
 	public String[] loadLogFile(String fileName){
-		String[] args = new String[1];
+		ArrayList<String> list = new ArrayList<String>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
-			
 			int i = 0;
 			String line = br.readLine();
 	        while (line != null) {
-	            switch(i){
-	            case 0:
-	            	args[0] = line;
-	            break;
-	            }
+	            if(line.equals("break")) break;
+	            list.add(line);
 	        	line = br.readLine();
 	            i += 1;
 	        }
@@ -27,6 +24,7 @@ public class LiquidFileLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		String[] args = list.toArray(new String[list.size()]);
 		return args;
 	}
 	

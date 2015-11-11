@@ -8,11 +8,11 @@ public class LiquidGUIVariables {
 	String liquid;
 	float temperature;
 	float viscosity;
-	float runtime;
+	int runtime;
 	int enviroLength = 500;
 	int enviroWidth = 400;
 	ArrayList<String> objects = new ArrayList<String>();
-	int selectedObjects;
+	int selectedObject;
 	
 	
 	/**
@@ -22,35 +22,40 @@ public class LiquidGUIVariables {
 	 * @return
 	 */
 	public String[] storeArray() {
-		String[] var = new String[10];
+		ArrayList<String> list = new ArrayList<String>();
 		
-		var[0] = filename;
-		var[1] = liquid;
-		var[2] = Float.toString(temperature);
-		var[3] = Float.toString(viscosity);
-		var[4] = Float.toString(runtime);
-		var[5] = Integer.toString(enviroLength) + " " + Integer.toString(enviroWidth);
+		list.add(filename);
+		list.add(liquid);
+		list.add(Float.toString(temperature));
+		list.add(Float.toString(viscosity));
+		list.add(Integer.toString(runtime));
+		list.add(Integer.toString(enviroLength) + " " + Integer.toString(enviroWidth));
 		
 		for (int i = 0; i < objects.size(); i++) {
-			var[i+6] = objects.get(i);
+			list.add(objects.get(i));
 		}
+		
+		list.add("break");
+		String[] var = list.toArray(new String[list.size()]);
 		return var;
 	}
 	
 	
 	public void readArray(String[] arr) {
-		filename = arr[0];
 		liquid = arr[1];
 		temperature = Float.parseFloat(arr[2]);
 		viscosity = Float.parseFloat(arr[3]);
-		runtime = Float.parseFloat(arr[4]);
+		runtime = Integer.parseInt(arr[4]);
 		
 		String[] tokens = arr[5].split(" ");
 		enviroLength = Integer.parseInt(tokens[0]);
 		enviroWidth = Integer.parseInt(tokens[1]);
 		
+		objects = new ArrayList<String>();
 		for (int i = 6; i < arr.length; i++) {
 			objects.add(arr[i]);
 		}
+		
+		selectedObject = 0;
 	}
 }

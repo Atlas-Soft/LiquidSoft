@@ -48,12 +48,14 @@ public class LiquidMenuBar extends JMenuBar{
 		load.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				JFileChooser  fileDialog = new JFileChooser("../logs");
+				fileDialog.setAcceptAllFileFilterUsed(false);
 				fileDialog.setDialogTitle("Load Log File");
 				fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
 				int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().frame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					LiquidApplication.getGUI().variables.filename = fileDialog.getSelectedFile().getPath();
 		            LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidGUI.REQUEST_LOADLOG);
+		            LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename + " - LIQUID : 2D Fluid Simulator   ");
 		        }
 			}
         });

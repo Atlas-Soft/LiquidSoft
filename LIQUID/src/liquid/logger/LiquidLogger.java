@@ -43,7 +43,7 @@ public class LiquidLogger implements Interfaceable{
 				break;
 			case WRITELOG:
 				currentFile = args[0];
-				fileWriter.appendtoLogFile(currentFile, args[1] + " " + args[2]);
+				fileWriter.writetoLogFile(currentFile, args);
 				break;
 			}
 		}

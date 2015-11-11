@@ -51,10 +51,7 @@ public class LiquidGUI implements Interfaceable{
 				i.receive(this, LiquidLogger.LOADLOG, args);
 			break;
 			case REQUEST_WRITELOG:
-				args = new String[3];
-				args[0] = variables.filename;
-				args[1] = "" + variables.enviroLength;
-				args[2] = "" + variables.enviroWidth;
+				args = variables.storeArray();
 				i.receive(this, LiquidLogger.WRITELOG, args);
 			break;
 			}
@@ -72,11 +69,12 @@ public class LiquidGUI implements Interfaceable{
 		if(i instanceof LiquidLogger){
 			switch(arg0){
 			case SETLOGPARAM:
-				String[] tokens = args[0].split(" ");
-				variables.enviroLength = Integer.parseInt(tokens[0]);
-				variables.enviroWidth = Integer.parseInt(tokens[1]);
+				variables.readArray(args);
+				param.update();
+				enviroeditor.enviroLen.setText(Integer.toString(variables.enviroLength));
+				enviroeditor.enviroWid.setText(Integer.toString(variables.enviroWidth));
 				sim.repaint();
-				console.print_to_Console("Log File Loaded.\n");
+				console.print_to_Console(variables.filename + " Loaded.\n");
 			break;
 			}
 		}
@@ -98,7 +96,10 @@ public class LiquidGUI implements Interfaceable{
 	
 	public void reset(){
 		variables = new LiquidGUIVariables();
+		enviroeditor.enviroLen.setText(Integer.toString(variables.enviroLength));
+		enviroeditor.enviroWid.setText(Integer.toString(variables.enviroWidth));
 		param.reset();
+		frame.setTitle("Untitled - LIQUID : 2D Fluid Simulator");
 	}
 	
 }

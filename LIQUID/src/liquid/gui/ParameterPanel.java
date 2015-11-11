@@ -66,15 +66,15 @@ public class ParameterPanel extends JPanel {
 		liqs.setSelectedIndex(0);
 		add(liqs);
 		
-		temp = new JTextField("-100 -100");
+		temp = new JTextField("10");
 		temp.setBounds(155, 40, 120, 25);
 		add(temp);
 		
-		visc = new JTextField("0 -?");
+		visc = new JTextField("1");
 		visc.setBounds(155, 90, 120, 25);
 		add(visc);
 		
-		time = new JTextField("0 -300");
+		time = new JTextField("300");
 		time.setBounds(100, 475, 125, 25);
 		add(time);
 		
@@ -86,7 +86,7 @@ public class ParameterPanel extends JPanel {
 					LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
 					LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
 					LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
-					LiquidApplication.getGUI().variables.runtime = Integer.parseInt(temp.getText());
+					LiquidApplication.getGUI().variables.runtime = Integer.parseInt(time.getText());
 					if(LiquidApplication.getGUI().variables.filename == null){
 						LiquidApplication.getGUI().variables.filename = "../logs/" + JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:") + ".log";
 					}
@@ -95,6 +95,7 @@ public class ParameterPanel extends JPanel {
 					step.setEnabled(false);
 					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
 				}catch(Exception e){
+					e.printStackTrace();
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
 				}
 			}
@@ -136,9 +137,16 @@ public class ParameterPanel extends JPanel {
 	
 	public void reset(){
 		liqs.setSelectedIndex(0);
-		temp.setText("-100 -100");
-		visc.setText("0 - ?");
-		time.setText("0 - 300");
+		temp.setText("10");
+		visc.setText("1");
+		time.setText("300");
+	}
+	
+	public void update(){
+		liqs.setSelectedIndex(0);
+		temp.setText(Float.toString(LiquidApplication.getGUI().variables.temperature));
+		visc.setText(Float.toString(LiquidApplication.getGUI().variables.viscosity));
+		time.setText(Integer.toString(LiquidApplication.getGUI().variables.runtime));
 	}
 	
 }

@@ -20,6 +20,8 @@ public class EnvironmentEditorPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	JPanel enviro;
+	JTextField enviroLen;
+	JTextField enviroWid;
 	JPanel obstacles;
 	JPanel forces;
 	JPanel sensors;
@@ -68,11 +70,11 @@ public class EnvironmentEditorPanel extends JPanel{
 		l.setBounds(5,50,110,25);
 		enviro.add(l);
 		
-		JTextField enviroLen = new JTextField("500");
+		enviroLen = new JTextField("500");
 		enviroLen.setBounds(5, 25, 110, 25);
 		enviro.add(enviroLen);
 		
-		JTextField enviroWid = new JTextField("400");
+		enviroWid = new JTextField("400");
 		enviroWid.setBounds(5, 75, 110, 25);
 		enviro.add(enviroWid);
 		
@@ -161,7 +163,7 @@ public class EnvironmentEditorPanel extends JPanel{
 					arg += Integer.parseInt(obstacleL.getText()) + " ";
 					arg += Integer.parseInt(obstacleW.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
-					LiquidApplication.getGUI().variables.selectedObjects = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -174,8 +176,8 @@ public class EnvironmentEditorPanel extends JPanel{
 		delete.setBounds(5,175,110,25);
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects);
-				LiquidApplication.getGUI().variables.selectedObjects = 0;
+				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
+				LiquidApplication.getGUI().variables.selectedObject = 0;
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -191,8 +193,8 @@ public class EnvironmentEditorPanel extends JPanel{
 					arg += Integer.parseInt(obstacleY.getText()) + " ";
 					arg += Integer.parseInt(obstacleL.getText()) + " ";
 					arg += Integer.parseInt(obstacleW.getText());
-					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObjects, arg);
-					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects+1);
+					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObject, arg);
+					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject+1);
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -261,7 +263,7 @@ public class EnvironmentEditorPanel extends JPanel{
 					arg += Integer.parseInt(forceXComp.getText()) + " ";
 					arg += Integer.parseInt(forceYComp.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
-					LiquidApplication.getGUI().variables.selectedObjects = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -274,8 +276,8 @@ public class EnvironmentEditorPanel extends JPanel{
 		delete.setBounds(5,175,110,25);
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects);
-				LiquidApplication.getGUI().variables.selectedObjects = 0;
+				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
+				LiquidApplication.getGUI().variables.selectedObject = 0;
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -291,8 +293,8 @@ public class EnvironmentEditorPanel extends JPanel{
 					arg += Integer.parseInt(forceY.getText()) + " ";
 					arg += Integer.parseInt(forceXComp.getText()) + " ";
 					arg += Integer.parseInt(forceYComp.getText());
-					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObjects, arg);
-					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects+1);
+					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObject, arg);
+					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject+1);
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -343,7 +345,7 @@ public class EnvironmentEditorPanel extends JPanel{
 					arg += Integer.parseInt(sensorX.getText()) + " ";
 					arg += Integer.parseInt(sensorY.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
-					LiquidApplication.getGUI().variables.selectedObjects = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -355,8 +357,8 @@ public class EnvironmentEditorPanel extends JPanel{
 		delete.setBounds(5,175,110,25);
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects);
-				LiquidApplication.getGUI().variables.selectedObjects = 0;
+				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
+				LiquidApplication.getGUI().variables.selectedObject = 0;
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -372,8 +374,8 @@ public class EnvironmentEditorPanel extends JPanel{
 					String arg = sensorType.getSelectedItem() + " ";
 					arg += Integer.parseInt(sensorX.getText()) + " ";
 					arg += Integer.parseInt(sensorY.getText());
-					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObjects, arg);
-					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObjects+1);
+					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObject, arg);
+					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject+1);
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -384,12 +386,12 @@ public class EnvironmentEditorPanel extends JPanel{
 		
 		ActionListener snext = new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				if(LiquidApplication.getGUI().variables.selectedObjects < LiquidApplication.getGUI().variables.objects.size()-1){
-					LiquidApplication.getGUI().variables.selectedObjects += 1;
+				if(LiquidApplication.getGUI().variables.selectedObject < LiquidApplication.getGUI().variables.objects.size()-1){
+					LiquidApplication.getGUI().variables.selectedObject += 1;
 				}else{
-					LiquidApplication.getGUI().variables.selectedObjects = 0;
+					LiquidApplication.getGUI().variables.selectedObject = 0;
 				}
-				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObjects).split(" ");
+				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
 				if(tokens[0].equals("Rectangular") || tokens[0].equals("Circular")){
 					select.setSelectedItem("Obstacles");
 					forces.setVisible(false);
@@ -427,12 +429,12 @@ public class EnvironmentEditorPanel extends JPanel{
 		
 		ActionListener sprev = new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
-				if(LiquidApplication.getGUI().variables.selectedObjects > 0){
-					LiquidApplication.getGUI().variables.selectedObjects -= 1;
+				if(LiquidApplication.getGUI().variables.selectedObject > 0){
+					LiquidApplication.getGUI().variables.selectedObject -= 1;
 				}else{
-					LiquidApplication.getGUI().variables.selectedObjects = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 				}
-				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObjects).split(" ");
+				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
 				if(tokens[0].equals("Rectangular") || tokens[0].equals("Circular")){
 					select.setSelectedItem("Obstacles");
 					forces.setVisible(false);
