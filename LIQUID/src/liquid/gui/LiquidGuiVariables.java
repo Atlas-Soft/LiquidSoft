@@ -2,7 +2,7 @@ package liquid.gui;
 
 import java.util.ArrayList;
 
-public class LiquidGuiVariables {
+public class LiquidGUIVariables {
 	 
 	String filename;
 	String liquid;
