@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import liquid.core.LiquidApplication;
+import liquid.logger.LiquidLogger;
 
 public class ParameterPanel extends JPanel {
 	
@@ -92,7 +93,7 @@ public class ParameterPanel extends JPanel {
 					pause.setEnabled(true);
 					run.setEnabled(false);
 					step.setEnabled(false);
-					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidApplication.getLogger().WRITELOG);
+					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
 				}

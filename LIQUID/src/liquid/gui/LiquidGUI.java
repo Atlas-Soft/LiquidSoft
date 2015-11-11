@@ -18,7 +18,7 @@ public class LiquidGUI implements Interfaceable{
 	public static final int REQUEST_WRITELOG = 1;
 	public static final int SETLOGPARAM = 0;
 	
-	LiquidGuiVariables variables;
+	LiquidGUIVariables variables;
 	LiquidFrame frame;
 	LiquidMenuBar menubar;
 	ParameterPanel param;
@@ -87,7 +87,7 @@ public class LiquidGUI implements Interfaceable{
 	 * Method defines the components in the GUI.
 	 */
 	private void initComponents(){
-		variables = new LiquidGuiVariables();
+		variables = new LiquidGUIVariables();
 		frame = new LiquidFrame();
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());
