@@ -1,5 +1,8 @@
 package liquid.gui;
 
+import java.awt.Component;
+import java.awt.Container;
+
 import liquid.core.Interfaceable;
 import liquid.logger.LiquidLogger;
 
@@ -94,12 +97,35 @@ public class LiquidGUI implements Interfaceable{
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Method resets GUI to initial conditions and parameters.
+	 */
 	public void reset(){
 		variables = new LiquidGUIVariables();
 		enviroeditor.enviroLen.setText(Integer.toString(variables.enviroLength));
 		enviroeditor.enviroWid.setText(Integer.toString(variables.enviroWidth));
 		param.reset();
 		frame.setTitle("Untitled - LIQUID : 2D Fluid Simulator");
+	}
+	
+	public void setEnable(boolean enable){
+		menubar.New.setEnabled(enable);
+		menubar.load.setEnabled(enable);
+		menubar.undo.setEnabled(enable);
+		menubar.redo.setEnabled(enable);
+		for(Component x : enviroeditor.getComponents()){
+			x.setEnabled(enable);
+			if(x instanceof Container){
+				for(Component y : ((Container) x).getComponents()){
+					y.setEnabled(enable);
+				}
+			}
+		}
+		param.liqs.setEnabled(enable);
+		param.visc.setEnabled(enable);
+		param.temp.setEnabled(enable);
+		param.time.setEnabled(enable);
+		param.replay.setEnabled(enable);
 	}
 	
 }

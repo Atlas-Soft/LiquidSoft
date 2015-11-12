@@ -45,6 +45,7 @@ public class ConsolePanel extends JPanel {
 		console.setBounds(0, 20, 500, 160);
 		console.append ("Welcome to LIQUID!\n");
 		console.setEditable(false);
+		console.setCaretPosition(console.getDocument().getLength());
 		JScrollPane sp = new JScrollPane(console);
 		sp.setBounds(0, 20, 500, 160);
 		sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

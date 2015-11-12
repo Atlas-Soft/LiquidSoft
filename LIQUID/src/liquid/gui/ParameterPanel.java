@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ public class ParameterPanel extends JPanel {
 	JButton pause;
 	JButton step;
 	JButton end;
+	JCheckBox replay;
 	JList<String> liqs;
 	JTextField temp;
 	JTextField visc;
@@ -56,10 +58,6 @@ public class ParameterPanel extends JPanel {
 		l.setBounds(25,475,75,25);
 		add(l);
 		
-		l = new JLabel("Sec.");
-		l.setBounds(225,475,50,25);
-		add(l);
-		
 		String[] options = {"Water","Glycerin"};
 		liqs = new JList<String>(options);
 		liqs.setBounds(25,15,120,150);
@@ -75,28 +73,39 @@ public class ParameterPanel extends JPanel {
 		add(visc);
 		
 		time = new JTextField("300");
-		time.setBounds(100, 475, 125, 25);
+		time.setBounds(75, 475, 65, 25);
 		add(time);
+		
+		replay = new JCheckBox("Run Replay");
+		replay.setBounds(155, 475, 115, 25);
+		add(replay);
 		
 		run = new JButton("Run");
 		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
-					LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
-					LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
-					LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
-					LiquidApplication.getGUI().variables.runtime = Integer.parseInt(time.getText());
-					if(LiquidApplication.getGUI().variables.filename == null){
-						LiquidApplication.getGUI().variables.filename = "../logs/" + JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:") + ".log";
+					if(!LiquidApplication.getGUI().variables.simulating){
+						LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
+						LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
+						LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
+						LiquidApplication.getGUI().variables.runtime = Integer.parseInt(time.getText());
+						if(LiquidApplication.getGUI().variables.filename == null){
+							String filename = JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:");
+							if(filename == null || filename.equals("")) return;
+							LiquidApplication.getGUI().variables.filename = "../logs/" + filename + ".log";
+							LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
+						}
+						end.setEnabled(true);
+						LiquidApplication.getGUI().setEnable(false);
+						LiquidApplication.getGUI().variables.simulating = true;
+						LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 					}
 					pause.setEnabled(true);
 					run.setEnabled(false);
-					step.setEnabled(false);
-					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
+					step.setEnabled(false);			
 				}catch(Exception e){
-					e.printStackTrace();
-					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
+					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid "+ e.getMessage() + "\n");
 				}
 			}
         });
@@ -107,6 +116,7 @@ public class ParameterPanel extends JPanel {
 		pause.setEnabled(false);
 		pause.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().console.print_to_Console("Simulation Paused.\n");
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);
@@ -125,8 +135,13 @@ public class ParameterPanel extends JPanel {
 		
 		end = new JButton("End");
 		end.setBounds(155,545,115,25);
+		end.setEnabled(false);
 		end.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().console.print_to_Console("Simulation Ended.\n");
+				LiquidApplication.getGUI().variables.simulating = false;
+				LiquidApplication.getGUI().setEnable(true);
+				end.setEnabled(false);
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);

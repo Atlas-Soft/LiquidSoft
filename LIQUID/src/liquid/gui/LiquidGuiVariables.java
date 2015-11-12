@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class LiquidGUIVariables {
 	 
+	boolean simulating = false;
 	String filename;
 	String liquid;
 	float temperature;
