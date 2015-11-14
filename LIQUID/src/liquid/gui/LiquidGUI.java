@@ -15,7 +15,7 @@ import liquid.logger.LiquidLogger;
  * 
  *@version	1.0
  */
-public class LiquidGUI implements Interfaceable{
+public class LiquidGUI implements Interfaceable {
 	
 	public static final int REQUEST_LOADLOG = 0;
 	public static final int REQUEST_WRITELOG = 1;
