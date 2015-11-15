@@ -6,7 +6,7 @@ import javax.swing.BorderFactory;
 
 import liquid.core.LiquidApplication;
 
-public class BoundaryCheck {
+public class ValidityCheck {
 
 	/**
 	 * Method checks to ensure that the temperature value is
