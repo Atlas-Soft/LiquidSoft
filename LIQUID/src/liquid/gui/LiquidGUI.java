@@ -28,6 +28,7 @@ public class LiquidGUI implements Interfaceable {
 	EnvironmentEditorPanel enviroeditor;
 	SimulationPanel sim;
 	ConsolePanel console;
+	ValidityCheck check;
 	
 	/**
 	 * Constructor initializes components of GUI
@@ -94,6 +95,7 @@ public class LiquidGUI implements Interfaceable {
 		frame.add(param = new ParameterPanel());
 		param.add(enviroeditor = new EnvironmentEditorPanel());
 		frame.add(sim = new SimulationPanel());	
+		check = new ValidityCheck();
 		frame.setVisible(true);
 	}
 	

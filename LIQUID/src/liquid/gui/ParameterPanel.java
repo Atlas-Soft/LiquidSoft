@@ -22,7 +22,7 @@ import liquid.logger.LiquidLogger;
  * temperature, viscosity, and run time; but most importantly,
  * it creates the Run, Pause, Step, and End buttons.
  * 
- * A replay checkbox has been included to indicate when a
+ * A replay checkbox has also been added to indicate when a
  * simulation is running a previously saved set of parameters.
  */
 public class ParameterPanel extends JPanel {
@@ -121,35 +121,38 @@ public class ParameterPanel extends JPanel {
 		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				try {
-					// obtains the desired parameter values, either defaults or
-					// user-specified, only when the simulation is not running
-					if(!LiquidApplication.getGUI().variables.simulating) {
-						LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
-						LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
-						LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
-						LiquidApplication.getGUI().variables.runtime = Integer.parseInt(time.getText());
+				// when the user presses the Pause button, the simulation is still technically
+				// running so the other buttons must be turned on/off, as appropriate
+				if (LiquidApplication.getGUI().variables.simulating) {
+					run.setEnabled(false);
+					pause.setEnabled(true);
+					step.setEnabled(false);
+					
+				// makes sure that the obtained parameter values, either
+				// defaults or user-specified, are in the appropriate ranges
+				} else if (LiquidApplication.getGUI().check.tempHolds(temp.getText()) &
+							LiquidApplication.getGUI().check.viscosityHolds(visc.getText()) &
+							LiquidApplication.getGUI().check.runtimeHolds(time.getText())) {
+					
+					LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
 						
-						// if a log file is not already present, the user has
-						// to define a valid log file name in order to proceed
-						if(LiquidApplication.getGUI().variables.filename == null){
-							String filename = JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:");
-							if(filename == null || filename.equals("")) return;
-							LiquidApplication.getGUI().variables.filename = "../logs/" + filename + ".log";
-							
-							// sends a notice to the Logger to begin recording data
-							LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
-						}
-						end.setEnabled(true);
-						LiquidApplication.getGUI().setEnable(false);
-						LiquidApplication.getGUI().variables.simulating = true;
-						LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
+					// if a log file is not already present, the user has
+					// to define a valid log file name in order to proceed
+					if (LiquidApplication.getGUI().variables.filename == null) {
+						String filename = JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:");
+						if (filename == null || filename.equals("")) return;
+						LiquidApplication.getGUI().variables.filename = "../logs/" + filename + ".log";
+						
+						// sends a notice to the Logger to begin recording data
+						LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
 					}
 					run.setEnabled(false);
 					pause.setEnabled(true);
-					step.setEnabled(false);			
-				} catch(Exception e) {
-					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid "+ e.getMessage() + "\n");
+					step.setEnabled(false);
+					end.setEnabled(true);
+					LiquidApplication.getGUI().setEnable(false);
+					LiquidApplication.getGUI().variables.simulating = true;
+					LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 				}
 			}
         });
@@ -159,7 +162,7 @@ public class ParameterPanel extends JPanel {
 		pause = new JButton("Pause");
 		pause.setBounds(155,510,115,25);
 		pause.setEnabled(false);
-		pause.addActionListener(new ActionListener(){
+		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
@@ -174,7 +177,7 @@ public class ParameterPanel extends JPanel {
 		// (since that's how the Logger records the data) 
 		step = new JButton("Step");
 		step.setBounds(25,545,115,25);
-		step.addActionListener(new ActionListener(){
+		step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 			}
@@ -185,7 +188,7 @@ public class ParameterPanel extends JPanel {
 		end = new JButton("End");
 		end.setBounds(155,545,115,25);
 		end.setEnabled(false);
-		end.addActionListener(new ActionListener(){
+		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				run.setEnabled(true);
 			    pause.setEnabled(false);

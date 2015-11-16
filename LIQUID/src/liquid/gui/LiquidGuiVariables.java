@@ -18,7 +18,7 @@ public class LiquidGUIVariables {
 	int enviroLength = 500;
 	int enviroWidth = 400;
 	ArrayList<String> objects = new ArrayList<String>();
-	int selectedObject; // parameter not stored
+	int selectedObject = 0; // parameter not stored
 	
 	
 	/**
@@ -61,9 +61,8 @@ public class LiquidGUIVariables {
 		viscosity = Float.parseFloat(arr[3]);
 		runtime = Integer.parseInt(arr[4]);
 		
-		// splits the sixth item into 2 parts, the
-		// length/width of the environment. It is
-		// stored as "'length' 'width'"
+		// splits the sixth item into 2 parts, the length/width
+		// of the environment. It is stored as "'length' 'width'"
 		String[] tokens = arr[5].split(" ");
 		enviroLength = Integer.parseInt(tokens[0]);
 		enviroWidth = Integer.parseInt(tokens[1]);
@@ -72,7 +71,5 @@ public class LiquidGUIVariables {
 		for (int i = 6; i < arr.length; i++) {
 			objects.add(arr[i]);
 		}
-		
-		selectedObject = 0;
 	} // closes readArray(String[])
 } // closes LiquidGUIVariables
