@@ -1,6 +1,8 @@
 package liquid.gui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,12 +21,26 @@ public class EnvironmentEditorPanel extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	
+	JComboBox<String> select;
 	JPanel enviro;
-	JTextField enviroLen;
-	JTextField enviroWid;
+		JTextField enviroLen;
+		JTextField enviroWid;
 	JPanel obstacles;
+		JComboBox<String> obstacleType;
+		JTextField obstacleX;
+		JTextField obstacleY;
+		JTextField obstacleL;
+		JTextField obstacleW;
 	JPanel forces;
+		JComboBox<String> forceType;
+		JTextField forceX;
+		JTextField forceY;
+		JTextField forceXComp;
+		JTextField forceYComp;
 	JPanel sensors;
+		JComboBox<String> sensorType;		
+		JTextField sensorX;
+		JTextField sensorY;
 	
 	public EnvironmentEditorPanel() {
 		super();
@@ -40,7 +56,8 @@ public class EnvironmentEditorPanel extends JPanel{
 		setFont(font);
 		
 		String[] options = {"Environment","Obstacles","Forces","Sensors"};
-		JComboBox<String> select = new JComboBox<String>(options);
+		
+		select = new JComboBox<String>(options);
 		select.setBounds(5, 5, 240, 25);
 		select.addItemListener(new ItemListener(){
 			@Override
@@ -83,7 +100,7 @@ public class EnvironmentEditorPanel extends JPanel{
 		update.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
-					int l = Integer.parseInt(enviroLen.getText());
+					float l = Float.parseFloat(enviroLen.getText());
 					if(l >= 0 && l <= 500 ){
 						LiquidApplication.getGUI().variables.enviroLength = l;
 						LiquidApplication.getGUI().sim.repaint();
@@ -92,7 +109,7 @@ public class EnvironmentEditorPanel extends JPanel{
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Length Is Not An Integer.\n");
 				}
 				try{
-					int w = Integer.parseInt(enviroWid.getText());
+					float w = Float.parseFloat(enviroWid.getText());
 					if(w >= 0 && w <= 400 ){
 						LiquidApplication.getGUI().variables.enviroWidth = w;
 						LiquidApplication.getGUI().sim.repaint();
@@ -100,6 +117,7 @@ public class EnvironmentEditorPanel extends JPanel{
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Width Is Not An Integer.\n");
 				}
+				LiquidApplication.getGUI().variables.saveState();
 			}
         });
 		enviro.add(update);
@@ -132,23 +150,23 @@ public class EnvironmentEditorPanel extends JPanel{
 		obstacles.add(l);
 		
 		String[] obstype = {"Rectangular","Circular"};
-		JComboBox<String> obstacleType = new JComboBox<String>(obstype);
+		obstacleType = new JComboBox<String>(obstype);
 		obstacleType.setBounds(5, 25, 110, 25);
 		obstacles.add(obstacleType);
 			
-		JTextField obstacleX = new JTextField("0");
+		obstacleX = new JTextField("0");
 		obstacleX.setBounds(125, 25, 110, 25);
 		obstacles.add(obstacleX);
 		
-		JTextField obstacleY = new JTextField("0");
+		obstacleY = new JTextField("0");
 		obstacleY.setBounds(125, 75, 110, 25);
 		obstacles.add(obstacleY);
 		
-		JTextField obstacleL = new JTextField("50");
+		obstacleL = new JTextField("50");
 		obstacleL.setBounds(125, 125, 110, 25);
 		obstacles.add(obstacleL);
 		
-		JTextField obstacleW = new JTextField("50");
+		obstacleW = new JTextField("50");
 		obstacleW.setBounds(125, 175, 110, 25);
 		obstacles.add(obstacleW);
 		
@@ -158,12 +176,13 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
 					String arg = obstacleType.getSelectedItem() + " ";
-					arg += Integer.parseInt(obstacleX.getText()) + " ";
-					arg += Integer.parseInt(obstacleY.getText()) + " ";
-					arg += Integer.parseInt(obstacleL.getText()) + " ";
-					arg += Integer.parseInt(obstacleW.getText());
+					arg += Float.parseFloat(obstacleX.getText()) + " ";
+					arg += Float.parseFloat(obstacleY.getText()) + " ";
+					arg += Float.parseFloat(obstacleL.getText()) + " ";
+					arg += Float.parseFloat(obstacleW.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.saveState();
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -178,6 +197,7 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
 				LiquidApplication.getGUI().variables.selectedObject = 0;
+				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -189,12 +209,13 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
 					String arg = obstacleType.getSelectedItem() + " ";
-					arg += Integer.parseInt(obstacleX.getText()) + " ";
-					arg += Integer.parseInt(obstacleY.getText()) + " ";
-					arg += Integer.parseInt(obstacleL.getText()) + " ";
-					arg += Integer.parseInt(obstacleW.getText());
+					arg += Float.parseFloat(obstacleX.getText()) + " ";
+					arg += Float.parseFloat(obstacleY.getText()) + " ";
+					arg += Float.parseFloat(obstacleL.getText()) + " ";
+					arg += Float.parseFloat(obstacleW.getText());
 					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObject, arg);
 					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject+1);
+					LiquidApplication.getGUI().variables.saveState();
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -232,23 +253,23 @@ public class EnvironmentEditorPanel extends JPanel{
 		forces.add(l);
 		
 		String[] fotype = {"Source"};
-		JComboBox<String> forceType = new JComboBox<String>(fotype);
+		forceType = new JComboBox<String>(fotype);
 		forceType.setBounds(5, 25, 110, 25);
 		forces.add(forceType);
 			
-		JTextField forceX = new JTextField("0");
+		forceX = new JTextField("0");
 		forceX.setBounds(125, 25, 110, 25);
 		forces.add(forceX);
 		
-		JTextField forceY = new JTextField("0");
+		forceY = new JTextField("0");
 		forceY.setBounds(125, 75, 110, 25);
 		forces.add(forceY);
 		
-		JTextField forceXComp = new JTextField("10");
+		forceXComp = new JTextField("10");
 		forceXComp.setBounds(125, 125, 110, 25);
 		forces.add(forceXComp);
 		
-		JTextField forceYComp = new JTextField("10");
+		forceYComp = new JTextField("10");
 		forceYComp.setBounds(125, 175, 110, 25);
 		forces.add(forceYComp);
 		
@@ -258,12 +279,13 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
 					String arg = forceType.getSelectedItem() + " ";
-					arg += Integer.parseInt(forceX.getText()) + " ";
-					arg += Integer.parseInt(forceY.getText()) + " ";
-					arg += Integer.parseInt(forceXComp.getText()) + " ";
-					arg += Integer.parseInt(forceYComp.getText());
+					arg += Float.parseFloat(forceX.getText()) + " ";
+					arg += Float.parseFloat(forceY.getText()) + " ";
+					arg += Float.parseFloat(forceXComp.getText()) + " ";
+					arg += Float.parseFloat(forceYComp.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.saveState();
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -278,6 +300,7 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
 				LiquidApplication.getGUI().variables.selectedObject = 0;
+				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -289,12 +312,13 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
 					String arg = forceType.getSelectedItem() + " ";
-					arg += Integer.parseInt(forceX.getText()) + " ";
-					arg += Integer.parseInt(forceY.getText()) + " ";
-					arg += Integer.parseInt(forceXComp.getText()) + " ";
-					arg += Integer.parseInt(forceYComp.getText());
+					arg += Float.parseFloat(forceX.getText()) + " ";
+					arg += Float.parseFloat(forceY.getText()) + " ";
+					arg += Float.parseFloat(forceXComp.getText()) + " ";
+					arg += Float.parseFloat(forceYComp.getText());
 					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObject, arg);
 					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject+1);
+					LiquidApplication.getGUI().variables.saveState();
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -324,15 +348,15 @@ public class EnvironmentEditorPanel extends JPanel{
 		sensors.add(l);
 		
 		String[] sentype = {"Flowmeter"};
-		JComboBox<String> sensorType = new JComboBox<String>(sentype);
+		sensorType = new JComboBox<String>(sentype);
 		sensorType.setBounds(5, 25, 110, 25);
 		sensors.add(sensorType);
 			
-		JTextField sensorX = new JTextField("0");
+		sensorX = new JTextField("0");
 		sensorX.setBounds(125, 25, 110, 25);
 		sensors.add(sensorX);
 		
-		JTextField sensorY = new JTextField("0");
+		sensorY = new JTextField("0");
 		sensorY.setBounds(125, 75, 110, 25);
 		sensors.add(sensorY);
 		
@@ -342,10 +366,11 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
 					String arg = sensorType.getSelectedItem() + " ";
-					arg += Integer.parseInt(sensorX.getText()) + " ";
-					arg += Integer.parseInt(sensorY.getText());
+					arg += Float.parseFloat(sensorX.getText()) + " ";
+					arg += Float.parseFloat(sensorY.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().variables.saveState();
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -359,6 +384,7 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
 				LiquidApplication.getGUI().variables.selectedObject = 0;
+				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -372,10 +398,11 @@ public class EnvironmentEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent actionEvent) {
 				try{
 					String arg = sensorType.getSelectedItem() + " ";
-					arg += Integer.parseInt(sensorX.getText()) + " ";
-					arg += Integer.parseInt(sensorY.getText());
+					arg += Float.parseFloat(sensorX.getText()) + " ";
+					arg += Float.parseFloat(sensorY.getText());
 					LiquidApplication.getGUI().variables.objects.add(LiquidApplication.getGUI().variables.selectedObject, arg);
 					LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject+1);
+					LiquidApplication.getGUI().variables.saveState();
 					LiquidApplication.getGUI().sim.repaint();
 				}catch(Exception e){
 					LiquidApplication.getGUI().console.print_to_Console("Error: Inputed Value is Not Valid.\n");
@@ -391,38 +418,8 @@ public class EnvironmentEditorPanel extends JPanel{
 				}else{
 					LiquidApplication.getGUI().variables.selectedObject = 0;
 				}
-				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
-				if(tokens[0].equals("Rectangular") || tokens[0].equals("Circular")){
-					select.setSelectedItem("Obstacles");
-					forces.setVisible(false);
-					sensors.setVisible(false);
-					obstacles.setVisible(true);
-					obstacleType.setSelectedItem(tokens[0]);
-					obstacleX.setText(tokens[1]);
-					obstacleY.setText(tokens[2]);
-					obstacleL.setText(tokens[3]);
-					obstacleW.setText(tokens[4]);
-				}
-				if(tokens[0].equals("Source")){
-					select.setSelectedItem("Forces");
-					forces.setVisible(true);
-					sensors.setVisible(false);
-					obstacles.setVisible(false);
-					forceType.setSelectedItem(tokens[0]);
-					forceX.setText(tokens[1]);
-					forceY.setText(tokens[2]);
-					forceXComp.setText(tokens[3]);
-					forceYComp.setText(tokens[4]);
-				}
-				if(tokens[0].equals("Flowmeter")){
-					select.setSelectedItem("Sensors");
-					sensors.setVisible(true);
-					forces.setVisible(false);
-					obstacles.setVisible(false);
-					sensorType.setSelectedItem(tokens[0]);
-					sensorX.setText(tokens[1]);
-					sensorY.setText(tokens[2]);
-				}
+				update();
+				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
 			}
 		};
@@ -434,39 +431,7 @@ public class EnvironmentEditorPanel extends JPanel{
 				}else{
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 				}
-				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
-				if(tokens[0].equals("Rectangular") || tokens[0].equals("Circular")){
-					select.setSelectedItem("Obstacles");
-					forces.setVisible(false);
-					sensors.setVisible(false);
-					obstacles.setVisible(true);
-					obstacleType.setSelectedItem(tokens[0]);
-					obstacleX.setText(tokens[1]);
-					obstacleY.setText(tokens[2]);
-					obstacleL.setText(tokens[3]);
-					obstacleW.setText(tokens[4]);
-				}
-				if(tokens[0].equals("Source")){
-					select.setSelectedItem("Forces");
-					forces.setVisible(true);
-					sensors.setVisible(false);
-					obstacles.setVisible(false);
-					forceType.setSelectedItem(tokens[0]);
-					forceX.setText(tokens[1]);
-					forceY.setText(tokens[2]);
-					forceXComp.setText(tokens[3]);
-					forceYComp.setText(tokens[4]);
-				}
-				if(tokens[0].equals("Flowmeter")){
-					select.setSelectedItem("Sensors");
-					sensors.setVisible(true);
-					forces.setVisible(false);
-					obstacles.setVisible(false);
-					sensorType.setSelectedItem(tokens[0]);
-					sensorX.setText(tokens[1]);
-					sensorY.setText(tokens[2]);
-				}
-				LiquidApplication.getGUI().sim.repaint();
+				update();
 			}
 		};
 			
@@ -504,4 +469,73 @@ public class EnvironmentEditorPanel extends JPanel{
 		add(sensors);	
 	}
 	
+	public void update(){
+		enviroLen.setText(Float.toString(LiquidApplication.getGUI().variables.enviroLength));
+		enviroWid.setText(Float.toString(LiquidApplication.getGUI().variables.enviroWidth));
+		try{
+			String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
+			if(tokens[0].equals("Rectangular") || tokens[0].equals("Circular")){
+				select.setSelectedItem("Obstacles");
+				forces.setVisible(false);
+				sensors.setVisible(false);
+				obstacles.setVisible(true);
+				obstacleType.setSelectedItem(tokens[0]);
+				obstacleX.setText(tokens[1]);
+				obstacleY.setText(tokens[2]);
+				obstacleL.setText(tokens[3]);
+				obstacleW.setText(tokens[4]);
+			}
+			if(tokens[0].equals("Source")){
+				select.setSelectedItem("Forces");
+				forces.setVisible(true);
+				sensors.setVisible(false);
+				obstacles.setVisible(false);
+				forceType.setSelectedItem(tokens[0]);
+				forceX.setText(tokens[1]);
+				forceY.setText(tokens[2]);
+				forceXComp.setText(tokens[3]);
+				forceYComp.setText(tokens[4]);
+			}
+			if(tokens[0].equals("Flowmeter")){
+				select.setSelectedItem("Sensors");
+				sensors.setVisible(true);
+				forces.setVisible(false);
+				obstacles.setVisible(false);
+				sensorType.setSelectedItem(tokens[0]);
+				sensorX.setText(tokens[1]);
+				sensorY.setText(tokens[2]);
+			}
+		}catch(Exception e){
+		}
+	}
+	
+	public void reset(){
+		enviroLen.setText(Float.toString(LiquidApplication.getGUI().variables.enviroLength));
+		enviroWid.setText(Float.toString(LiquidApplication.getGUI().variables.enviroWidth));
+		select.setSelectedItem("Environment");
+		obstacleType.setSelectedIndex(0);
+		obstacleX.setText("0");
+		obstacleY.setText("0");
+		obstacleL.setText("50");
+		obstacleW.setText("50");
+		forceType.setSelectedIndex(0);
+		forceX.setText("0");
+		forceY.setText("0");
+		forceXComp.setText("10");
+		forceYComp.setText("10");
+		sensorType.setSelectedIndex(0);
+		sensorX.setText("0");
+		sensorY.setText("0");
+	}
+	
+	public void setEnabled(boolean enable){
+		for(Component x : getComponents()){
+			x.setEnabled(enable);
+			if(x instanceof Container){
+				for(Component y : ((Container) x).getComponents()){
+					y.setEnabled(enable);
+				}
+			}
+		}
+	}
 }

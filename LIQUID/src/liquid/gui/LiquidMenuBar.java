@@ -96,6 +96,8 @@ public class LiquidMenuBar extends JMenuBar {
 						LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename +
 								" - LIQUID : 2D Fluid Simulator   ");
 					}
+					LiquidApplication.getGUI().variables.savedStates.clear();
+					LiquidApplication.getGUI().variables.saveState();
 				} catch(Exception e) {
 					LiquidApplication.getGUI().console.print_to_Console("Error Loading File.");
 				}
@@ -125,6 +127,8 @@ public class LiquidMenuBar extends JMenuBar {
 		undo = new JMenuItem("Undo");
 		undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.undo();
+				LiquidApplication.getGUI().enviroeditor.update();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -135,6 +139,8 @@ public class LiquidMenuBar extends JMenuBar {
 		redo = new JMenuItem("Redo");
 		redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().variables.redo();
+				LiquidApplication.getGUI().enviroeditor.update();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -151,5 +157,12 @@ public class LiquidMenuBar extends JMenuBar {
 		about = new JMenuItem("About");
 		m.add(about);
 		add(m);
-	} // closes initComponents()
-} // closes LiquidMenuBar
+	}
+	
+	public void setEnbaled(boolean enable){
+		New.setEnabled(enable);
+		load.setEnabled(enable);
+		undo.setEnabled(enable);
+		redo.setEnabled(enable);
+	}
+}

@@ -1,9 +1,7 @@
 package liquid.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-
 import liquid.core.Interfaceable;
+import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 
 /**
@@ -19,9 +17,14 @@ public class LiquidGUI implements Interfaceable {
 	
 	public static final int REQUEST_LOADLOG = 0;
 	public static final int REQUEST_WRITELOG = 1;
+	public static final int REQUEST_RUNSIM = 2;
+	public static final int REQUEST_PAUSESIM = 5;
+	public static final int REQUEST_ENDSIM = 6;
 	public static final int SETLOGPARAM = 0;
+	public static final int DISPLAYSIM = 3;
+	public static final int PRINTSIM = 4;
 	
-	LiquidGUIVariables variables;
+	LiquidGuiVariables variables;
 	LiquidFrame frame;
 	LiquidMenuBar menubar;
 	ParameterPanel param;
@@ -55,8 +58,24 @@ public class LiquidGUI implements Interfaceable {
 				i.receive(this, LiquidLogger.LOADLOG, args);
 			break;
 			case REQUEST_WRITELOG:
-				args = variables.storeArray();
+				args = variables.writeArray();
 				i.receive(this, LiquidLogger.WRITELOG, args);
+			break;
+			}
+		}
+		if(i instanceof LiquidEngine){
+			switch(arg0){
+			case REQUEST_RUNSIM:
+				args = variables.writeArray();
+				i.receive(this, LiquidEngine.RUNSIM, args);
+			break;
+			case REQUEST_PAUSESIM:
+				args = new String[0];
+				i.receive(this, LiquidEngine.PAUSESIM, args);
+			break;
+			case REQUEST_ENDSIM:
+				args = new String[0];
+				i.receive(this, LiquidEngine.ENDSIM, args);
 			break;
 			}
 		}
@@ -75,10 +94,20 @@ public class LiquidGUI implements Interfaceable {
 			case SETLOGPARAM:
 				variables.readArray(args);
 				param.update();
-				enviroeditor.enviroLen.setText(Integer.toString(variables.enviroLength));
-				enviroeditor.enviroWid.setText(Integer.toString(variables.enviroWidth));
+				enviroeditor.update();
 				sim.repaint();
-				console.print_to_Console(variables.filename + " Loaded.\n");
+				console.print_to_Console("Log File Loaded.\n");
+			break;
+			}
+		}
+		if(i instanceof LiquidEngine){
+			switch(arg0){
+			case DISPLAYSIM:
+				variables.particles = args;
+				sim.repaint();
+			break;
+			case PRINTSIM:
+				console.print_to_Console(args[0]);
 			break;
 			}
 		}
@@ -88,7 +117,7 @@ public class LiquidGUI implements Interfaceable {
 	 * Method defines the components in the GUI.
 	 */
 	private void initComponents(){
-		variables = new LiquidGUIVariables();
+		variables = new LiquidGuiVariables();
 		frame = new LiquidFrame();
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(console = new ConsolePanel());
@@ -103,31 +132,16 @@ public class LiquidGUI implements Interfaceable {
 	 * Method resets GUI to initial conditions and parameters.
 	 */
 	public void reset(){
-		variables = new LiquidGUIVariables();
-		enviroeditor.enviroLen.setText(Integer.toString(variables.enviroLength));
-		enviroeditor.enviroWid.setText(Integer.toString(variables.enviroWidth));
+		variables.reset();
+		enviroeditor.reset();
 		param.reset();
 		frame.setTitle("Untitled - LIQUID : 2D Fluid Simulator");
 	}
 	
 	public void setEnable(boolean enable){
-		menubar.New.setEnabled(enable);
-		menubar.load.setEnabled(enable);
-		menubar.undo.setEnabled(enable);
-		menubar.redo.setEnabled(enable);
-		for(Component x : enviroeditor.getComponents()){
-			x.setEnabled(enable);
-			if(x instanceof Container){
-				for(Component y : ((Container) x).getComponents()){
-					y.setEnabled(enable);
-				}
-			}
-		}
-		param.liqs.setEnabled(enable);
-		param.visc.setEnabled(enable);
-		param.temp.setEnabled(enable);
-		param.time.setEnabled(enable);
-		param.replay.setEnabled(enable);
+		menubar.setEnabled(enable);
+		enviroeditor.setEnabled(enable);
+		param.setEnabled(enable);
 	}
 	
 }

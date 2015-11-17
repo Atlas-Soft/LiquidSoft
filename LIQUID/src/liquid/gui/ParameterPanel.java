@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import liquid.core.LiquidApplication;
+import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 
 /**
@@ -48,7 +49,7 @@ public class ParameterPanel extends JPanel {
 	 * it is located on the right side of the simulator,
 	 * excluding the 'Environment Editor:' section.
 	 */
-	public ParameterPanel() {
+	public ParameterPanel(){
 		super();
 		initComponents();
 		setLayout(null);
@@ -121,6 +122,24 @@ public class ParameterPanel extends JPanel {
 		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				try{
+					if(!LiquidApplication.getGUI().variables.simulating){
+						LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedValue();
+						LiquidApplication.getGUI().variables.temperature = Float.parseFloat(temp.getText());
+						LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(visc.getText());
+						LiquidApplication.getGUI().variables.runtime = Integer.parseInt(time.getText());
+						if(LiquidApplication.getGUI().variables.filename == null){
+							String filename = JOptionPane.showInputDialog(LiquidApplication.getGUI().frame, "Save Log As:");
+							if(filename == null || filename.equals("")) return;
+							LiquidApplication.getGUI().variables.filename = "../logs/" + filename + ".log";
+							LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
+						}
+						end.setEnabled(true);
+						LiquidApplication.getGUI().setEnable(false);
+						LiquidApplication.getGUI().variables.simulating = true;
+						LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
+					}
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), LiquidEngine.RUNSIM);
 				// when the user presses the Pause button, the simulation is still technically
 				// running so the other buttons must be turned on/off, as appropriate
 				if (LiquidApplication.getGUI().variables.simulating) {
@@ -154,6 +173,9 @@ public class ParameterPanel extends JPanel {
 					LiquidApplication.getGUI().variables.simulating = true;
 					LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 				}
+			}catch(Exception e){
+				
+			}
 			}
         });
 		add(run);
@@ -164,6 +186,8 @@ public class ParameterPanel extends JPanel {
 		pause.setEnabled(false);
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().console.print_to_Console("Simulation Paused.\n");
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), LiquidEngine.PAUSESIM);
 			    pause.setEnabled(false);
 			    run.setEnabled(true);
 			    step.setEnabled(true);
@@ -190,6 +214,13 @@ public class ParameterPanel extends JPanel {
 		end.setEnabled(false);
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().console.print_to_Console("Simulation Ended.\n");
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), LiquidEngine.ENDSIM);
+				LiquidApplication.getGUI().variables.simulating = false;
+				LiquidApplication.getGUI().variables.particles = new String[0];
+				LiquidApplication.getGUI().setEnable(true);
+				LiquidApplication.getGUI().sim.repaint();
+				end.setEnabled(false);
 				run.setEnabled(true);
 			    pause.setEnabled(false);
 			    step.setEnabled(true);
@@ -202,7 +233,6 @@ public class ParameterPanel extends JPanel {
 		add(end);
 	} // closes initComponents()
 	
-	
 	/**
 	 * The simulation will revert back to
 	 * the original default settings.
@@ -212,9 +242,16 @@ public class ParameterPanel extends JPanel {
 		temp.setText("70");
 		visc.setText("1");
 		time.setText("300");
-	} // closes reset()
+		replay.setSelected(false);
+	}
 	
-	
+	public void setEnabled(boolean enable){
+		liqs.setEnabled(enable);
+		visc.setEnabled(enable);
+		temp.setEnabled(enable);
+		time.setEnabled(enable);
+		replay.setEnabled(enable);
+	}
 	/**
 	 * The main parameters will get their
 	 * values updated when a feature has changed.
@@ -225,4 +262,6 @@ public class ParameterPanel extends JPanel {
 		visc.setText(Float.toString(LiquidApplication.getGUI().variables.viscosity));
 		time.setText(Integer.toString(LiquidApplication.getGUI().variables.runtime));
 	} // closes update()
+	
 } // closes ParameterPanel
+
