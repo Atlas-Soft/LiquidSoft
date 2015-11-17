@@ -48,7 +48,7 @@ public class FluidEnvironment {
 			}
 		}
 		
-		particles.get(0).vel.setLocation(1, 0);
+		particles.get(0).vel.setLocation(10, 0);
 	}
 	
 	public void update(float delta){

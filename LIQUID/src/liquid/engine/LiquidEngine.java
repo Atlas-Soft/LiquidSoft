@@ -108,6 +108,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
+				//send(LiquidApplication.getGUI(), LiquidGUI.PRINTSIM);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;

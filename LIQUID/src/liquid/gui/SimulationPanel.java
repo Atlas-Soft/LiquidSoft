@@ -71,7 +71,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         
         for(int i = 0; i < LiquidApplication.getGUI().variables.objects.size(); i++){
         	String[] tokens = LiquidApplication.getGUI().variables.objects.get(i).split(" ");
-        	if(i == LiquidApplication.getGUI().variables.selectedObject) g2d.setColor(Color.green);
+        	if(i == LiquidApplication.getGUI().variables.selectedObject && !LiquidApplication.getGUI().variables.simulating) g2d.setColor(Color.green);
         	else g2d.setColor(Color.black);
         	if(tokens[0].equals("Rectangular")){
         		x = environment.x+Float.parseFloat(tokens[1]);

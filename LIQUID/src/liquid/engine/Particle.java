@@ -16,7 +16,7 @@ public class Particle {
 	
 	public Particle(Point2D p){
 		loc = p;
-		vel = new Point2D.Float(1,1);
+		vel = new Point2D.Float(.1f,.51f);
 	}
 	
 	public String getData(){

@@ -99,7 +99,7 @@ public class LiquidMenuBar extends JMenuBar {
 					LiquidApplication.getGUI().variables.savedStates.clear();
 					LiquidApplication.getGUI().variables.saveState();
 				} catch(Exception e) {
-					LiquidApplication.getGUI().console.print_to_Console("Error Loading File.");
+					LiquidApplication.getGUI().console.print_to_Console("Error Loading File.\n");
 				}
 			}
         });
@@ -159,7 +159,7 @@ public class LiquidMenuBar extends JMenuBar {
 		add(m);
 	}
 	
-	public void setEnbaled(boolean enable){
+	public void setEnabled(boolean enable){
 		New.setEnabled(enable);
 		load.setEnabled(enable);
 		undo.setEnabled(enable);
