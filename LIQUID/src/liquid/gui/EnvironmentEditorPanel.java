@@ -77,6 +77,8 @@ public class EnvironmentEditorPanel extends JPanel {
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 				}
 				update();
+				LiquidApplication.getGUI().variables.saveState();
+				LiquidApplication.getGUI().sim.repaint();
 			}
 		};
 		

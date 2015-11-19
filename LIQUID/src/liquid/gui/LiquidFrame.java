@@ -1,6 +1,7 @@
 package liquid.gui;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import liquid.core.LiquidApplication;
 
@@ -22,7 +23,13 @@ public class LiquidFrame extends JFrame {
 	
 	@Override
 	public void dispose(){
-		super.dispose();
-		LiquidApplication.dispose();
+		int exitSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+				"Are you sure you want to exit the simulator?", "Exit Simulator?",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (exitSim == JOptionPane.YES_OPTION) {
+			super.dispose();
+			LiquidApplication.dispose();
+		}
+		
 	}
 }

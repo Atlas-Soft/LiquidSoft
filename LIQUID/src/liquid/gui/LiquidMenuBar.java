@@ -106,13 +106,7 @@ public class LiquidMenuBar extends JMenuBar {
 		Exit = new JMenuItem("Exit");
 		Exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				int exitSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
-						"Are you sure you want to exit the simulator?", "Exit Simulator?",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (exitSim == JOptionPane.YES_OPTION) {
-					LiquidApplication.getGUI().frame.dispose();
-					System.exit(0);
-				}
+			    LiquidApplication.getGUI().frame.dispose();
 			}
         });
 		m.add(Exit);
