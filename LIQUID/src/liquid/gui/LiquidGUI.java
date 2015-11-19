@@ -144,4 +144,8 @@ public class LiquidGUI implements Interfaceable {
 		param.setEnabled(enable);
 	}
 	
+	public void dispose(){
+		
+	}
+	
 }

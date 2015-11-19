@@ -124,6 +124,7 @@ public class ParameterPanel extends JPanel {
 						if (LiquidApplication.getGUI().check.tempHolds(temp.getText()) && LiquidApplication.getGUI().check.viscosityHolds(visc.getText())
 							&& LiquidApplication.getGUI().check.runtimeHolds(time.getText())) {
 							LiquidApplication.getGUI().variables.runtime = Integer .parseInt(time.getText());
+							LiquidApplication.getGUI().variables.liquid = (String)liqs.getSelectedValue();
 							// if a log file is not already present, the user has
 							// to define a valid log file name in order to proceed
 							if (LiquidApplication.getGUI().variables.filename == null) {
@@ -193,7 +194,6 @@ public class ParameterPanel extends JPanel {
 		end.setEnabled(false);
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().console.print_to_Console("Simulation Ended.\n");
 				LiquidApplication.getGUI().send(LiquidApplication.getEngine(),LiquidEngine.ENDSIM);
 				LiquidApplication.getGUI().variables.simulating = false;
 				LiquidApplication.getGUI().variables.particles = new String[0];

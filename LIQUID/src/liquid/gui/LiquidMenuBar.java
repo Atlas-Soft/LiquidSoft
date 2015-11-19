@@ -111,7 +111,7 @@ public class LiquidMenuBar extends JMenuBar {
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().frame.dispose();
-				System.exit(0);
+				//System.exit(0);
 			}
         });
 		m.add(exit);

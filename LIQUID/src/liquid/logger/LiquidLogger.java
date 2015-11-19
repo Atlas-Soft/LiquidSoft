@@ -63,4 +63,8 @@ public class LiquidLogger implements Interfaceable{
 			f.mkdirs();
 		}
 	}
+	
+	public void dispose(){
+		
+	}
 }

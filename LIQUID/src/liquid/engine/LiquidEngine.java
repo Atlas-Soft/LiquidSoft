@@ -1,8 +1,6 @@
 package liquid.engine;
 
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import org.jbox2d.collision.shapes.PolygonShape;
 
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
@@ -38,7 +36,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		if (i instanceof LiquidGUI) {
 			switch (arg0) {
 			case REQUEST_DISPLAYSIM:
-				args = particlestoArray();
+				args = enviro.getParticleData();
 				i.receive(this, LiquidGUI.DISPLAYSIM, args);
 			break;
 			case REQUEST_PRINTSIM:
@@ -134,14 +132,15 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
-				enviro.addObstacle(new Obstacle(new Rectangle2D.Float(x, y, l,w)));
+				PolygonShape shape = new PolygonShape();
+				shape.setAsBox(l, w);
+				enviro.addObstacle(shape, x, y);
 			}
 			if (tokens[0].equals("Circular")) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
-				enviro.addObstacle(new Obstacle(new Ellipse2D.Float(x, y, l, w)));
 			}
 			if (tokens[0].equals("Source")) {
 
@@ -152,13 +151,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		}
 		enviro.init();
 	}
-
-	public String[] particlestoArray() {
-		ArrayList<Particle> particles = enviro.getParticles();
-		String[] arr = new String[particles.size()];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = particles.get(i).getData();
-		}
-		return arr;
+	
+	public void dispose(){
+		simulating = false;
 	}
 }

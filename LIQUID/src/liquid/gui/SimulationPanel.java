@@ -61,12 +61,14 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         g2d.draw(environment);
         
         float x,y,l,w;
-        for(int i = 0; i < LiquidApplication.getGUI().variables.particles.length; i++){
-        	String[] tokens = LiquidApplication.getGUI().variables.particles[i].split(" ");
-        	x = environment.x+Float.parseFloat(tokens[1]);
-    		y = environment.y+Float.parseFloat(tokens[2]);
-    		g2d.setColor(new Color(1-(1/Float.parseFloat(tokens[3])), 0, 1/Float.parseFloat(tokens[3])));
-        	g2d.fill(new Ellipse2D.Float(x-2.5f,y-2.5f,5,5));
+        if(LiquidApplication.getGUI().variables.simulating){
+        	for(int i = 0; i < LiquidApplication.getGUI().variables.particles.length; i++){
+        		String[] tokens = LiquidApplication.getGUI().variables.particles[i].split(" ");
+        		x = environment.x+Float.parseFloat(tokens[1]);
+        		y = environment.y+Float.parseFloat(tokens[2]);
+        		g2d.setColor(new Color(1-(1/Float.parseFloat(tokens[3])), 0, 1/Float.parseFloat(tokens[3])));
+        		g2d.fill(new Ellipse2D.Float(x-2.5f,y-2.5f,5,5));
+        	}
         }
         
         for(int i = 0; i < LiquidApplication.getGUI().variables.objects.size(); i++){

@@ -26,6 +26,12 @@ public class LiquidApplication {
 		gui = new LiquidGUI();
 	}
 	
+	public static void dispose(){
+		logger.dispose();
+		engine.dispose();
+		gui.dispose();
+	}
+	
 	/**
 	 * 
 	 * @return	gui

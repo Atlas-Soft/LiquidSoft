@@ -34,6 +34,7 @@ public class LiquidGuiVariables {
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects = new ArrayList<String>();
+		selectedObject = 0;
 		particles = new String[0];
 		saveState();
 	}
@@ -50,6 +51,7 @@ public class LiquidGuiVariables {
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects.clear();
+		particles = new String[0];
 		saveState();
 	}
 	
