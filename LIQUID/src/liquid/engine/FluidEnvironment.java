@@ -34,12 +34,12 @@ public class FluidEnvironment {
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
 		particles = new ParticleSystem(world);
+		
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
 		Body b = world.createBody(bd);
 		ChainShape shape = new ChainShape();
-        final Vec2[] vertices =
-            new Vec2[] {new Vec2(0, 0), new Vec2(len, 0), new Vec2(len, wid), new Vec2(0, wid)};
+        Vec2[] vertices = new Vec2[] {new Vec2(0, 0), new Vec2(len, 0), new Vec2(len, wid), new Vec2(0, wid)};
         shape.createLoop(vertices, 4);
         b.createFixture(shape, 0.0f);
 		
@@ -48,6 +48,7 @@ public class FluidEnvironment {
 	
 	public void init(){
 		world.setParticleRadius(5f);
+		world.setParticleDensity(1.0f);
 	}
 	
 	public void update(float delta){
@@ -70,13 +71,12 @@ public class FluidEnvironment {
 	private void addParticle(float x, float y, float velx, float vely){
 		if (particleCount < 1000) {
 	    	CircleShape shape = new CircleShape();
-	    	shape.setRadius(5);
+	    	shape.setRadius(6);
 	        ParticleGroupDef pd = new ParticleGroupDef();
 	        pd.position.set(x, y);
 	        pd.flags = ParticleType.b2_waterParticle;
 	        pd.shape = shape;
-	        pd.linearVelocity.set(velx, vely);
-	        world.setParticleDensity(.5f);
+	        pd.linearVelocity.set(velx, vely); 
 	        world.createParticleGroup(pd);
 	        particleCount ++;
 	    }
@@ -87,9 +87,7 @@ public class FluidEnvironment {
 		ArrayList<String> dataList = new ArrayList<String>();
 		Vec2[] particlePos = world.getParticlePositionBuffer();
 		Vec2[] particleVel = world.getParticleVelocityBuffer();
-		
 		try{
-			System.out.println(particlePos.length);
 			for(int i = 0; i < particlePos.length; i++){
 				String data = "P " + particlePos[i].x + " " + particlePos[i].y + " " + (particleVel[i].length() + 1.0);
 				dataList.add(data);

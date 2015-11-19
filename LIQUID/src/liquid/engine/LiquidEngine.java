@@ -1,6 +1,8 @@
 package liquid.engine;
 
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.MathUtils;
+import org.jbox2d.common.Vec2;
 
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
@@ -141,6 +143,13 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
+				PolygonShape shape = new PolygonShape();
+				Vec2[] vertices = new Vec2[90];
+				for(int t = 0; t < vertices.length; t ++){
+					vertices[t] = new Vec2(((l/2)*MathUtils.cos(t*(360.0f/vertices.length)))+(l/2),((w/2)*MathUtils.sin(t*(360.0f/vertices.length))+(w/2))); 	
+				}
+				shape.set(vertices, vertices.length);
+				enviro.addObstacle(shape, x, y);
 			}
 			if (tokens[0].equals("Source")) {
 
