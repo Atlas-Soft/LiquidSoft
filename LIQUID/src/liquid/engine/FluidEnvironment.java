@@ -4,15 +4,19 @@
 package liquid.engine;
 
 import org.jbox2d.collision.shapes.ChainShape;
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.common.MathUtils;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.particle.ParticleDef;
 import org.jbox2d.particle.ParticleGroupDef;
+import org.jbox2d.particle.ParticleSystem;
 import org.jbox2d.particle.ParticleType;
 
 import java.util.ArrayList;
@@ -24,14 +28,12 @@ import java.util.ArrayList;
 public class FluidEnvironment {
 
 	World world;
-	
-	ArrayList<Source> sources;
-	ArrayList<Flowmeter> flowmeters;
-	
+	ParticleSystem particles;
 	int particleCount;
 	
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
+		particles = new ParticleSystem(world);
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
 		Body b = world.createBody(bd);
@@ -41,28 +43,17 @@ public class FluidEnvironment {
         shape.createLoop(vertices, 4);
         b.createFixture(shape, 0.0f);
 		
-		sources = new ArrayList<Source>();
-		flowmeters = new ArrayList<Flowmeter>();
-		
 		particleCount = 0;
 	}
 	
 	public void init(){
-		world.setParticleRadius(0.3f);
+		world.setParticleRadius(5f);
 	}
 	
 	public void update(float delta){
-		if (particleCount < 300) {
-	    	PolygonShape shape = new PolygonShape();
-	        shape.setAsBox(1,1, new Vec2(25, 75), 0);
-	        ParticleGroupDef pd = new ParticleGroupDef();
-	        pd.flags = ParticleType.b2_waterParticle;
-	        pd.shape = shape;
-	        world.setParticleDensity(1.0f);
-	        world.createParticleGroup(pd);
-	        particleCount ++;
-	    }
+		
 		world.step(delta, 6, 3);
+		addParticle(25,75,10,0);
 	}
 	
 	public void addObstacle(Shape s,float x, float y){
@@ -76,12 +67,19 @@ public class FluidEnvironment {
 		b.createFixture(fd);
 	}
 	
-	public void addSource(Source s){
-		sources.add(s);
-	}
-	
-	public void addFlowMeter(Flowmeter f){
-		flowmeters.add(f);
+	private void addParticle(float x, float y, float velx, float vely){
+		if (particleCount < 1000) {
+	    	CircleShape shape = new CircleShape();
+	    	shape.setRadius(5);
+	        ParticleGroupDef pd = new ParticleGroupDef();
+	        pd.position.set(x, y);
+	        pd.flags = ParticleType.b2_waterParticle;
+	        pd.shape = shape;
+	        pd.linearVelocity.set(velx, vely);
+	        world.setParticleDensity(.5f);
+	        world.createParticleGroup(pd);
+	        particleCount ++;
+	    }
 	}
 	
 	public String[] getParticleData(){
@@ -91,6 +89,7 @@ public class FluidEnvironment {
 		Vec2[] particleVel = world.getParticleVelocityBuffer();
 		
 		try{
+			System.out.println(particlePos.length);
 			for(int i = 0; i < particlePos.length; i++){
 				String data = "P " + particlePos[i].x + " " + particlePos[i].y + " " + (particleVel[i].length() + 1.0);
 				dataList.add(data);
