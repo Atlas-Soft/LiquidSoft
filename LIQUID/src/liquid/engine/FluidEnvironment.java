@@ -3,9 +3,6 @@
  */
 package liquid.engine;
 
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
-
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.collision.shapes.Shape;
@@ -55,11 +52,11 @@ public class FluidEnvironment {
 	}
 	
 	public void update(float delta){
-		if (particleCount < 100) {
+		if (particleCount < 300) {
 	    	PolygonShape shape = new PolygonShape();
 	        shape.setAsBox(1,1, new Vec2(25, 75), 0);
 	        ParticleGroupDef pd = new ParticleGroupDef();
-	        pd.flags = ParticleType.b2_viscousParticle;
+	        pd.flags = ParticleType.b2_waterParticle;
 	        pd.shape = shape;
 	        world.setParticleDensity(1.0f);
 	        world.createParticleGroup(pd);
