@@ -8,15 +8,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.LiquidApplication;
 
 /**
- * Class creates the menu bar along the top of the
- * simulator. This is in relation to other programs,
- * where you can create a new program and view the
- * specifics of the program (the "About").
+ * Class creates the menu bar along the top of the simulator. This is
+ * in relation to other programs, where you can create a new program
+ * or view the specifics of the program (the "About" section).
  * 
  * For our simulation, you can also load a log file
  * to "replay" it or undo/redo the last move performed.
@@ -25,57 +25,54 @@ public class LiquidMenuBar extends JMenuBar {
 
 	private static final long serialVersionUID = 1L;
 	
-	// creates the individual sections of
-	// the menu bar, including the file name
+	// creates the individual sections of the menu bar, including the file name
 	JMenuItem New;
-	JMenuItem load;
-	JMenuItem exit;
-	JMenuItem undo;
-	JMenuItem redo;
-	JMenuItem about;
+	JMenuItem Load;
+	JMenuItem Exit;
+	JMenuItem Undo;
+	JMenuItem Redo;
+	JMenuItem About;
 	String log_filename;
-
 	
 	/**
-	 * Constructor for the menu bar. Creates
-	 * the menu across the top of the simulator.
+	 * Constructor for the menu bar. Creates the menu across the top of the simulator.
 	 */
 	public LiquidMenuBar() {
 		super();
 		initComponents();
 	}
 	
-	
 	/**
-	 * Initializes the various components of the
-	 * menu bar, such as the font, the main menu
-	 * tabs, and the individual sections of the tabs.
+	 * Initializes the various components of the menu bar, such as the
+	 * main menu tabs and sub-tabs, as well as their functionalities.
 	 */
 	private void initComponents() {
 		Font font = new Font("Verdana", Font.BOLD, 12);
 		setFont(font);
 		
-		// creates the first main menu tab, which
-		// features 'New', 'Load...', and 'Exit'
+		// creates the first main menu tab, which features 'New', 'Load...', and 'Exit'
 		JMenu m = new JMenu("File");
 		
-		// the 'New' feature creates a new
-		// simulation by resetting the program
+		// the 'New' feature creates a new simulation by resetting the program
 		New = new JMenuItem("New");
 		New.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().reset();
+				int newSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+						"Are you sure you want to make a new simulation?", "Create New Simulation?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (newSim == JOptionPane.YES_OPTION) {
+					LiquidApplication.getGUI().reset();
+				}
 			}
         });
 		m.add(New);
 		
-		// the 'Load' feature attempts to obtain a log
-		// file from the computer's document system
-		load = new JMenuItem("Load...");
-		load.addActionListener(new ActionListener() {
+		// the 'Load' feature attempts to obtain a log file from the computer's document system
+		Load = new JMenuItem("Load...");
+		Load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				try {
-					// sets the conditions when retrieving a log file, such as
+					// sets the conditions when retrieving a log file:
 					//  - Folder is set to be 'logs'
 					//  - File must end in '.log'
 					JFileChooser fileDialog = new JFileChooser("../logs");
@@ -103,66 +100,66 @@ public class LiquidMenuBar extends JMenuBar {
 				}
 			}
         });
-		m.add(load);
+		m.add(Load);
 		
-		// the 'Exit' feature leaves the simulation program
-		// by deleting the GUI and executing 'System.exit(0);'
-		exit = new JMenuItem("Exit");
-		exit.addActionListener(new ActionListener() {
+		// the 'Exit' feature leaves the simulation program by disposing the GUI and exiting altogether
+		Exit = new JMenuItem("Exit");
+		Exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().frame.dispose();
-				//System.exit(0);
+				int exitSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+						"Are you sure you want to exit the simulator?", "Exit Simulator?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (exitSim == JOptionPane.YES_OPTION) {
+					LiquidApplication.getGUI().frame.dispose();
+					System.exit(0);
+				}
 			}
         });
-		m.add(exit);
+		m.add(Exit);
 		add(m);
 		
-		
-		// creates the second main menu tab,
-		// which features 'Undo' and 'Redo'
+		// creates the second main menu tab, which features 'Undo' and 'Redo'
 		m = new JMenu("Edit");
 		
-		// the 'Undo' feature un-does the
-		// last action made by the user
-		undo = new JMenuItem("Undo");
-		undo.addActionListener(new ActionListener() {
+		// the 'Undo' feature un-does the last action made by the user
+		Undo = new JMenuItem("Undo");
+		Undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.undo();
 				LiquidApplication.getGUI().enviroeditor.update();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
-		m.add(undo);
+		m.add(Undo);
 		
-		// the 'Redo' feature re-does the
-		// last action made by the user
-		redo = new JMenuItem("Redo");
-		redo.addActionListener(new ActionListener() {
+		// the 'Redo' feature re-does the last action made by the user
+		Redo = new JMenuItem("Redo");
+		Redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.redo();
 				LiquidApplication.getGUI().enviroeditor.update();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
-		m.add(redo);
+		m.add(Redo);
 		add(m);
 		
-		
-		// creates the third main menu tab,
-		// which features the 'About' sub-tab
+		// creates the third main menu tab, which features the 'About' sub-tab
 		m = new JMenu("Help");
 		
-		// the 'About' feature provides screenshots to guide
-		// the user in setting up and running a simulation
-		about = new JMenuItem("About");
-		m.add(about);
+		// the 'About' feature provides screenshots to guide the user in setting up and running a simulation
+		About = new JMenuItem("About");
+		m.add(About);
 		add(m);
 	}
 	
+	/**
+	 * Method enables/disables the appropriate main menu tabs.
+	 */
 	public void setEnabled(boolean enable){
 		New.setEnabled(enable);
-		load.setEnabled(enable);
-		undo.setEnabled(enable);
-		redo.setEnabled(enable);
+		Load.setEnabled(enable);
+		Undo.setEnabled(enable);
+		Redo.setEnabled(enable);
 	}
 }

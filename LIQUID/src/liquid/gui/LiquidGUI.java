@@ -93,7 +93,7 @@ public class LiquidGUI implements Interfaceable {
 			switch(arg0){
 			case SETLOGPARAM:
 				variables.readArray(args);
-				param.update();
+				param.logUpdate();
 				enviroeditor.update();
 				sim.repaint();
 				console.print_to_Console("Log File Loaded.\n");
