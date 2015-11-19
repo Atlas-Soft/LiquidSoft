@@ -133,8 +133,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
 				PolygonShape shape = new PolygonShape();
-				shape.setAsBox(l, w);
-				enviro.addObstacle(shape, x, y);
+				shape.setAsBox(l/2, w/2);
+				enviro.addObstacle(shape, (l/2)+x, (w/2)+y);
 			}
 			if (tokens[0].equals("Circular")) {
 				x = Float.parseFloat(tokens[1]);

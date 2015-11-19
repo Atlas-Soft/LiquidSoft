@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class FluidEnvironment {
 
 	World world;
-	Vec2 bounds;
 	
 	ArrayList<Source> sources;
 	ArrayList<Flowmeter> flowmeters;
@@ -36,7 +35,6 @@ public class FluidEnvironment {
 	
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
-		bounds = new Vec2(len, wid);
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
 		Body b = world.createBody(bd);
@@ -57,11 +55,11 @@ public class FluidEnvironment {
 	}
 	
 	public void update(float delta){
-		if (particleCount < 500) {
+		if (particleCount < 100) {
 	    	PolygonShape shape = new PolygonShape();
 	        shape.setAsBox(1,1, new Vec2(25, 75), 0);
 	        ParticleGroupDef pd = new ParticleGroupDef();
-	        pd.flags = ParticleType.b2_tensileParticle | ParticleType.b2_viscousParticle;
+	        pd.flags = ParticleType.b2_viscousParticle;
 	        pd.shape = shape;
 	        world.setParticleDensity(1.0f);
 	        world.createParticleGroup(pd);

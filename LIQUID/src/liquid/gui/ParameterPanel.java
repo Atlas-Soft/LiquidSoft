@@ -147,6 +147,7 @@ public class ParameterPanel extends JPanel {
 							LiquidApplication.getGUI().send(LiquidApplication.getEngine(), LiquidEngine.RUNSIM);
 						}
 					}else{
+						run.setEnabled(false);
 						pause.setEnabled(true);
 						step.setEnabled(false);
 						end.setEnabled(true);
