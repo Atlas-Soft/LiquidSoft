@@ -62,6 +62,7 @@ public class LiquidMenuBar extends JMenuBar {
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (newSim == JOptionPane.YES_OPTION) {
 					LiquidApplication.getGUI().reset();
+					LiquidApplication.getGUI().sim.repaint();
 				}
 			}
         });

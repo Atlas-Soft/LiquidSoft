@@ -3,6 +3,10 @@
  */
 package liquid.engine;
 
+
+import org.jbox2d.callbacks.ParticleQueryCallback;
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.Shape;
@@ -13,9 +17,11 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.particle.ParticleGroupDef;
+import org.jbox2d.particle.ParticleGroupType;
 import org.jbox2d.particle.ParticleSystem;
 import org.jbox2d.particle.ParticleType;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +31,7 @@ import java.util.ArrayList;
 public class FluidEnvironment {
 
 	World world;
+	Rectangle2D bounds;
 	ParticleSystem particles;
 	ArrayList<Source> sources;
 	
@@ -32,6 +39,7 @@ public class FluidEnvironment {
 		world = new World(new Vec2(0, 0));
 		particles = new ParticleSystem(world);
 		sources = new ArrayList<Source>();
+		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
 		
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
@@ -44,8 +52,23 @@ public class FluidEnvironment {
 	
 	public void init(){
 		world.setParticleRadius(5f);
-		world.setParticleDensity(1.0f);
-		world.setParticleMaxCount(1000);
+		world.setParticleMaxCount(1500);
+		world.setParticleViscousStrength(0.0f);
+		
+		
+		for(int i = 0; i < 100; i ++){
+			for(int j = 0; j < 100; j++){
+				ParticleQuery pq = new ParticleQuery();
+				Vec2 p = new Vec2(i*12,j*12);
+				AABB pb = new AABB();
+				pb.lowerBound.set(p.x-10, p.y-10);
+				pb.upperBound.set(p.x+10, p.y+10);
+				world.queryAABB((QueryCallback)pq, (ParticleQueryCallback)pq, pb);
+				if(pq.isOpen() && bounds.contains(p.x, p.y)){
+					//addParticle(p.x,p.y,0,0);
+				}
+			}
+		}
 	}
 	
 	public void update(float delta){
@@ -72,13 +95,12 @@ public class FluidEnvironment {
 	
 	public void addParticle(float x, float y, float velx, float vely){
 	    	CircleShape shape = new CircleShape();
-	    	shape.setRadius(6);
+	    	shape.setRadius(5);
 	        ParticleGroupDef pd = new ParticleGroupDef();
 	        pd.position.set(x, y);
-	        pd.flags = ParticleType.b2_waterParticle;
+	        pd.flags = ParticleType.b2_waterParticle | ParticleType.b2_viscousParticle;
 	        pd.shape = shape;
 	        pd.linearVelocity.set(velx, vely); 
-	        pd.strength = 1.0f;
 	        world.createParticleGroup(pd);
 	}
 	
