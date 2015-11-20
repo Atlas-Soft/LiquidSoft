@@ -27,6 +27,7 @@ public class Flowmeter {
 		for (int i = 0; i < pos.length; i++){
 			//implement almostEqual() to get values from near flowmeter
 		}
+		return null;
 	}
 	
 	  /**
