@@ -3,6 +3,8 @@ package liquid.gui;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import liquid.core.LiquidApplication;
+
 /**
  * Class will store all of the parameters associated with
  * the simulation. This includes file name, liquid type,
@@ -44,10 +46,6 @@ public class LiquidGuiVariables {
 		undoStates.clear();
 		simulating = false;
 		filename = null;
-		liquid = null;
-		temperature = 170;
-		viscosity = 1;
-		runtime = 300;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects.clear();
@@ -114,6 +112,12 @@ public class LiquidGuiVariables {
 	public void saveState(){
 		savedStates.push(writeArray());
 		undoStates.clear();
+		if(savedStates.size()>1){
+			LiquidApplication.getGUI().frame.setTitle("*"+filename + " - LIQUID : 2D Fluid Simulator   ");
+			if(filename == null){
+				LiquidApplication.getGUI().frame.setTitle("*Untitled - LIQUID : 2D Fluid Simulator   ");
+			}
+		}
 	}
 	
 	public void undo(){

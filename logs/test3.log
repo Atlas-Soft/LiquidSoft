@@ -1,8 +1,10 @@
-../logs/test3.log
+C:\Users\GameDesign\Documents\GitHub\AtlasSoft\logs\test3.log
 Water
 0
-10.0
+70.0
 1.0
 300
-300.0 300.0
+500.0 400.0
+Rectangular 0.0 0.0 50.0 50.0
+Source 100.0 100.0 0.0 10.0
 break

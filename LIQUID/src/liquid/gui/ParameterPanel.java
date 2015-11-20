@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,9 +34,9 @@ public class ParameterPanel extends JPanel {
 	// declares some of the parameter components, such as temperature and viscosity,
 	// as well as the buttons to allow the user to begin, pause, and end a simulation
 	JComboBox<String> liqs; // a drop-down menu
-	JComboBox<String> time;
-	JComboBox<String> temp;
-	JComboBox<String> visc;
+	JComboBox<Integer> time;
+	JComboBox<Float> temp;
+	JComboBox<Float> visc;
 	JCheckBox replay;
 	JButton run;
 	JButton pause;
@@ -98,23 +97,23 @@ public class ParameterPanel extends JPanel {
 		liqs.setBounds(25, 40, 120, 25);
 		add(liqs);
 
-		time = new JComboBox<String>();
+		time = new JComboBox<Integer>();
 		for (int i = 0; i <= 300; i++) {
-			time.addItem(Integer.toString(i));}
+			time.addItem(i);}
 		time.setSelectedIndex(300);
 		time.setBounds(155, 40, 120, 25);
 		add(time);
 		
-		temp = new JComboBox<String>();
+		temp = new JComboBox<Float>();
 		for (int i = -100; i <= 100; i++) {
-			temp.addItem(Integer.toString(i));}
+			temp.addItem(Float.valueOf(i));}
 		temp.setSelectedIndex(170);
 		temp.setBounds(25, 90, 120, 25);
 		add(temp);
 
-		visc = new JComboBox<String>();
+		visc = new JComboBox<Float>();
 		for (int i = 0; i <= 50; i++) {
-			visc.addItem(Integer.toString(i));}
+			visc.addItem(Float.valueOf(i));}
 		visc.setSelectedIndex(1);
 		visc.setBounds(155, 90, 120, 25);
 		add(visc);
@@ -134,12 +133,14 @@ public class ParameterPanel extends JPanel {
 						// for a paused simulation, it is still technically on-
 						// going. Parameters need to be set to continue simulating
 						prepareSim(SetSim.Paused, null);
-						return;}
+						return;
+					}
 					
-					if (LiquidApplication.getGUI().variables.filename != null) {
+					if (LiquidApplication.getGUI().variables.filename != null && LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
 						// sets various parameters for a previously-saved simulation
 						prepareSim(SetSim.YesFile, null);
-						return;}
+						return;
+					}
 					
 					// obtains the file name from the save file dialog and repeats
 					// the process when necessary (like with an invalid file name)
@@ -148,31 +149,24 @@ public class ParameterPanel extends JPanel {
 					fileDialog.setApproveButtonText("Save");
 					fileDialog.setDialogTitle("Create Log File");
 					fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
-					boolean cancel = false;
-					
-					// loop continues as long as there is an invalid file name
-					// (or until the user presses the cancel button to exit)
-					do {
-						int returnVal = fileDialog.showSaveDialog(LiquidApplication.getGUI().frame);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
+					int returnVal = fileDialog.showSaveDialog(LiquidApplication.getGUI().frame);
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
 							// a valid file name (not empty or repeated) is required to
 							// proceed, or when the Cancel/'X' button is pressed 
 							String filename = fileDialog.getSelectedFile().getPath();
-							if (filename == null || filename.equals("")) {
-								JOptionPane.showMessageDialog(null,
-										"Please enter a valid file name, no empty or repeated names.",
-										"Invalid File Name", JOptionPane.ERROR_MESSAGE);
-							} else {
-								// a legitimate file name exists, so program
-								// sets various parameters for a new simulation
-								prepareSim(SetSim.NewSim, filename);}
-						} else {
-							// cancel button jumps out of this loop
-							cancel = true;}
-					} while (LiquidApplication.getGUI().variables.filename == null && cancel == false);			
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+							if(filename.endsWith(".log")){
+								int run = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+										"Are you sure you want to overwrite this log file?", "Overwrite File?",
+										JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+								if (run == JOptionPane.NO_OPTION) return;
+							}else{
+							   filename = filename + ".log";
+							}
+							// a legitimate file name exists, so program
+							// sets various parameters for a new simulation
+							prepareSim(SetSim.NewSim, filename);
+					}
+				} catch (Exception e) {}
 			}
 		});
 		add(run);
@@ -251,8 +245,17 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().setEnable(false);
 			LiquidApplication.getGUI().variables.simulating = true;
 			LiquidApplication.getGUI().variables.filename = filename;
+			LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
+			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
+			LiquidApplication.getGUI().variables.temperature = (float) temp.getSelectedItem();
+			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
+			LiquidApplication.getGUI().variables.savedStates.clear();
+			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
+			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
+			break;
+		case Paused:
 			break;
 		default:
 		}
@@ -274,10 +277,10 @@ public class ParameterPanel extends JPanel {
 	 * updated based on the information from the log file.
 	 */
 	public void logUpdate() {
-		liqs.setSelectedIndex(0);
-		time.setSelectedIndex(300);
-		temp.setSelectedIndex(170);
-		visc.setSelectedIndex(1);
+		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
+		time.setSelectedIndex((int)LiquidApplication.getGUI().variables.runtime);
+		temp.setSelectedIndex((int)LiquidApplication.getGUI().variables.temperature+100);
+		visc.setSelectedIndex((int)LiquidApplication.getGUI().variables.viscosity);
 	}
 	
 	/**

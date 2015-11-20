@@ -17,8 +17,6 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.particle.ParticleGroupDef;
-import org.jbox2d.particle.ParticleGroupType;
-import org.jbox2d.particle.ParticleSystem;
 import org.jbox2d.particle.ParticleType;
 
 import java.awt.geom.Rectangle2D;
@@ -32,12 +30,10 @@ public class FluidEnvironment {
 
 	World world;
 	Rectangle2D bounds;
-	ParticleSystem particles;
 	ArrayList<Source> sources;
 	
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
-		particles = new ParticleSystem(world);
 		sources = new ArrayList<Source>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
 		
@@ -54,7 +50,6 @@ public class FluidEnvironment {
 		world.setParticleRadius(5f);
 		world.setParticleMaxCount(1500);
 		world.setParticleViscousStrength(0.0f);
-		
 		
 		for(int i = 0; i < 100; i ++){
 			for(int j = 0; j < 100; j++){
@@ -98,9 +93,9 @@ public class FluidEnvironment {
 	    	shape.setRadius(5);
 	        ParticleGroupDef pd = new ParticleGroupDef();
 	        pd.position.set(x, y);
+	        pd.linearVelocity.set(velx, vely); 
 	        pd.flags = ParticleType.b2_waterParticle | ParticleType.b2_viscousParticle;
 	        pd.shape = shape;
-	        pd.linearVelocity.set(velx, vely); 
 	        world.createParticleGroup(pd);
 	}
 	
@@ -114,9 +109,7 @@ public class FluidEnvironment {
 				String data = "P " + particlePos[i].x + " " + particlePos[i].y + " " + (particleVel[i].length() + 1.0);
 				dataList.add(data);
 			}
-		}catch(Exception e){
-		}
-		
+		}catch(Exception e){}		
 		dataArray = dataList.toArray(new String[dataList.size()]);
 		return dataArray;
 	}

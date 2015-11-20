@@ -86,7 +86,6 @@ public class LiquidMenuBar extends JMenuBar {
 					// and proceeds only when it passes the '.log' ending
 					int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().frame);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						
 						// sets filename to be the chosen file's name, and calls
 						// the Logger to obtain and set the necessary parameters
 						LiquidApplication.getGUI().variables.filename = fileDialog.getSelectedFile().getPath();

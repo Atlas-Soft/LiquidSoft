@@ -1,15 +1,15 @@
 C:\Users\GameDesign\Documents\GitHub\AtlasSoft\logs\test1.log
 Glycerin
-2
-100.0
+4
+50.0
 2.0
-250
-400 300
+30
+400.0 300.0
 Rectangular 0 0 400 50
 Rectangular 0 250 400 50
 Rectangular 0 100 50 150
 Rectangular 350 50 50 150
-Source 25 75 100 25
-Rectangular 150 100 100 100
-Flowmeter 350 225
+Rectangular 150.0 100.0 100.0 100.0
+Source 375.0 225.0 -100.0 0.0
+Source 25.0 75.0 100.0 0.0
 break
