@@ -10,12 +10,17 @@ import org.jbox2d.dynamics.World;
 
 /**
  * @author Rafael Zamora
- *
+ * Edited 11/20 - William Steele
  */
 public class Flowmeter {
 	private World myWorld;
 	private Vec2 myLoc;
 	
+	/**
+	 * 
+	 * @param imHere the world this flow meter is monitoring
+	 * @param loc the location this flow meter monitors
+	 */
 	public Flowmeter(World imHere, Vec2 loc){
 		myWorld = imHere;
 		myLoc = loc;

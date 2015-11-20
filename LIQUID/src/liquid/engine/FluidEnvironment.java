@@ -31,6 +31,7 @@ public class FluidEnvironment {
 	World world;
 	Rectangle2D bounds;
 	ArrayList<Source> sources;
+	ArrayList<Flowmeter> meters;
 	
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
@@ -86,6 +87,15 @@ public class FluidEnvironment {
 	
 	public void addSource(float x, float y, float velx, float vely){
 		sources.add(new Source(this, x, y, velx, vely));
+	}
+	
+	/**
+	 * Creates a Flow meter at the specified coordinates
+	 * @param x x-position of the new flow meter
+	 * @param y y-position of the new flow meter
+	 */
+	public void addFlowmeter(float x, float y){
+		meters.add(new Flowmeter(world, new Vec2(x, y)));
 	}
 	
 	public void addParticle(float x, float y, float velx, float vely){
