@@ -2,7 +2,11 @@ package liquid.logger;
 
 import java.io.File;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import liquid.core.Interfaceable;
+import liquid.core.LiquidApplication;
 import liquid.gui.LiquidGUI;
 
 public class LiquidLogger implements Interfaceable{

@@ -5,55 +5,59 @@ import liquid.gui.LiquidGUI;
 import liquid.logger.LiquidLogger;
 
 /**
- * The Liquid Application class initializes the GUI,
- * Logger, and Fluid Engine components. It also provides
- * static access to the components.
- * 
- *
+ * The Liquid Application class initializes the
+ * Fluid Engine, GUI, and Logger components. It
+ * also provides static access to these components.
  */
 public class LiquidApplication {
 	
+	// allows static access to the main simulation components
+	private static LiquidEngine engine;
 	private static LiquidGUI gui;
 	private static LiquidLogger logger;
-	private static LiquidEngine engine;
 	
 	/**
-	 * Constructor initializes components of application.
+	 * Constructor initializes the application components.
 	 */
-	public LiquidApplication(){
-		logger = new LiquidLogger();
+	public LiquidApplication() {
 		engine = new LiquidEngine();
 		gui = new LiquidGUI();
-	}
-	
-	public static void dispose(){
-		logger.dispose();
-		engine.dispose();
-		gui.dispose();
+		logger = new LiquidLogger();
 	}
 	
 	/**
-	 * 
-	 * @return	gui
+	 * Method disposes all components of the liquid simulator.
 	 */
-	public static LiquidGUI getGUI(){
+	public static void dispose() {
+		engine.dispose();
+		gui.dispose();
+		logger.dispose();
+	}
+	
+	/**
+	 * Getter allows access to the Engine parts of the simulator.
+	 * 
+	 * @return engine - the Engine component
+	 */
+	public static LiquidEngine getEngine() {
+		return engine;
+	}
+	
+	/**
+	 * Getter allows access to the GUI parts of the simulator.
+	 * 
+	 * @return	gui - the GUI component
+	 */
+	public static LiquidGUI getGUI() {
 		return gui;
 	}
 	
 	/**
+	 * Getter allows access to the Logger parts of the simulator.
 	 * 
-	 * @return logger
+	 * @return logger - the Logger component
 	 */
-	public static LiquidLogger getLogger(){
+	public static LiquidLogger getLogger() {
 		return logger;
 	}
-	
-	/**
-	 * 
-	 * @return engine
-	 */
-	public static LiquidEngine getEngine(){
-		return engine;
-	}
-	
 }

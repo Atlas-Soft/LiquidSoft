@@ -45,9 +45,9 @@ public class LiquidGuiVariables {
 		simulating = false;
 		filename = null;
 		liquid = null;
-		temperature = 0;
-		viscosity = 0;
-		runtime = 0;
+		temperature = 170;
+		viscosity = 1;
+		runtime = 300;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects.clear();
