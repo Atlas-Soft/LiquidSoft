@@ -20,14 +20,30 @@ public class Flowmeter {
 		myWorld = imHere;
 		myLoc = loc;
 	}
-	
+	/**
+	 * Gets the average x and y velocities of particles within 2.0 units of this flowmeter's position
+	 * @return Vec2 object containing the average x and y velocities of nearby particles
+	 */
 	public Vec2 pollVelocity(){
 		Vec2[] pos = myWorld.getParticlePositionBuffer();
 		ArrayList<Vec2> vel = new ArrayList<Vec2>();
+		Vec2 bounds = new Vec2(2.0f, 2.0f);	//To change boundaries to check, simply change parameters of constructor
 		for (int i = 0; i < pos.length; i++){
-			//implement almostEqual() to get values from near flowmeter
+			if(almostEqual(myLoc, pos[i], bounds)){
+				vel.add(myWorld.getParticleVelocityBuffer()[i]);	//may need to be changed to local variable depending on performance
+			}
 		}
-		return null;
+		
+		float avgx = 0;
+		float avgy = 0;
+		for (int i = 0; i < vel.size(); i++){
+			avgx += vel.get(i).x;
+			avgy += vel.get(i).y;
+		}
+		avgx = avgx/vel.size();
+		avgy = avgy/vel.size();
+		
+		return new Vec2(avgx, avgy);
 	}
 	
 	  /**
@@ -37,6 +53,11 @@ public class Flowmeter {
 	   * @param bounds Object containing x and y radius that b must be in relative to a
 	   */
 	  public final static boolean almostEqual(Vec2 a, Vec2 b, Vec2 bounds){
-		  return false;
+		  boolean send = false;
+		  if(a.x - bounds.x <= b.x && a.x + bounds.x >= b.x){ //checks if b.x is within a.x +/- bounds.x
+			  if(a.y - bounds.y <= b.y && a.y + bounds.y >= b.y)
+				  send = true;
+		  }
+		  return send;
 	  }
 }
