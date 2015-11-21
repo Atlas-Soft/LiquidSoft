@@ -48,8 +48,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				break;}
 		}
 	}
-
-	@SuppressWarnings({ "incomplete-switch", "deprecation" })
+	
 	@Override
 	public void receive(Interfaceable i, Request request, String[] args) {
 		if (i instanceof LiquidLogger) {
@@ -108,7 +107,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			fps++;
 			
 			enviro.update(delta);
-			send(LiquidApplication.getGUI(), Interfaceable.Request.DISPLAY_SIM);
+			send(LiquidApplication.getGUI(), Interfaceable.Request.REQUEST_DISPLAY_SIM);
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");

@@ -61,7 +61,7 @@ public class FluidEnvironment {
 				pb.upperBound.set(p.x+10, p.y+10);
 				world.queryAABB((QueryCallback)pq, (ParticleQueryCallback)pq, pb);
 				if(pq.isOpen() && bounds.contains(p.x, p.y)){
-					//addParticle(p.x,p.y,0,0);
+					//addParticle(p.x,p.y,10,10);
 				}
 			}
 		}
