@@ -132,6 +132,7 @@ public class LiquidGuiVariables {
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects.clear();
+		selectedObject = 0;
 		savedStates.clear();
 		undoStates.clear();
 		particles = new String[0];

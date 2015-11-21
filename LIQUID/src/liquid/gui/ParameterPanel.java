@@ -251,9 +251,9 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void logUpdate() {
 		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
-		time.setSelectedIndex((int)LiquidApplication.getGUI().variables.runtime);
-		temp.setSelectedIndex((int)LiquidApplication.getGUI().variables.temperature+100);
-		visc.setSelectedIndex((int)LiquidApplication.getGUI().variables.viscosity);
+		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
+		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
+		visc.setSelectedItem(LiquidApplication.getGUI().variables.viscosity);
 	}
 	
 	/**

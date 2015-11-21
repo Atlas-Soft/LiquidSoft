@@ -485,7 +485,7 @@ public class EnvironmentEditorPanel extends JPanel {
 				obstacleW.setText(tokens[4]);
 			}
 			if(tokens[0].equals("Source")){
-				select.setSelectedItem("Forces");
+				select.setSelectedItem("Initial Forces");
 				forces.setVisible(true);
 				sensors.setVisible(false);
 				obstacles.setVisible(false);
