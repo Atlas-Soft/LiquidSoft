@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -12,12 +13,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
-import liquid.engine.LiquidEngine;
-import liquid.logger.LiquidLogger;
 
 /**
  * Sets up some of the parameters to be used during the simulation,
@@ -45,7 +43,7 @@ public class ParameterPanel extends JPanel {
 	JButton end;
 	
 	// used to set up the simulation when it's paused, a file name exists, or it's a new simulation
-	enum SetSim{Paused, YesFile, NewSim};
+	enum SetSim{PAUSED, YES_FILE, NEW_SIM};
 
 	/**
 	 * Constructor for the parameter panels. Currently, it is located on the right side
@@ -130,42 +128,23 @@ public class ParameterPanel extends JPanel {
 		run.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				try {
+					// for a paused simulation, it is still technically on-
+					// going. Parameters need to be set to continue simulating
 					if (LiquidApplication.getGUI().variables.simulating) {
-						// for a paused simulation, it is still technically on-
-						// going. Parameters need to be set to continue simulating
-						prepareSim(SetSim.Paused, null);
-						return;
-					}
+						prepareSim(SetSim.PAUSED, null);
 					
-					if (LiquidApplication.getGUI().variables.filename != null && LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
-						// sets various parameters for a previously-saved simulation
-						prepareSim(SetSim.YesFile, null);
-						return;
-					}
+					// sets various parameters for a previously-saved simulation
+					} else if (LiquidApplication.getGUI().variables.filename != null &&
+							LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
+						prepareSim(SetSim.YES_FILE, null);
 					
-					// obtains the file name from the save file dialog and repeats
-					// the process when necessary (like with an invalid file name)
-					JFileChooser fileDialog = new JFileChooser("../logs");
-					fileDialog.setAcceptAllFileFilterUsed(false);
-					fileDialog.setApproveButtonText("Save");
-					fileDialog.setDialogTitle("Create Log File");
-					fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
-					int returnVal = fileDialog.showSaveDialog(LiquidApplication.getGUI().frame);
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-							// a valid file name (not empty or repeated) is required to
-							// proceed, or when the Cancel/'X' button is pressed 
-							String filename = fileDialog.getSelectedFile().getPath();
-							if(filename.endsWith(".log")){
-								int run = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
-										"Are you sure you want to overwrite this log file?", "Overwrite File?",
-										JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-								if (run == JOptionPane.NO_OPTION) return;
-							}else{
-							   filename = filename + ".log";
-							}
-							// a legitimate file name exists, so program
-							// sets various parameters for a new simulation
-							prepareSim(SetSim.NewSim, filename);
+					// path continues for new simulations to set a valid log file name
+					} else {
+						JFileChooser fileDialog = new JFileChooser("../logs");
+						String filename = LiquidApplication.getLogger().
+								setUpFile(fileDialog, "SAVE", LiquidApplication.getGUI().frame);
+						if (filename != null)
+							prepareSim(SetSim.NEW_SIM, filename);
 					}
 				} catch (Exception e) {}
 			}
@@ -183,7 +162,7 @@ public class ParameterPanel extends JPanel {
 				pause.setEnabled(false);
 				step.setEnabled(true);
 				LiquidApplication.getGUI().console.print_to_Console("Simulation Paused.\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.PAUSE_SIM);
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_PAUSE_SIM);
 			}
 		});
 		add(pause);
@@ -214,16 +193,16 @@ public class ParameterPanel extends JPanel {
 				LiquidApplication.getGUI().variables.particles = new String[0];
 				LiquidApplication.getGUI().sim.repaint();
 				LiquidApplication.getGUI().console.print_to_Console("Simulation Ended.\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.END_SIM);
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_END_SIM);
 			}
 		});
 		add(end);
 	}
 
 	/**
-	 * Used for the Run button to extract setting various parameters when
-	 * setting up a simulation. This includes button enabling/disabling and
-	 * sending notices to the Logger/Engine to write the log file and run simulation.
+	 * Used for the Run button to extract setting various parameters when setting
+	 * up a simulation. This includes button enabling/disabling and sending
+	 * notices to the Logger/Engine to write the log file and run simulation.
 	 * 
 	 * @param route    - determines the route to take
 	 * @param filename - to pass in the file name (NewSim only)
@@ -233,16 +212,19 @@ public class ParameterPanel extends JPanel {
 		pause.setEnabled(true);
 		step.setEnabled(false);
 		end.setEnabled(true);
-		LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.RUN_SIM);
-
+		
 		// sets parameters for specific cases
 		switch (route) {
-		case YesFile: // when a file name is already present
+		case PAUSED: // when the simulation has been paused
+			LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
+			break;
+		case YES_FILE: // when a file name is already present
 			LiquidApplication.getGUI().setEnable(false);
 			LiquidApplication.getGUI().variables.simulating = true;
 			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
+			LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 			break;
-		case NewSim: // when NO file name is present
+		case NEW_SIM: // when NO file name is present
 			LiquidApplication.getGUI().setEnable(false);
 			LiquidApplication.getGUI().variables.simulating = true;
 			LiquidApplication.getGUI().variables.filename = filename;
@@ -254,9 +236,8 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.WRITE_LOG);
-			break;
-		case Paused:
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG);
+			LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 			break;
 		default:
 		}

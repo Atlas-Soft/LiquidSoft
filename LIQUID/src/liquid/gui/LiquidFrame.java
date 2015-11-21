@@ -15,7 +15,7 @@ public class LiquidFrame extends JFrame {
 	/**
 	 * Constructor sets the parameters of the frame, such as the size.
 	 */
-	public LiquidFrame(){
+	public LiquidFrame() {
 		super("Untitled - LIQUID : 2D Fluid Simulator");
 		setSize(800,640);
 		setResizable(false);
@@ -29,7 +29,7 @@ public class LiquidFrame extends JFrame {
 	 * by first confirming this action with the user.
 	 */
 	@Override
-	public void dispose(){
+	public void dispose() {
 		int exitSim = JOptionPane.showConfirmDialog(LiquidFrame.this,
 				"Are you sure you want to exit the simulator?", "Exit Simulator?",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);

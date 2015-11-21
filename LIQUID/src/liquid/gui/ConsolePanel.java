@@ -15,7 +15,6 @@ import javax.swing.JTextArea;
 public class ConsolePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
-	
 	private JTextArea console;
 	
 	/**
