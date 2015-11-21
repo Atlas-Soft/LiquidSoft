@@ -9,10 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
- * ConsolePanel contains a TextArea used
- * to print textual information.
- *
- *@version 1.0
+ * Console Panel class contains a text-box area used
+ * to print textual information about the simulation.
  */
 public class ConsolePanel extends JPanel {
 	
@@ -21,21 +19,23 @@ public class ConsolePanel extends JPanel {
 	private JTextArea console;
 	
 	/**
-	 * 
+	 * Constructor creates a console panel in the
+	 * lower left-hand side of the simulation.
 	 */
 	public ConsolePanel(){
 		super();
 		initComponents();
 		setLayout(null);
-		setBackground(Color.lightGray);
+		setBackground(Color.LIGHT_GRAY);
 		setBounds(0,400,500,240);
 		setVisible(true);
 	}
 	
 	/**
-	 * 
+	 * Initializes the two components of the console panel,
+	 * the label and the console itself, which is scrollable.
 	 */
-	private void initComponents(){
+	private void initComponents() {
 		JLabel l = new JLabel("Console");
 		l.setBounds(205,0,90,20);
 		add(l);
@@ -43,9 +43,11 @@ public class ConsolePanel extends JPanel {
 		console = new JTextArea(); 
 		console.setFont(new Font("Verdana", Font.PLAIN, 10));
 		console.setBounds(0, 20, 500, 160);
-		console.append ("Welcome to LIQUID!\n");
+		console.append("Welcome to LIQUID!\n");
 		console.setEditable(false);
 		console.setCaretPosition(console.getDocument().getLength());
+		
+		// make the console panel scrollable
 		JScrollPane sp = new JScrollPane(console);
 		sp.setBounds(0, 20, 500, 160);
 		sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -53,10 +55,11 @@ public class ConsolePanel extends JPanel {
 	}
 	
 	/**
-	 * Method appends inputed string to textArea.
-	 * @param str
+	 * Method appends inputed string to the text area.
+	 * 
+	 * @param str - the string to be inputed
 	 */
-	public void print_to_Console(String str){
+	public void print_to_Console(String str) {
 		console.append(str);
 	}
 }

@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 
 /**
@@ -89,7 +90,7 @@ public class LiquidMenuBar extends JMenuBar {
 						// sets filename to be the chosen file's name, and calls
 						// the Logger to obtain and set the necessary parameters
 						LiquidApplication.getGUI().variables.filename = fileDialog.getSelectedFile().getPath();
-						LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidGUI.REQUEST_LOADLOG);
+						LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG);
 						LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename +
 								" - LIQUID : 2D Fluid Simulator   ");
 					}

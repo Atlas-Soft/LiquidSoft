@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
@@ -182,7 +183,7 @@ public class ParameterPanel extends JPanel {
 				pause.setEnabled(false);
 				step.setEnabled(true);
 				LiquidApplication.getGUI().console.print_to_Console("Simulation Paused.\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(),LiquidEngine.PAUSESIM);
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.PAUSE_SIM);
 			}
 		});
 		add(pause);
@@ -213,7 +214,7 @@ public class ParameterPanel extends JPanel {
 				LiquidApplication.getGUI().variables.particles = new String[0];
 				LiquidApplication.getGUI().sim.repaint();
 				LiquidApplication.getGUI().console.print_to_Console("Simulation Ended.\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(),LiquidEngine.ENDSIM);
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.END_SIM);
 			}
 		});
 		add(end);
@@ -232,7 +233,7 @@ public class ParameterPanel extends JPanel {
 		pause.setEnabled(true);
 		step.setEnabled(false);
 		end.setEnabled(true);
-		LiquidApplication.getGUI().send(LiquidApplication.getEngine(), LiquidEngine.RUNSIM);
+		LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.RUN_SIM);
 
 		// sets parameters for specific cases
 		switch (route) {
@@ -253,7 +254,7 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), LiquidLogger.WRITELOG);
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.WRITE_LOG);
 			break;
 		case Paused:
 			break;

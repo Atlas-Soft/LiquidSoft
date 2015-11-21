@@ -11,12 +11,6 @@ import liquid.logger.LiquidLogger;
 
 public class LiquidEngine implements Interfaceable, Runnable {
 
-	public static final int REQUEST_DISPLAYSIM = 3;
-	public static final int REQUEST_PRINTSIM = 4;
-	public static final int RUNSIM = 2;
-	public static final int PAUSESIM = 5;
-	public static final int ENDSIM = 6;
-
 	Thread loop;
 	FluidEnvironment enviro;
 	int runtime;
@@ -27,56 +21,66 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		super();
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
-	public void send(Interfaceable i, int arg0) {
+	public void send(Interfaceable i, Request request) {
 		String[] args;
+		
 		if (i instanceof LiquidLogger) {
-			switch (arg0) {
+			switch (request) {
 
-			}
+			default:
+				break;}
 		}
+		
 		if (i instanceof LiquidGUI) {
-			switch (arg0) {
-			case REQUEST_DISPLAYSIM:
+			switch (request) {
+			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
-				i.receive(this, LiquidGUI.DISPLAYSIM, args);
-			break;
-			case REQUEST_PRINTSIM:
+				i.receive(this, request.DISPLAY_SIM, args);
+				break;
+			case REQUEST_PRINT_SIM:
 				args = new String[1];
 				args[0] = "1\n";
-				i.receive(this, LiquidGUI.PRINTSIM, args);
-			break;
-			}
+				i.receive(this, request.PRINT_SIM, args);
+				break;
+			default:
+				break;}
 		}
 	}
 
+	@SuppressWarnings({ "incomplete-switch", "deprecation" })
 	@Override
-	public void receive(Interfaceable i, int arg0, String[] args) {
+	public void receive(Interfaceable i, Request request, String[] args) {
 		if (i instanceof LiquidLogger) {
-			switch (arg0) {
+			switch (request) {
 
-			}
+			default:
+				break;}
 		}
+		
+		
 		if (i instanceof LiquidGUI) {
-			switch (arg0) {
-			case RUNSIM:
-				if(!simulating){
+			switch (request) {
+			case RUN_SIM:
+				if (!simulating) {
 					initiateSim(args);
 					simulating = true;
 					loop = new Thread(this);
 					loop.start();
-				}else{
+				} else {
 					loop.resume();
 				}
-			break;
-			case PAUSESIM:
+				break;
+			case PAUSE_SIM:
 				loop.suspend();
 				wasPaused = true;
-			break;
-			case ENDSIM:
+				break;
+			case END_SIM:
 				simulating = false;
-			break;
-			}
+				break;
+			default:
+				break;}
 		}
 	}
 
@@ -104,7 +108,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			fps++;
 			
 			enviro.update(delta);
-			send(LiquidApplication.getGUI(), LiquidGUI.DISPLAYSIM);
+			send(LiquidApplication.getGUI(), Interfaceable.Request.DISPLAY_SIM);
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");

@@ -2,19 +2,10 @@ package liquid.logger;
 
 import java.io.File;
 
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import liquid.core.Interfaceable;
-import liquid.core.LiquidApplication;
 import liquid.gui.LiquidGUI;
 
 public class LiquidLogger implements Interfaceable{
-
-	public static final int REQUEST_SETLOGPARAM = 0;
-	public static final int LOADLOG = 0;
-	public static final int WRITELOG = 1;
-	
 	
 	private LiquidFileLoader fileLoader;
 	private LiquidFileWriter fileWriter;
@@ -25,31 +16,35 @@ public class LiquidLogger implements Interfaceable{
 		init();
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
-	public void send(Interfaceable i, int arg0) {
+	public void send(Interfaceable i, Request request) {
 		if(i instanceof LiquidGUI){
-			switch(arg0){
-			case REQUEST_SETLOGPARAM:
+			switch(request){
+			case REQUEST_SET_LOG_PARAM:
 				String[] args = fileLoader.loadLogFile(currentFile);
-				i.receive(this, LiquidGUI.SETLOGPARAM, args);
+				i.receive(this, request.SET_LOG_PARAM, args);
 				break;
-			}
+			default:
+				break;}
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
-	public void receive(Interfaceable i, int arg0, String[] args) {
+	public void receive(Interfaceable i, Request request, String[] args) {
 		if(i instanceof LiquidGUI){
-			switch(arg0){
-			case LOADLOG:
+			switch(request){
+			case LOAD_LOG:
 				currentFile = args[0];
-				send(i, REQUEST_SETLOGPARAM);
+				send(i, request.REQUEST_SET_LOG_PARAM);
 				break;
-			case WRITELOG:
+			case WRITE_LOG:
 				currentFile = args[0];
 				fileWriter.writetoLogFile(currentFile, args);
 				break;
-			}
+			default:
+				break;}
 		}
 	}
 	

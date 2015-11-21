@@ -11,44 +11,57 @@ import liquid.core.LiquidApplication;
  * temperature, viscosity, and various others.
  */
 public class LiquidGuiVariables {
-
-	LinkedList<String[]> savedStates;
-	LinkedList<String[]> undoStates;
 	
+	// declares various parameters regarding the GUI
 	boolean simulating;
 	String filename;
 	String liquid;
+	int selectedObject;
 	float temperature;
 	float viscosity;
 	int runtime;
 	float enviroLength;
 	float enviroWidth;
 	ArrayList<String> objects;
-	int selectedObject;
 
-	
+	// declares various parameters regarding the Engine
+	LinkedList<String[]> savedStates;
+	LinkedList<String[]> undoStates;
 	String[] particles;
 	
-	public LiquidGuiVariables(){
-		savedStates = new LinkedList<String[]>();
-		undoStates = new LinkedList<String[]>();
+	/**
+	 * Constructor initializes some initial values of the parameters declared.
+	 */
+	public LiquidGuiVariables() {
+		// initializes parameters regarding the GUI
 		simulating = false;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects = new ArrayList<String>();
 		selectedObject = 0;
+		
+		// initializes parameters regarding the Engine
+		savedStates = new LinkedList<String[]>();
+		undoStates = new LinkedList<String[]>();
 		particles = new String[0];
 		saveState();
 	}
 	
-	public void reset(){
-		savedStates.clear();
-		undoStates.clear();
+	/**
+	 * Resets the program to its default settings.
+	 */
+	public void reset() {
+		// resets the GUI parameters
 		simulating = false;
 		filename = null;
+		liquid = null;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects.clear();
+		
+		// resets the Engine parameters
+		savedStates.clear();
+		undoStates.clear();
 		particles = new String[0];
 		saveState();
 	}
@@ -58,7 +71,7 @@ public class LiquidGuiVariables {
 	 * as String values, which will then be passed from the GUI
 	 * to the Logger and written into the log file.
 	 * 
-	 * @return - the string array of all parameters
+	 * @return - the string array of parameters
 	 */
 	public String[] writeArray() {
 		ArrayList<String> list = new ArrayList<String>();
@@ -71,22 +84,21 @@ public class LiquidGuiVariables {
 		list.add(Integer.toString(runtime));
 		list.add(Float.toString(enviroLength) + " " + Float.toString(enviroWidth));
 		
+		// adds information of all objects, like X-/Y-Coordinates
 		for (int i = 0; i < objects.size(); i++) {
-			list.add(objects.get(i));
-		}
+			list.add(objects.get(i));}
 		
 		list.add("break");
 		String[] arr = list.toArray(new String[list.size()]);
 		return arr;
-	} // closes storeArray()
-		
+	}	
 
 	/**
 	 * Obtains an array list of necessary parameters from the
 	 * Logger to be read. This method will then set them
 	 * as their respective native variables of this class.
 	 * 
-	 * @param arr - array that holds all the parameter info
+	 * @param args - array that holds parameter info
 	 */
 	public void readArray(String[] args) {
 		liquid = args[1];
@@ -103,18 +115,15 @@ public class LiquidGuiVariables {
 		
 		objects = new ArrayList<String>();
 		for (int i = 7; i < args.length; i++) {
-			objects.add(args[i]);
-		}
-		
-		
+			objects.add(args[i]);}
 	}
 	
 	public void saveState(){
 		savedStates.push(writeArray());
 		undoStates.clear();
-		if(savedStates.size()>1){
+		if (savedStates.size() > 1) {
 			LiquidApplication.getGUI().frame.setTitle("*"+filename + " - LIQUID : 2D Fluid Simulator   ");
-			if(filename == null){
+			if (filename == null) {
 				LiquidApplication.getGUI().frame.setTitle("*Untitled - LIQUID : 2D Fluid Simulator   ");
 			}
 		}
@@ -123,14 +132,12 @@ public class LiquidGuiVariables {
 	public void undo(){
 		if(savedStates.size() > 1){
 			undoStates.push(savedStates.pop());
-			readArray(savedStates.peek());
-		}
+			readArray(savedStates.peek());}
 	}
 	
 	public void redo(){
 		if(!undoStates.isEmpty()){
 			savedStates.push(undoStates.pop());
-			readArray(savedStates.peek());
-		}
+			readArray(savedStates.peek());}
 	}
 }
