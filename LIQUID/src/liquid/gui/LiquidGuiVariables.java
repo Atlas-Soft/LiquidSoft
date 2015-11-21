@@ -48,25 +48,6 @@ public class LiquidGuiVariables {
 	}
 	
 	/**
-	 * Resets the program to its default settings.
-	 */
-	public void reset() {
-		// resets the GUI parameters
-		simulating = false;
-		filename = null;
-		liquid = null;
-		enviroLength = 500;
-		enviroWidth = 400;
-		objects.clear();
-		
-		// resets the Engine parameters
-		savedStates.clear();
-		undoStates.clear();
-		particles = new String[0];
-		saveState();
-	}
-	
-	/**
 	 * Stores all of the necessary parameters into an array list
 	 * as String values, which will then be passed from the GUI
 	 * to the Logger and written into the log file.
@@ -139,5 +120,21 @@ public class LiquidGuiVariables {
 		if(!undoStates.isEmpty()){
 			savedStates.push(undoStates.pop());
 			readArray(savedStates.peek());}
+	}
+	
+	/**
+	 * Resets the program to its default settings.
+	 */
+	public void reset() {
+		simulating = false;
+		filename = null;
+		liquid = null;
+		enviroLength = 500;
+		enviroWidth = 400;
+		objects.clear();
+		savedStates.clear();
+		undoStates.clear();
+		particles = new String[0];
+		saveState();
 	}
 }

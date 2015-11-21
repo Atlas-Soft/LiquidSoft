@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.Interfaceable;
@@ -14,7 +13,7 @@ import liquid.gui.LiquidGUI;
  * LiquidLogger is the main class of the Logger component. Here,
  * the methods to write or load a log file are initialized.
  * 
- * This class interacts with both the GUI and Engine.
+ * This class interacts with both the GUI to write/load a log file.
  */
 public class LiquidLogger implements Interfaceable {
 	
@@ -51,25 +50,39 @@ public class LiquidLogger implements Interfaceable {
 		}
 	}
 	
+	/**
+	 * Method defines requested interactions to the GUI.
+	 * 
+	 * Current Send Interactions:
+	 *  - REQUEST_SET_LOG_PARAM - obtains the necessary parameters to send to the GUI to set the simulation up
+	 */
 	@SuppressWarnings("static-access")
 	@Override
 	public void send(Interfaceable i, Request request) {
-		if(i instanceof LiquidGUI){
-			switch(request){
+		// sends a String[] of parameters for the GUI to separate
+		if (i instanceof LiquidGUI) {
+			switch (request) {
 			case REQUEST_SET_LOG_PARAM:
 				String[] args = fileLoader.loadLogFile(currentFile);
 				i.receive(this, request.SET_LOG_PARAM, args);
 				break;
-			default:
-				break;}
+			default:}
 		}
 	}
 
+	/**
+	 * Method defines requested interactions from the GUI.
+	 * 
+	 * Current Receive Interactions:
+	 *  - LOAD_LOG - sends a self-request to find file based on the given file name
+	 *  - WRITE_LOG - writes the log file beginning with the given file name
+	 */
 	@SuppressWarnings("static-access")
 	@Override
 	public void receive(Interfaceable i, Request request, String[] args) {
-		if(i instanceof LiquidGUI){
-			switch(request){
+		// loads the parameters by sending a self-request or writes the log file
+		if (i instanceof LiquidGUI) {
+			switch (request) {
 			case LOAD_LOG:
 				currentFile = args[0];
 				send(i, request.REQUEST_SET_LOG_PARAM);
@@ -78,54 +91,46 @@ public class LiquidLogger implements Interfaceable {
 				currentFile = args[0];
 				fileWriter.writetoLogFile(currentFile, args);
 				break;
-			default:
-				break;}
+			default:}
 		}
 	}
 	
-	public String setUpFile(JFileChooser fileDialog, String set, Component frame) {
-		// sets the conditions for a log file:
-		//  - Folder is set to be 'logs'
-		//  - File must end in '.log'
-		fileDialog.setAcceptAllFileFilterUsed(false);
-		fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
-		
-		switch (set) {
-		case "SAVE":
-			fileDialog.setApproveButtonText("Save");
-			fileDialog.setDialogTitle("Create Log File");
-			File origFile = fileDialog.getCurrentDirectory();
+	/**
+	 * Sets up the file name by first making sure the 'logs' directory is
+	 * present and filtering all files expect ones that end in '.log'.
+	 * Method can be used both to set up a new file or load an existing one.
+	 * 
+	 * @param set   - determines to save or load a file 
+	 * @param frame - the frame with which JFileChooser will appear in
+	 * @return      - the String name of the file
+	 */
+	public String setUpFile(String set, Component frame) {
+		try {
+			// sets the conditions for a log file:
+			//  - Folder is set to be 'logs'
+			//  - File must end in '.log'
+			JFileChooser fileDialog = new JFileChooser("../logs");
+			fileDialog.setAcceptAllFileFilterUsed(false);
+			fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
 			
-			// continues through the loop only if "Save" has been pressed; otherwise exits
-			int returnVal = fileDialog.showSaveDialog(frame);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				
-				// checks if file directory is in the "..AtlasSoft\logs\" directory
-				File currFile = fileDialog.getCurrentDirectory();
-				if (!currFile.getName().contains("logs")) {
-					JOptionPane.showMessageDialog(frame, "The directory of your log file has been changed to be under " +
-						"AtlasSoft's 'logs'\nfolder to preserve uniformity. Sorry for any inconveniences!",
-						"WARNING: Directory Change!!", JOptionPane.WARNING_MESSAGE);}
-				
-				String filename = origFile + "\\" + fileDialog.getSelectedFile().getName();
-				if (filename.endsWith(".log")) {
-					int run = JOptionPane.showConfirmDialog(frame, "Are you sure you want to overwrite this log file?",
-							"Overwrite File?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					if (run == JOptionPane.YES_OPTION)
-						return filename;
-				} else {
-					return filename + ".log";}
-			}
-			break;
-		case "LOAD":
-			fileDialog.setApproveButtonText("Load");
-			fileDialog.setDialogTitle("Load Log File");
-			break;
-		default:}
+			switch (set) {
+			case "LOAD": // case for when a log file needs to be loaded into the simulator
+				fileDialog.setApproveButtonText("Load");
+				fileDialog.setDialogTitle("Load Log File");
+				return fileLoader.setUpFileToLoad(fileDialog, frame);
+			
+			case "SAVE": // case for when a new log file needs to be created for the simulator
+				fileDialog.setApproveButtonText("Save");
+				fileDialog.setDialogTitle("Create Log File");
+				return fileWriter.setUpFileToSave(fileDialog, frame);
+			default:}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
-	public void dispose(){
+	public void dispose() {
 		
 	}
 }

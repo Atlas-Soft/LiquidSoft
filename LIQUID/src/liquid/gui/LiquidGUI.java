@@ -27,14 +27,14 @@ public class LiquidGUI implements Interfaceable {
 	/**
 	 * Constructor initializes the components of the GUI.
 	 */
-	public LiquidGUI(){
+	public LiquidGUI() {
 		initComponents();
 	}
 	
 	/**
 	 * Method defines the components of the GUI.
 	 */
-	private void initComponents(){
+	private void initComponents() {
 		variables = new LiquidGuiVariables();
 		frame = new LiquidFrame();
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
@@ -61,7 +61,7 @@ public class LiquidGUI implements Interfaceable {
 	public void send(Interfaceable i, Request request) {
 		String[] args;
 		
-		// sends requests to the Logger to to begin to load or write a log file
+		// sends requests to the Logger to begin to load or write a log file
 		if(i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_LOAD_LOG:
@@ -73,8 +73,7 @@ public class LiquidGUI implements Interfaceable {
 				args = variables.writeArray();
 				i.receive(this, request.WRITE_LOG, args);
 				break;
-			default:
-				break;}
+			default:}
 		}
 		
 		// sends requests to the Engine to run, pause, or end a simulation
@@ -92,8 +91,7 @@ public class LiquidGUI implements Interfaceable {
 				args = new String[0];
 				i.receive(this, request.END_SIM, args);
 				break;
-			default:
-				break;}
+			default:}
 		}
 	}
 	
@@ -119,8 +117,7 @@ public class LiquidGUI implements Interfaceable {
 				sim.repaint();
 				console.print_to_Console("Log File Loaded.\n");
 				break;
-			default:
-				break;}
+			default:}
 		}
 		
 		// receives information from the Engine to display particles or print information onto the console
@@ -133,8 +130,7 @@ public class LiquidGUI implements Interfaceable {
 			case PRINT_SIM:
 				console.print_to_Console(args[0]);
 				break;
-			default:
-				break;}
+			default:}
 		}
 	}
 	
@@ -145,8 +141,8 @@ public class LiquidGUI implements Interfaceable {
 	 */
 	public void setEnable(boolean enable) {
 		menubar.setEnabled(enable);
-		param.setEnabled(enable);
 		enviroeditor.setEnabled(enable);
+		param.setEnabled(enable);
 	}
 	
 	/**
@@ -155,8 +151,8 @@ public class LiquidGUI implements Interfaceable {
 	public void reset() {
 		frame.setTitle("Untitled - LIQUID : 2D Fluid Simulator");
 		variables.reset();
-		param.reset();
 		enviroeditor.reset();
+		param.reset();
 	}
 	
 	public void dispose() {

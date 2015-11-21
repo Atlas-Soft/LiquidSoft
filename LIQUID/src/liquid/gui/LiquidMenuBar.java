@@ -4,12 +4,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
@@ -73,31 +71,16 @@ public class LiquidMenuBar extends JMenuBar {
 		Load = new JMenuItem("Load...");
 		Load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				try {
-					// sets the conditions when retrieving a log file:
-					//  - Folder is set to be 'logs'
-					//  - File must end in '.log'
-					JFileChooser fileDialog = new JFileChooser("../logs");
-					fileDialog.setAcceptAllFileFilterUsed(false);
-					fileDialog.setApproveButtonText("Load");
-					fileDialog.setDialogTitle("Load Log File");
-					fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
-					
-					// opens up a new dialog box to select the file,
-					// and proceeds only when it passes the '.log' ending
-					int returnVal = fileDialog.showOpenDialog(LiquidApplication.getGUI().frame);
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						// sets filename to be the chosen file's name, and calls
-						// the Logger to obtain and set the necessary parameters
-						LiquidApplication.getGUI().variables.filename = fileDialog.getSelectedFile().getPath();
-						LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG);
-						LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename +
-								" - LIQUID : 2D Fluid Simulator   ");
-					}
+				// calls the Logger to obtain a valid log file to replay on the simulator
+				String filename = LiquidApplication.getLogger().setUpFile("LOAD", LiquidApplication.getGUI().frame);
+				
+				// proceeds when a file name is actually present
+				if (filename != null) {
+					LiquidApplication.getGUI().variables.filename = filename;
+					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG);
+					LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename + " - LIQUID : 2D Fluid Simulator   ");
 					LiquidApplication.getGUI().variables.savedStates.clear();
 					LiquidApplication.getGUI().variables.saveState();
-				} catch(Exception e) {
-					LiquidApplication.getGUI().console.print_to_Console("Error Loading File.\n");
 				}
 			}
         });
@@ -151,7 +134,7 @@ public class LiquidMenuBar extends JMenuBar {
 	/**
 	 * Method enables/disables the appropriate main menu tabs.
 	 */
-	public void setEnabled(boolean enable){
+	public void setEnabled(boolean enable) {
 		New.setEnabled(enable);
 		Load.setEnabled(enable);
 		Undo.setEnabled(enable);

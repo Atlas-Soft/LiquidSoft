@@ -4,14 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import liquid.core.Interfaceable;
@@ -88,9 +85,9 @@ public class ParameterPanel extends JPanel {
 		l.setBounds(25, 125, 140, 25);
 		add(l);
 
-		// creates drop-downs and/or text-boxes for the user to
-		// enter values for the previously-defined set of parameters
-		String[] options = { "Water", "Glycerin" };
+		// creates drop downs and/or text boxes for the user to
+		// enter values for the previously defined set of parameters
+		String[] options = {"Water", "Glycerin"};
 		liqs = new JComboBox<String>(options);
 		liqs.setSelectedIndex(0);
 		liqs.setBounds(25, 40, 120, 25);
@@ -127,26 +124,22 @@ public class ParameterPanel extends JPanel {
 		run.setBounds(25, 510, 115, 25);
 		run.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				try {
-					// for a paused simulation, it is still technically on-
-					// going. Parameters need to be set to continue simulating
-					if (LiquidApplication.getGUI().variables.simulating) {
-						prepareSim(SetSim.PAUSED, null);
+				// for a paused simulation, it is still technically on-going.
+				// Specific parameters need to be set to continue simulating
+				if (LiquidApplication.getGUI().variables.simulating) {
+					prepareSim(SetSim.PAUSED, null);
 					
-					// sets various parameters for a previously-saved simulation
-					} else if (LiquidApplication.getGUI().variables.filename != null &&
-							LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
-						prepareSim(SetSim.YES_FILE, null);
-					
-					// path continues for new simulations to set a valid log file name
-					} else {
-						JFileChooser fileDialog = new JFileChooser("../logs");
-						String filename = LiquidApplication.getLogger().
-								setUpFile(fileDialog, "SAVE", LiquidApplication.getGUI().frame);
-						if (filename != null)
-							prepareSim(SetSim.NEW_SIM, filename);
-					}
-				} catch (Exception e) {}
+				// sets various parameters for a previously-saved simulation
+				} else if (LiquidApplication.getGUI().variables.filename != null &&
+						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
+					prepareSim(SetSim.YES_FILE, null);
+				
+				// for new simulations, path calls Logger to set a valid log file name
+				} else {
+					String filename = LiquidApplication.getLogger().
+							setUpFile("SAVE", LiquidApplication.getGUI().frame);
+					if (filename != null) prepareSim(SetSim.NEW_SIM, filename);
+				}
 			}
 		});
 		add(run);
@@ -216,13 +209,11 @@ public class ParameterPanel extends JPanel {
 		// sets parameters for specific cases
 		switch (route) {
 		case PAUSED: // when the simulation has been paused
-			LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 			break;
 		case YES_FILE: // when a file name is already present
 			LiquidApplication.getGUI().setEnable(false);
 			LiquidApplication.getGUI().variables.simulating = true;
 			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
-			LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 			break;
 		case NEW_SIM: // when NO file name is present
 			LiquidApplication.getGUI().setEnable(false);
@@ -237,10 +228,10 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG);
-			LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 			break;
 		default:
 		}
+		LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 	}
 	
 	/**

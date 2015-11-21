@@ -17,7 +17,7 @@ public class LiquidFrame extends JFrame {
 	 */
 	public LiquidFrame() {
 		super("Untitled - LIQUID : 2D Fluid Simulator");
-		setSize(800,640);
+		setSize(800, 640);
 		setResizable(false);
 		setLayout(null);
 		setLocationRelativeTo(null);

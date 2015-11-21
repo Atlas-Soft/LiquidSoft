@@ -18,20 +18,20 @@ public interface Interfaceable {
 	/**
 	 * Method will be defined/overridden in the implemented class.
 	 * The component should send encoded information into a String[]
-	 * to be sent and received by the receiver by the receive method.
+	 * to be sent and received by another component through the receive method.
 	 * 
 	 * @param i    - determines which component to request an interaction with
-	 * @param arg0 - determines what interaction to request
+	 * @param route - determines what interaction to request (see class' enum)
 	 */
 	public void send(Interfaceable i, Request route);
 	
 	/**
 	 * Method will be defined/overridden in the implemented class.
-	 * The component should receive decoded information from String[]
-	 * to be used by the receiving component in the interaction.
+	 * The component should receive decoded information from the sender
+	 * in a String[] to be used by the receiving component in some way.
 	 * 
 	 * @param i    - determines which component is requesting an interaction
-	 * @param arg0 - determines what interaction is requested
+	 * @param route - determines what interaction is requested (see class' enum)
 	 * @param args - information required to complete requested interaction
 	 */
 	public void receive(Interfaceable i, Request route, String[] args);

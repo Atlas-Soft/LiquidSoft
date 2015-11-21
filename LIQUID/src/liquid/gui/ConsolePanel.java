@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
- * Console Panel class contains a text-box area used
+ * Console Panel class contains a text box area used
  * to print textual information about the simulation.
  */
 public class ConsolePanel extends JPanel {
@@ -21,7 +21,7 @@ public class ConsolePanel extends JPanel {
 	 * Constructor creates a console panel in the
 	 * lower left-hand side of the simulation.
 	 */
-	public ConsolePanel(){
+	public ConsolePanel() {
 		super();
 		initComponents();
 		setLayout(null);
