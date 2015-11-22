@@ -87,6 +87,7 @@ public class ParameterPanel extends JPanel {
 
 		// creates drop downs and/or text boxes for the user to
 		// enter values for the previously defined set of parameters
+		
 		String[] options = {"Water", "Glycerin"};
 		liqs = new JComboBox<String>(options);
 		liqs.setSelectedIndex(0);
@@ -154,7 +155,7 @@ public class ParameterPanel extends JPanel {
 				run.setEnabled(true);
 				pause.setEnabled(false);
 				step.setEnabled(true);
-				LiquidApplication.getGUI().console.print_to_Console("Simulation Paused.\n");
+				LiquidApplication.getGUI().console.print_to_Console("[Simulation Paused.]\n");
 				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_PAUSE_SIM);
 			}
 		});
@@ -185,7 +186,7 @@ public class ParameterPanel extends JPanel {
 				LiquidApplication.getGUI().variables.simulating = false;
 				LiquidApplication.getGUI().variables.particles = new String[0];
 				LiquidApplication.getGUI().sim.repaint();
-				LiquidApplication.getGUI().console.print_to_Console("Simulation Ended.\n");
+				LiquidApplication.getGUI().console.print_to_Console("[Simulation Ended.]\n");
 				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_END_SIM);
 			}
 		});
@@ -213,7 +214,10 @@ public class ParameterPanel extends JPanel {
 		case YES_FILE: // when a file name is already present
 			LiquidApplication.getGUI().setEnable(false);
 			LiquidApplication.getGUI().variables.simulating = true;
-			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
+			LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
+			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
+			LiquidApplication.getGUI().variables.temperature = (float) temp.getSelectedItem();
+			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
 			break;
 		case NEW_SIM: // when NO file name is present
 			LiquidApplication.getGUI().setEnable(false);
@@ -225,12 +229,12 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
-			LiquidApplication.getGUI().console.print_to_Console("Simulation Started.\n");
 			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG);
 			break;
 		default:
 		}
+		LiquidApplication.getGUI().console.print_to_Console("[Simulation Started.]\n");
 		LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 	}
 	
@@ -251,9 +255,10 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void update() {
 		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
-		time.setSelectedIndex((int)LiquidApplication.getGUI().variables.runtime);
-		temp.setSelectedIndex((int)LiquidApplication.getGUI().variables.temperature+100);
-		visc.setSelectedIndex((int)LiquidApplication.getGUI().variables.viscosity);
+		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
+		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
+		visc.setSelectedItem(LiquidApplication.getGUI().variables.viscosity);
+		System.out.println(LiquidApplication.getGUI().variables.runtime);
 	}
 	
 	/**

@@ -14,6 +14,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	Thread loop;
 	FluidEnvironment enviro;
 	int runtime;
+	int sec;
 	boolean simulating;
 	boolean wasPaused;
 
@@ -41,8 +42,12 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				break;
 			case REQUEST_PRINT_SIM:
 				args = new String[1];
-				args[0] = "1\n";
+				args[0] = "-Time " + (sec + 1) + ": \n";
 				i.receive(this, request.PRINT_SIM, args);
+				break;
+			case REQUEST_SIM_HAS_ENDED:
+				args = new String[0];
+				i.receive(this, request.SIM_HAS_ENDED, args);
 				break;
 			default:
 				break;}
@@ -91,7 +96,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		int fps = 0;
 		float lastFpsTime = 0;
 
-		int sec = 0;
+		sec = 0;
 
 		while (sec < runtime && simulating) {
 			long now = System.nanoTime();
@@ -107,11 +112,11 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			fps++;
 			
 			enviro.update(delta);
-			send(LiquidApplication.getGUI(), Interfaceable.Request.REQUEST_DISPLAY_SIM);
+			send(LiquidApplication.getGUI(), Request.REQUEST_DISPLAY_SIM);
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
-				//send(LiquidApplication.getGUI(), LiquidGUI.PRINTSIM);
+				send(LiquidApplication.getGUI(), Request.REQUEST_PRINT_SIM);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
@@ -122,6 +127,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			} catch (Exception e) {
 			}
 		}
+		send(LiquidApplication.getGUI(), Request.REQUEST_SIM_HAS_ENDED);
 	}
 
 	public void initiateSim(String[] args) {
