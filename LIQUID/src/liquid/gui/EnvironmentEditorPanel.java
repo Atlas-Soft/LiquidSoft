@@ -391,7 +391,7 @@ public class EnvironmentEditorPanel extends JPanel {
 		l.setBounds(125, 30, 110, 25);
 		sensors.add(l);
 		
-		String[] sentype = {"Flow Meter"};
+		String[] sentype = {"Flowmeter"};	//changed to "Flowmeter" without space to fix flowmeters not being rendered
 		sensorType = new JComboBox<String>(sentype);
 		sensorType.setBounds(115, 5, 110, 25);
 		sensors.add(sensorType);
