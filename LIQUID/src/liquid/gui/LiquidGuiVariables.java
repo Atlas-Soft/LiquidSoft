@@ -99,25 +99,39 @@ public class LiquidGuiVariables {
 			objects.add(args[i]);}
 	}
 	
-	public void saveState(){
+	/**
+	 * Checks whether there are unsaved parameter changes to the current simulation or not. If so,
+	 * sets the simulator file name to include a '*' (to imitate current software functionalities).
+	 */
+	public void saveState() {
+		// saves the entire list of parameters onto the linked list to be able to see the history of changes
 		savedStates.push(writeArray());
 		undoStates.clear();
 		if (savedStates.size() > 1) {
-			LiquidApplication.getGUI().frame.setTitle("*"+filename + " - LIQUID : 2D Fluid Simulator   ");
-			if (filename == null) {
+			if (filename == null)
 				LiquidApplication.getGUI().frame.setTitle("*Untitled - LIQUID : 2D Fluid Simulator   ");
-			}
-		}
+			else
+				LiquidApplication.getGUI().frame.setTitle("*"+filename + " - LIQUID : 2D Fluid Simulator   ");}
 	}
 	
-	public void undo(){
-		if(savedStates.size() > 1){
+	/**
+	 * Un-does the lastest change made by the user.
+	 */
+	public void undo() {
+		// if there are unsaved changes, the latest changes will get be popped
+		// from the linked list, and the newest set of parameters will be set
+		if (savedStates.size() > 1) {
 			undoStates.push(savedStates.pop());
 			readArray(savedStates.peek());}
 	}
 	
-	public void redo(){
-		if(!undoStates.isEmpty()){
+	/**
+	 * Re-does the lastest change made by the user.
+	 */
+	public void redo() {
+		// if a set of un-did changes is present, then those set of parameters
+		// will be pushed back onto the saved state of parameters and be set
+		if (!undoStates.isEmpty()) {
 			savedStates.push(undoStates.pop());
 			readArray(savedStates.peek());}
 	}

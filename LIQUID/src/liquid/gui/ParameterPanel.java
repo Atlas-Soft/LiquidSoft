@@ -249,7 +249,7 @@ public class ParameterPanel extends JPanel {
 	 * The parameters in the parameter panel will get their values
 	 * updated based on the information from the log file.
 	 */
-	public void logUpdate() {
+	public void update() {
 		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
 		time.setSelectedIndex((int)LiquidApplication.getGUI().variables.runtime);
 		temp.setSelectedIndex((int)LiquidApplication.getGUI().variables.temperature+100);
