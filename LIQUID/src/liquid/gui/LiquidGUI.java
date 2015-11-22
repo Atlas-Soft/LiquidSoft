@@ -115,7 +115,7 @@ public class LiquidGUI implements Interfaceable {
 				param.logUpdate();
 				enviroeditor.update();
 				sim.repaint();
-				console.print_to_Console("Log File Loaded.\n");
+				console.print_to_Console("[Log File Loaded.]\n");
 				break;
 			default:}
 		}
@@ -130,6 +130,9 @@ public class LiquidGUI implements Interfaceable {
 			case PRINT_SIM:
 				console.print_to_Console(args[0]);
 				break;
+			case SIM_HAS_ENDED:
+				console.print_to_Console("[Simulation Finished.]\n");
+				param.pause.setEnabled(false);
 			default:}
 		}
 	}

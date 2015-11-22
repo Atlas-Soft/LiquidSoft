@@ -10,10 +10,16 @@ package liquid.core;
 public interface Interfaceable {
 
 	// to make send/receive requests clearer with the use of enum and English words
-	enum Request{REQUEST_SET_LOG_PARAM, SET_LOG_PARAM,
-		REQUEST_LOAD_LOG, REQUEST_WRITE_LOG, LOAD_LOG, WRITE_LOG,
-		REQUEST_RUN_SIM, REQUEST_PAUSE_SIM, REQUEST_END_SIM, RUN_SIM, PAUSE_SIM, END_SIM,
-		REQUEST_DISPLAY_SIM, REQUEST_PRINT_SIM, DISPLAY_SIM, PRINT_SIM};
+	enum Request{	REQUEST_SET_LOG_PARAM, SET_LOG_PARAM,
+					REQUEST_LOAD_LOG, LOAD_LOG,
+					REQUEST_WRITE_LOG, WRITE_LOG,
+					REQUEST_RUN_SIM, RUN_SIM,
+					REQUEST_PAUSE_SIM, PAUSE_SIM,
+					REQUEST_END_SIM, END_SIM,
+					REQUEST_DISPLAY_SIM, DISPLAY_SIM, 
+					REQUEST_PRINT_SIM, PRINT_SIM,
+					REQUEST_SIM_HAS_ENDED, SIM_HAS_ENDED
+				};
 	
 	/**
 	 * Method will be defined/overridden in the implemented class.
