@@ -70,6 +70,7 @@ public class LiquidFileWriter {
 					"WARNING: Directory Change!!", JOptionPane.WARNING_MESSAGE);}
 		
 			String filename = origFile + "\\" + fileDialog.getSelectedFile().getName();
+			System.out.println(filename);
 			if (filename.endsWith(".log")) {
 				int run = JOptionPane.showConfirmDialog(frame, "Are you sure you want to overwrite this log file?",
 						"Overwrite File?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);

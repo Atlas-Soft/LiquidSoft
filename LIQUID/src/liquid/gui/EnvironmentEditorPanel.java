@@ -21,6 +21,8 @@ public class EnvironmentEditorPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
+	String[] options = {"Environment", "Obstacles", "Initial Forces", "Flow Sensors"};
+	
 	JComboBox<String> select;
 	JPanel enviro;
 	JComboBox<Float> enviroLen;
@@ -75,25 +77,17 @@ public class EnvironmentEditorPanel extends JPanel {
 			}
 		};
 		
-		String[] options = {"Environment", "Obstacles", "Initial Forces", "Flow Sensors"};
-		
+		// sets the overall drop-down options for the EnvironmentEditorPanel
 		select = new JComboBox<String>(options);
-		select.setBounds(5, 5, 240, 25);
-		select.addItemListener(new ItemListener(){
+		select.setBounds(5,5,240,25);
+		select.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
-				if(arg0.getItem().toString() == "Environment") {
-					enviro.setVisible(true);
-				} else {
-					enviro.setVisible(false);
-				}
-				if(arg0.getItem().toString() == "Obstacles") {
-					//obstacles = new EnviroObstacles();
-					//add(obstacles);
-					obstacles.setVisible(true);
-				} else {
-					obstacles.setVisible(false);
-				}
+				// sets the drop-down option to be invisible if it is not currently selected 
+				if (arg0.getItem().toString() == "Environment") enviro.setVisible(true);
+				else enviro.setVisible(false);
+				if (arg0.getItem().toString() == "Obstacles") obstacles.setVisible(true);
+				else obstacles.setVisible(false);
 				if(arg0.getItem().toString() == "Initial Forces") forces.setVisible(true);
 				else forces.setVisible(false);
 				if(arg0.getItem().toString() == "Flow Sensors") sensors.setVisible(true);
@@ -121,14 +115,14 @@ public class EnvironmentEditorPanel extends JPanel {
 		enviroLen = new JComboBox<Float>();
 		for (int i = 0; i <= enviroLenLimit; i++) {
 			enviroLen.addItem(Float.valueOf(i));}
-		enviroLen.setSelectedIndex((int)enviroLenLimit);
+		enviroLen.setSelectedIndex((int) enviroLenLimit);
 		enviroLen.setBounds(5,25,110,25);
 		enviro.add(enviroLen);
 		
 		enviroWid = new JComboBox<Float>();
 		for (int i = 0; i <= enviroWidLimit; i++) {
 			enviroWid.addItem(Float.valueOf(i));}
-		enviroWid.setSelectedIndex((int)enviroWidLimit);
+		enviroWid.setSelectedIndex((int) enviroWidLimit);
 		enviroWid.setBounds(5,75,110,25);
 		enviro.add(enviroWid);
 		
@@ -137,12 +131,16 @@ public class EnvironmentEditorPanel extends JPanel {
 		draw.setBounds(5,125,110,25);
 		draw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.enviroLength = (float) enviroLen.getSelectedIndex();
-				LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedIndex();
+				// sets the length/width according to the drop-downs
+				LiquidApplication.getGUI().variables.enviroLength = (float) enviroLen.getSelectedItem();
+				LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedItem();
 				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
-				enviroLenLimit = enviroLen.getSelectedIndex();
-				enviroWidLimit = enviroWid.getSelectedIndex();
+				
+				// resets the limits to adjust the boundaries of creating various objects 
+				enviroLenLimit = (float) enviroLen.getSelectedItem();
+				enviroWidLimit = (float) enviroWid.getSelectedItem();
+				obstacles.adjustSettings();
 			}
         });
 		enviro.add(draw);

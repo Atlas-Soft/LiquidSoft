@@ -100,9 +100,9 @@ public class LiquidLogger implements Interfaceable {
 	 * present and filtering all files expect ones that end in '.log'.
 	 * Method can be used both to set up a new file or load an existing one.
 	 * 
-	 * @param set   - determines to save or load a file 
+	 * @param set  - determines to save or load a file 
 	 * @param frame - the frame with which JFileChooser will appear in
-	 * @return      - the String name of the file
+	 * @return    - the String name of the file
 	 */
 	public String setUpFile(String set, Component frame) {
 		try {
