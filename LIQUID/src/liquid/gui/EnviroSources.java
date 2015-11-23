@@ -39,7 +39,7 @@ public class EnviroSources extends JPanel {
 	 * Method creates the labels and drop-downs associated with creating sources.
 	 */
 	public void initComponents() {
-		setBounds(5,30,240,275);
+		setBounds(5,30,240,175);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		setVisible(false);
@@ -92,11 +92,9 @@ public class EnviroSources extends JPanel {
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				try {
-					String arg = forceType.getSelectedItem() + " ";
-					arg += Float.parseFloat(forceX.getText()) + " ";
-					arg += Float.parseFloat(forceY.getText()) + " ";
-					arg += Float.parseFloat(forceXComp.getText()) + " ";
-					arg += Float.parseFloat(forceYComp.getText());
+					String arg = forceType.getSelectedItem() + " " +
+						Float.parseFloat(forceX.getText()) + " " + Float.parseFloat(forceY.getText()) + " " +
+						Float.parseFloat(forceXComp.getText()) + " " + Float.parseFloat(forceYComp.getText());
 					LiquidApplication.getGUI().variables.objects.add(arg);
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 					LiquidApplication.getGUI().variables.saveState();
@@ -115,7 +113,7 @@ public class EnviroSources extends JPanel {
 	 * 
 	 * @param tokens - String[] of the log file to split
 	 */
-	public void updateObstacles(String[] tokens) {
+	public void updateSources(String[] tokens) {
 		try {
 			forceType.setSelectedItem(tokens[0]);
 			forceX.setText(tokens[1]);

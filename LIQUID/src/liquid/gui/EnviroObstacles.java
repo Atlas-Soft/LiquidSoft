@@ -39,10 +39,9 @@ public class EnviroObstacles extends JPanel {
 	 * Method creates the labels and drop-downs associated with creating obstacles.
 	 */
 	public void initComponents() {
-		setBounds(5,30,240,275);
+		setBounds(5,30,240,175);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
-		setVisible(false);
 		
 		// makes labels specific to creating obstacles
 		JLabel l = new JLabel("Object Type:");
@@ -72,14 +71,14 @@ public class EnviroObstacles extends JPanel {
 		add(obstacleType);
 			
 		obstacleX = new JComboBox<Float>();
-		for (int i = 0; i <= 50; i++) {
+		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			obstacleX.addItem(Float.valueOf(i));}
 		obstacleX.setSelectedIndex(0);
 		obstacleX.setBounds(5,55,(int)(this.getWidth()/2.2),25);
 		add(obstacleX);
 		
 		obstacleY = new JComboBox<Float>();
-		for (int i = 0; i <= 50; i++) {
+		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			obstacleY.addItem(Float.valueOf(i));}
 		obstacleY.setSelectedIndex(0);
 		obstacleY.setBounds(125,55,(int)(this.getWidth()/2.2),25);
@@ -88,29 +87,50 @@ public class EnviroObstacles extends JPanel {
 		obstacleL = new JComboBox<Float>();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			obstacleL.addItem(Float.valueOf(i));}
-		obstacleL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit/10));
+		if (EnvironmentEditorPanel.enviroLenLimit >= 50) {
+			obstacleL.setSelectedIndex(50);}
+		else {
+			obstacleL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit/10));}
 		obstacleL.setBounds(5,105,(int)(this.getWidth()/2.2),25);
 		add(obstacleL);
 		
 		obstacleW = new JComboBox<Float>();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			obstacleW.addItem(Float.valueOf(i));}
-		obstacleW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit/8));
+		if (EnvironmentEditorPanel.enviroWidLimit >= 50) {
+			obstacleW.setSelectedIndex(50);}
+		else {
+			obstacleW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit/10));}
 		obstacleW.setBounds(125,105,(int)(this.getWidth()/2.2),25);
 		add(obstacleW);
-		
+		createButton();
+	}
+	
+	/**
+	 * Method creates the Create button and throws error messages when
+	 * the obstacle will go out of the predefined environment size.
+	 */
+	public void createButton() {
 		// button creates the obstacle according to the parameters set
 		JButton create = new JButton("Create");
 		create.setBounds(65,140,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				// throws error messages when the obstacle will go beyond the environment
+				// (determined by the X-/Y-Coordinates and the length/width of the obstacle)
 				if ((obstacleX.getSelectedIndex() + obstacleL.getSelectedIndex()) > EnvironmentEditorPanel.enviroLenLimit) {
 					JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 							"Warning!! The X-Coordinate of your obstacle must be between 0 and " +
-							(EnvironmentEditorPanel.enviroLenLimit - obstacleL.getSelectedIndex()),
+							(obstacleL.getSelectedIndex()-EnvironmentEditorPanel.enviroLenLimit),
 							"Invalid X-Coordinate!!", JOptionPane.WARNING_MESSAGE);
+				} else if ((obstacleY.getSelectedIndex() + obstacleW.getSelectedIndex() > EnvironmentEditorPanel.enviroWidLimit)) {
+					JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
+							"Warning!! The Y-Coordinate of your obstace must be between 0 and " +
+							(obstacleW.getSelectedIndex()-EnvironmentEditorPanel.enviroWidLimit),
+							"Invalid Y-Coordinate!!", JOptionPane.WARNING_MESSAGE);
+					
+				// else sends the obstacle's information to the ArrayList of objects to store
 				} else {
-					// sends the obstacle's information to the ArrayList of objects to store
 					String arg = obstacleType.getSelectedItem() + " " +
 						obstacleX.getSelectedItem() + " " + obstacleY.getSelectedItem() + " " +
 						obstacleL.getSelectedItem() + " " + obstacleW.getSelectedItem();

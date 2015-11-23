@@ -28,11 +28,8 @@ public class EnvironmentEditorPanel extends JPanel {
 	static float enviroLenLimit = 500;
 	static float enviroWidLimit = 400;
 	
-	EnviroObstacles enviroObs;	
-	JPanel obstacles;
-	
-	EnviroSources enviroSou;
-	JPanel forces;
+	EnviroObstacles obstacles;
+	EnviroSources forces;
 	
 	JPanel sensors;
 		JComboBox<String> sensorType;		
@@ -85,9 +82,14 @@ public class EnvironmentEditorPanel extends JPanel {
 		select.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
-				if(arg0.getItem().toString() == "Environment") enviro.setVisible(true);
-				else enviro.setVisible(false);
+				if(arg0.getItem().toString() == "Environment") {
+					enviro.setVisible(true);
+				} else {
+					enviro.setVisible(false);
+				}
 				if(arg0.getItem().toString() == "Obstacles") {
+					//obstacles = new EnviroObstacles();
+					//add(obstacles);
 					obstacles.setVisible(true);
 				} else {
 					obstacles.setVisible(false);
@@ -124,7 +126,7 @@ public class EnvironmentEditorPanel extends JPanel {
 		enviro.add(enviroLen);
 		
 		enviroWid = new JComboBox<Float>();
-		for (int i = 0; i < enviroWidLimit; i++) {
+		for (int i = 0; i <= enviroWidLimit; i++) {
 			enviroWid.addItem(Float.valueOf(i));}
 		enviroWid.setSelectedIndex((int)enviroWidLimit);
 		enviroWid.setBounds(5,75,110,25);
@@ -135,10 +137,12 @@ public class EnvironmentEditorPanel extends JPanel {
 		draw.setBounds(5,125,110,25);
 		draw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.enviroLength = (float) enviroLen.getSelectedItem();
-				LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedItem();
-				LiquidApplication.getGUI().sim.repaint();
+				LiquidApplication.getGUI().variables.enviroLength = (float) enviroLen.getSelectedIndex();
+				LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedIndex();
 				LiquidApplication.getGUI().variables.saveState();
+				LiquidApplication.getGUI().sim.repaint();
+				enviroLenLimit = enviroLen.getSelectedIndex();
+				enviroWidLimit = enviroWid.getSelectedIndex();
 			}
         });
 		enviro.add(draw);
@@ -146,6 +150,7 @@ public class EnvironmentEditorPanel extends JPanel {
 		
 		// creates the Obstacle section, which represents the EnviroObstacle class
 		obstacles = new EnviroObstacles();
+		obstacles.setVisible(false);
 		add(obstacles);
 		
 		// creates the Initial Forces section, which represents the EnviroSource class
@@ -348,7 +353,7 @@ public class EnvironmentEditorPanel extends JPanel {
 				sensors.setVisible(false);
 				obstacles.setVisible(true);
 				
-				LiquidApplication.getGUI().enviroeditor.enviroObs.updateObstacles(tokens);
+				obstacles.updateObstacles(tokens);
 			}
 			if(tokens[0].equals("Source")){
 				select.setSelectedItem("Initial Forces");
@@ -356,6 +361,7 @@ public class EnvironmentEditorPanel extends JPanel {
 				sensors.setVisible(false);
 				obstacles.setVisible(false);
 				
+				forces.updateSources(tokens);
 				
 			}
 			if(tokens[0].equals("Flowmeter")){
@@ -377,8 +383,8 @@ public class EnvironmentEditorPanel extends JPanel {
 		enviroWid.setSelectedItem(Float.toString(LiquidApplication.getGUI().variables.enviroWidth));
 		select.setSelectedItem("Environment");
 
-		enviroObs.resetObstacles();
-		enviroSou.resetSources();
+		obstacles.resetObstacles();
+		forces.resetSources();
 		
 		sensorType.setSelectedIndex(0);
 		sensorX.setText("0");
