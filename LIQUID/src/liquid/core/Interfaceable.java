@@ -8,7 +8,7 @@ package liquid.core;
  * @author Rafael Zamora
  */
 public interface Interfaceable {
-
+	
 	// to make send/receive requests clearer with the use of enum and English words
 	enum Request{	REQUEST_SET_LOG_PARAM, SET_LOG_PARAM,
 					REQUEST_LOAD_LOG, LOAD_LOG,
@@ -23,11 +23,11 @@ public interface Interfaceable {
 	
 	/**
 	 * Method will be defined/overridden in the implemented class.
-	 * The component should send encoded information into a String[]
-	 * to be sent and received by another component through the receive method.
+	 * The component should send encoded information into a String[] to be
+	 * sent and received by another component through the receive method.
 	 * 
 	 * @param i    - determines which component to request an interaction with
-	 * @param route - determines what interaction to request (see class' enum)
+	 * @param route - determines what interaction to request (see enum Request)
 	 */
 	public void send(Interfaceable i, Request route);
 	
@@ -37,7 +37,7 @@ public interface Interfaceable {
 	 * in a String[] to be used by the receiving component in some way.
 	 * 
 	 * @param i    - determines which component is requesting an interaction
-	 * @param route - determines what interaction is requested (see class' enum)
+	 * @param route - determines what interaction is requested (see enum Request)
 	 * @param args - information required to complete requested interaction
 	 */
 	public void receive(Interfaceable i, Request route, String[] args);

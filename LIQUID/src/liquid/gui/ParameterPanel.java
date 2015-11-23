@@ -51,7 +51,7 @@ public class ParameterPanel extends JPanel {
 		initComponents();
 		setLayout(null);
 		setBackground(Color.LIGHT_GRAY);
-		setBounds(500, 0, 300, 640);
+		setBounds(500,0,300,640);
 		setVisible(true);
 	}
 
@@ -66,63 +66,62 @@ public class ParameterPanel extends JPanel {
 
 		// creates labels for the previously defined set of parameters
 		JLabel l = new JLabel("Liquid Type:");
-		l.setBounds(25, 15, 120, 25);
+		l.setBounds(25,15,120,25);
 		add(l);
 		
 		l = new JLabel("Run For (Seconds):");
-		l.setBounds(155, 15, 120, 25);
+		l.setBounds(155,15,120,25);
 		add(l);
 		
 		l = new JLabel("Temperature (\u00b0C):");
-		l.setBounds(25, 65, 120, 25);
+		l.setBounds(25,65,120,25);
 		add(l);
 
 		l = new JLabel("Viscocity:");
-		l.setBounds(155, 65, 120, 25);
+		l.setBounds(155,65,120,25);
 		add(l);
 
 		l = new JLabel("Environment Editor:");
-		l.setBounds(25, 125, 140, 25);
+		l.setBounds(25,125,140,25);
 		add(l);
 
 		// creates drop downs and/or text boxes for the user to
 		// enter values for the previously defined set of parameters
-		
 		String[] options = {"Water", "Glycerin"};
 		liqs = new JComboBox<String>(options);
 		liqs.setSelectedIndex(0);
-		liqs.setBounds(25, 40, 120, 25);
+		liqs.setBounds(25,40,120,25);
 		add(liqs);
 
 		time = new JComboBox<Integer>();
 		for (int i = 0; i <= 300; i++) {
 			time.addItem(i);}
 		time.setSelectedIndex(300);
-		time.setBounds(155, 40, 120, 25);
+		time.setBounds(155,40,120,25);
 		add(time);
 		
 		temp = new JComboBox<Float>();
 		for (int i = -100; i <= 100; i++) {
 			temp.addItem(Float.valueOf(i));}
 		temp.setSelectedIndex(170);
-		temp.setBounds(25, 90, 120, 25);
+		temp.setBounds(25,90,120,25);
 		add(temp);
 
 		visc = new JComboBox<Float>();
 		for (int i = 0; i <= 50; i++) {
 			visc.addItem(Float.valueOf(i));}
 		visc.setSelectedIndex(1);
-		visc.setBounds(155, 90, 120, 25);
+		visc.setBounds(155,90,120,25);
 		add(visc);
 
 		replay = new JCheckBox("Run Replay?");
-		replay.setBounds(95, 475, 100, 25);
+		replay.setBounds(95,475,100,25);
 		add(replay);
 
 		// the 'Run' button works only when the text fields have been inputed
 		// correctly and there is a log file present to record the data
 		run = new JButton("Run");
-		run.setBounds(25, 510, 115, 25);
+		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// for a paused simulation, it is still technically on-going.
@@ -137,8 +136,7 @@ public class ParameterPanel extends JPanel {
 				
 				// for new simulations, path calls Logger to set a valid log file name
 				} else {
-					String filename = LiquidApplication.getLogger().
-							setUpFile("SAVE", LiquidApplication.getGUI().frame);
+					String filename = LiquidApplication.getLogger().setUpFile("SAVE", LiquidApplication.getGUI().frame);
 					if (filename != null) prepareSim(SetSim.NEW_SIM, filename);
 				}
 			}
@@ -148,7 +146,7 @@ public class ParameterPanel extends JPanel {
 		// the 'Pause' button basically stops the simulation. However,
 		// no parameter configurations are allowed during this state
 		pause = new JButton("Pause");
-		pause.setBounds(155, 510, 115, 25);
+		pause.setBounds(155,510,115,25);
 		pause.setEnabled(false);
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -164,7 +162,7 @@ public class ParameterPanel extends JPanel {
 		// the 'Step' button proceeds through the simulation one step at a time,
 		// or one second at a time (since that's how the Logger records data)
 		step = new JButton("Step");
-		step.setBounds(25, 545, 115, 25);
+		step.setBounds(25,545,115,25);
 		step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 
@@ -174,7 +172,7 @@ public class ParameterPanel extends JPanel {
 
 		// the 'End' button dismisses the simulation
 		end = new JButton("End");
-		end.setBounds(155, 545, 115, 25);
+		end.setBounds(155,545,115,25);
 		end.setEnabled(false);
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -198,7 +196,7 @@ public class ParameterPanel extends JPanel {
 	 * up a simulation. This includes button enabling/disabling and sending
 	 * notices to the Logger/Engine to write the log file and run simulation.
 	 * 
-	 * @param route    - determines the route to take
+	 * @param route   - determines the route to take
 	 * @param filename - to pass in the file name (NewSim only)
 	 */
 	public void prepareSim(SetSim route, String filename) {

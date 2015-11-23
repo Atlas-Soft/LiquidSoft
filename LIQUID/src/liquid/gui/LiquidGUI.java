@@ -62,7 +62,7 @@ public class LiquidGUI implements Interfaceable {
 		String[] args;
 		
 		// sends requests to the Logger to begin to load or write a log file
-		if(i instanceof LiquidLogger) {
+		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_LOAD_LOG:
 				args = new String[1];
@@ -133,6 +133,7 @@ public class LiquidGUI implements Interfaceable {
 			case SIM_HAS_ENDED:
 				console.print_to_Console("[Simulation Finished.]\n");
 				param.pause.setEnabled(false);
+				break;
 			default:}
 		}
 	}

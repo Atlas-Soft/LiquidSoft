@@ -41,13 +41,13 @@ public class ConsolePanel extends JPanel {
 		
 		console = new JTextArea(); 
 		console.setFont(new Font("Consola", Font.PLAIN, 12));
-		console.setBounds(0, 20, 500, 160);
+		console.setBounds(0,20,500,160);
 		console.append("Welcome to LIQUID!\n");
 		console.setEditable(false);
 		
-		// make the console panel scrollable
+		// makes the console panel scrollable
 		JScrollPane sp = new JScrollPane(console);
-		sp.setBounds(0, 20, 500, 160);
+		sp.setBounds(0,20,500,160);
 		sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		add(sp);
 	}
@@ -59,6 +59,6 @@ public class ConsolePanel extends JPanel {
 	 */
 	public void print_to_Console(String str) {
 		console.append(str);
-		console.setCaretPosition(console.getDocument().getLength()); //auto Scroll
+		console.setCaretPosition(console.getDocument().getLength()); // auto-scroll
 	}
 }
