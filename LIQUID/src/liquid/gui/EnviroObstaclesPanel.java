@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import liquid.core.LiquidApplication;
@@ -16,7 +15,7 @@ import liquid.core.LiquidApplication;
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
  * to creating an obstacle are present, such as the X-/Y-Coordinates. 
  */
-public class EnviroObstacles extends JPanel {
+public class EnviroObstaclesPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -26,12 +25,12 @@ public class EnviroObstacles extends JPanel {
 	JComboBox<Float> obstacleY;
 	JComboBox<Float> obstacleL;
 	JComboBox<Float> obstacleW;
-	String[] obstype = {"Rectangular", "Circular"};
+	String[] obsType = {"Rectangular", "Circular"};
 	
 	/**
 	 * Constructor creates the Obstacles section of the EnvironmentEditorPanel.
 	 */
-	public EnviroObstacles() {
+	public EnviroObstaclesPanel() {
 		initComponents();
 	}
 	
@@ -64,25 +63,24 @@ public class EnviroObstacles extends JPanel {
 		l.setBounds(125,80,(this.getWidth()/2),25);
 		add(l);
 		
-		// makes the drop-downs needed to create obstacles
-		obstacleType = new JComboBox<String>(obstype);
+		// makes the drop-downs needed to creating obstacles
+		obstacleType = new JComboBox<String>(obsType);
 		obstacleType.setBounds(115,5,(this.getWidth()/2),25);
 		add(obstacleType);
 		
-		// makes drop-downs to represent the parameters of an obstacle
 		obstacleX = new JComboBox<Float>();
 		obstacleY = new JComboBox<Float>();
 		obstacleL = new JComboBox<Float>();
 		obstacleW = new JComboBox<Float>();
-		adjustSettings(); // populates the drop-down information
-		createButton(); // creates the Create button
+		obstaclesParam(); // populates the drop-down information
+		createObstacles(); // makes a Create button
 	}
 	
 	/**
-	 * Method adjusts the obstacles settings to be within the limit of the environment's size. It also provides
+	 * Method adjusts the obstacle's settings to be within the limit of the environment's size. It also provides
 	 * a real-time update of the obstacle parameters to prevent them from exceeding the environment's boundaries.
 	 */
-	public void adjustSettings() {
+	public void obstaclesParam() {
 		// each drop-down first gets all items removed from it, then gets
 		// populated with items all dependent on the environment boundaries
 		obstacleX.removeAllItems();
@@ -97,7 +95,6 @@ public class EnviroObstacles extends JPanel {
 		obstacleY.setBounds(125,55,(int)(this.getWidth()/2.2),25);
 		add(obstacleY);
 		
-		// sets the default settings to be always 50, unless restricted by the environment
 		obstacleL.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			obstacleL.addItem(Float.valueOf(i));}
@@ -110,47 +107,22 @@ public class EnviroObstacles extends JPanel {
 		obstacleW.setBounds(125,105,(int)(this.getWidth()/2.2),25);
 		add(obstacleW);
 		
-		// sets what the default parameters should be
+		// sets the default parameters even after an environment size change
 		resetObstacles();
 	}
 	
 	/**
-	 * Method creates the Create button and throws error messages when
-	 * the obstacle will go out of the predefined environment size.
+	 * Method used to call the editor panel to make a Create button for Obstacles.
 	 */
-	public void createButton() {
+	public void createObstacles() {
 		// button creates the obstacle according to the parameters set
 		JButton create = new JButton("Create");
 		create.setBounds(65,140,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				// throws error messages when the obstacle will go beyond the environment (determined
-				// by the X-/Y-Coordinates and the Length/Width of the obstacle, respectively)
-				if ((obstacleX.getSelectedIndex() + obstacleL.getSelectedIndex()) > EnvironmentEditorPanel.enviroLenLimit) {
-					JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-							"Warning!! Your X-Coordinate must be from 0.0 - " + (EnvironmentEditorPanel.enviroLenLimit - obstacleL.getSelectedIndex()) +
-							",\n or your Length must be from 0.0 - " + (EnvironmentEditorPanel.enviroLenLimit - obstacleX.getSelectedIndex()) +
-							"\n to be in the boundaries of your desired environment size.",
-							"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
-				} else if ((obstacleY.getSelectedIndex() + obstacleW.getSelectedIndex() > EnvironmentEditorPanel.enviroWidLimit)) {
-					JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-							"Warning!! Your Y-Coordinate must be from 0.0 - " + (EnvironmentEditorPanel.enviroWidLimit - obstacleW.getSelectedIndex()) +
-							",\n or your Width must be from 0.0 - " + (EnvironmentEditorPanel.enviroWidLimit - obstacleY.getSelectedIndex()) +
-							"\n to be in the boundaries of your desired environment size.",
-							"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
-					
-				// else sends the obstacle's information to the ArrayList of objects to store
-				} else {
-					String arg = obstacleType.getSelectedItem() + " " +
-						obstacleX.getSelectedItem() + " " + obstacleY.getSelectedItem() + " " +
-						obstacleL.getSelectedItem() + " " + obstacleW.getSelectedItem();
-					LiquidApplication.getGUI().variables.objects.add(arg);
-					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
-					LiquidApplication.getGUI().variables.saveState();
-					LiquidApplication.getGUI().sim.repaint();
-				}
+		public void actionPerformed(ActionEvent actionEvent) {
+			LiquidApplication.getGUI().enviroeditor.checkBoundaries(obstacleType, obstacleX, obstacleY, obstacleL, obstacleW);
 			}
-        });
+		});
 		add(create);
 	}
 	
@@ -178,12 +150,7 @@ public class EnviroObstacles extends JPanel {
 		obstacleType.setSelectedIndex(0);
 		obstacleX.setSelectedIndex(0);
 		obstacleY.setSelectedIndex(0);
-		
-		// sets the default settings to be always 50, unless restricted by the environment
-		if (EnvironmentEditorPanel.enviroLenLimit >= 50) obstacleL.setSelectedIndex(50);
-		else obstacleL.setSelectedIndex((int) (EnvironmentEditorPanel.enviroLenLimit/10));
-		
-		if (EnvironmentEditorPanel.enviroLenLimit >= 50) obstacleW.setSelectedIndex(50);
-		else obstacleW.setSelectedIndex((int) (EnvironmentEditorPanel.enviroLenLimit/10));
+		obstacleL.setSelectedIndex((int) (EnvironmentEditorPanel.enviroLenLimit/10));
+		obstacleW.setSelectedIndex((int) (EnvironmentEditorPanel.enviroWidLimit/8));
 	}
 }
