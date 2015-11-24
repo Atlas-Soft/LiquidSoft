@@ -32,26 +32,30 @@ public class FluidEnvironment {
 	Rectangle2D bounds;
 	ArrayList<Source> sources;
 	ArrayList<Flowmeter> meters;
-	
+
+	private float timer;
+
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
 		sources = new ArrayList<Source>();
+		meters = new ArrayList<Flowmeter>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
-		
+		timer = 0;
+
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
 		Body b = world.createBody(bd);
 		ChainShape shape = new ChainShape();
-        Vec2[] vertices = new Vec2[] {new Vec2(0, 0), new Vec2(len, 0), new Vec2(len, wid), new Vec2(0, wid)};
-        shape.createLoop(vertices, 4);
-        b.createFixture(shape, 0.0f);
+		Vec2[] vertices = new Vec2[] {new Vec2(0, 0), new Vec2(len, 0), new Vec2(len, wid), new Vec2(0, wid)};
+		shape.createLoop(vertices, 4);
+		b.createFixture(shape, 0.0f);
 	}
-	
+
 	public void init(){
 		world.setParticleRadius(5f);
 		world.setParticleMaxCount(1500);
 		world.setParticleViscousStrength(0.0f);
-		
+
 		for(int i = 0; i < 100; i ++){
 			for(int j = 0; j < 100; j++){
 				ParticleQuery pq = new ParticleQuery();
@@ -66,14 +70,21 @@ public class FluidEnvironment {
 			}
 		}
 	}
-	
+
 	public void update(float delta){
+		timer += delta;
 		world.step(delta, 6, 3);
 		for(Source s: sources){
 			s.update(delta);
 		}
+		if(timer >= 10){
+			timer = 0;
+			for (Flowmeter f: meters){
+				System.out.println(f.pollVelocity(delta));
+			}
+		}
 	}
-	
+
 	public void addObstacle(Shape s,float x, float y){
 		Body b;
 		BodyDef bd = new BodyDef();
@@ -84,11 +95,11 @@ public class FluidEnvironment {
 		fd.shape = s;
 		b.createFixture(fd);
 	}
-	
+
 	public void addSource(float x, float y, float velx, float vely){
 		sources.add(new Source(this, x, y, velx, vely));
 	}
-	
+
 	/**
 	 * Creates a Flow meter at the specified coordinates
 	 * @param x x-position of the new flow meter
@@ -97,18 +108,18 @@ public class FluidEnvironment {
 	public void addFlowmeter(float x, float y){
 		meters.add(new Flowmeter(world, new Vec2(x, y)));
 	}
-	
+
 	public void addParticle(float x, float y, float velx, float vely){
-	    	CircleShape shape = new CircleShape();
-	    	shape.setRadius(5);
-	        ParticleGroupDef pd = new ParticleGroupDef();
-	        pd.position.set(x, y);
-	        pd.linearVelocity.set(velx, vely); 
-	        pd.flags = ParticleType.b2_waterParticle | ParticleType.b2_viscousParticle;
-	        pd.shape = shape;
-	        world.createParticleGroup(pd);
+		CircleShape shape = new CircleShape();
+		shape.setRadius(5);
+		ParticleGroupDef pd = new ParticleGroupDef();
+		pd.position.set(x, y);
+		pd.linearVelocity.set(velx, vely); 
+		pd.flags = ParticleType.b2_waterParticle | ParticleType.b2_viscousParticle;
+		pd.shape = shape;
+		world.createParticleGroup(pd);
 	}
-	
+
 	public String[] getParticleData(){
 		String[] dataArray = new String[0];
 		ArrayList<String> dataList = new ArrayList<String>();

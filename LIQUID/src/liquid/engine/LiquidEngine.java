@@ -168,7 +168,9 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addSource(x, y, l, w);
 			}
 			if (tokens[0].equals("Flowmeter")) {
-
+				x = Float.parseFloat(tokens[1]);
+				y = Float.parseFloat(tokens[2]);
+				enviro.addFlowmeter(x, y);
 			}
 		}
 		enviro.init();
