@@ -16,7 +16,13 @@ import javax.swing.JOptionPane;
 public class LiquidFileWriter {
 
 	BufferedWriter bw;	//changed to class level variable to keep state of bw
-	
+	public void initLogFile(String fileName){
+		try{
+			bw = new BufferedWriter(new FileWriter(fileName));
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Method writes the contents of a String[] onto a text file. This'll
 	 * represent the log file, which stores all parameter information.
@@ -24,7 +30,7 @@ public class LiquidFileWriter {
 	 * @param fileName - the file's name to store in
 	 * @param args    - the String[] of parameters
 	 */
-	public void writetoLogFile(String fileName, String args[]) {
+	public void initLogFile(String fileName, String args[]) {
 		try {
 			bw = new BufferedWriter(new FileWriter(fileName));
 			
@@ -39,7 +45,11 @@ public class LiquidFileWriter {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Used to add strings in args to one line of the log file
+	 * PRECONDITION: writetoLogFile() <b>MUST</b> be called successfully at some point prior to calling this function
+	 * @param args an array of strings to be written to the log file
+	 */
 	public void appendtoLogFile(String args[]){
 		try {
 //			BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
@@ -84,7 +94,9 @@ public class LiquidFileWriter {
 		}
 		return null;
 	}
-	
+	/**
+	 * Closes file opened in writetoLogFile()
+	 */
 	public void dispose(){
 		try{
 			bw.close();

@@ -65,6 +65,7 @@ public class LiquidLogger implements Interfaceable {
 			switch (request) {
 			case REQUEST_SET_LOG_PARAM:
 				String[] args = fileLoader.loadLogFile(currentFile);
+//				fileWriter.initLogFile(currentFile);	//does not fix problem, produces ArrayIndexOutOfBoundsException: 1
 				i.receive(this, request.SET_LOG_PARAM, args);
 				break;
 			default:}
@@ -86,11 +87,12 @@ public class LiquidLogger implements Interfaceable {
 			switch (request) {
 			case LOAD_LOG:
 				currentFile = args[0];
+//				fileWriter.initLogFile(currentFile, args);	//did not work to initialize fileWriter, produces ArrayIndexOutOfBoundsException: 1
 				send(i, request.REQUEST_SET_LOG_PARAM);
 				break;
 			case WRITE_LOG:
 				currentFile = args[0];
-				fileWriter.writetoLogFile(currentFile, args);
+				fileWriter.initLogFile(currentFile, args);
 				break;
 			default:}
 		}
