@@ -20,7 +20,7 @@ public class LiquidFileWriter {
 	 * represent the log file, which stores all parameter information.
 	 * 
 	 * @param fileName - the file's name to store in
-	 * @param args     - the String[] of parameters
+	 * @param args    - the String[] of parameters
 	 */
 	public void writetoLogFile(String fileName, String args[]) {
 		try {
@@ -53,8 +53,8 @@ public class LiquidFileWriter {
 	 * is saved in the correct directory and whether or not it will override an existing file.
 	 * 
 	 * @param fileDialog - uses same JFileChooser to keep consistency
-	 * @param frame      - the frame with which to display
-	 * @return           - String name of the file
+	 * @param frame     - the frame with which to display
+	 * @return         - String name of the file
 	 */
 	public String setUpFileToSave(JFileChooser fileDialog, Component frame) {
 		File origFile = fileDialog.getCurrentDirectory();

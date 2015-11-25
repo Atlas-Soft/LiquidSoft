@@ -5,6 +5,8 @@ package liquid.engine;
 
 import org.jbox2d.common.Vec2;
 
+import liquid.core.LiquidApplication;
+
 /**
  * @author Rafael Zamora
  *
@@ -17,11 +19,11 @@ public class Source {
 	private float flowspeed;
 	private float timer;
 	
-	public Source(FluidEnvironment enviro, float x, float y, float velx, float vely){
+	public Source(FluidEnvironment enviro, float x, float y, float velx, float vely, float flow){
 		this.enviro = enviro;
 		pos = new Vec2(x, y);
 		force = new Vec2(velx,vely);
-		flowspeed = force.length();
+		flowspeed = flow;
 		timer = 0;
 	}
 	
