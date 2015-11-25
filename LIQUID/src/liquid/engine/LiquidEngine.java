@@ -41,8 +41,12 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				i.receive(this, request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:
-				args = new String[1];
-				args[0] = "-Time " + (sec + 1) + ": \n";
+				args = new String[enviro.meters.size() + 2];
+				args[0] = "-Time " + (sec + 1) + ":";
+				for (int f = 0; f < enviro.meters.size(); f++){
+					args[f+1] = enviro.meters.get(f).toString();
+				}
+				args[args.length - 1] = "\n";
 				i.receive(this, request.PRINT_SIM, args);
 				break;
 			case REQUEST_SIM_HAS_ENDED:

@@ -128,7 +128,8 @@ public class LiquidGUI implements Interfaceable {
 				sim.repaint();
 				break;
 			case PRINT_SIM:
-				console.print_to_Console(args[0]);
+				for(String s: args)
+					console.print_to_Console(s);
 				break;
 			case SIM_HAS_ENDED:
 				console.print_to_Console("[Simulation Finished.]\n");

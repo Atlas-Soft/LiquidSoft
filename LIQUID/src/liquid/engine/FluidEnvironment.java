@@ -79,9 +79,8 @@ public class FluidEnvironment {
 		}
 		if(timer >= 10){
 			timer = 0;
-			for (Flowmeter f: meters){
-				System.out.println(f.update());
-			}
+			for(Flowmeter f: meters)
+				System.out.println(f);
 		}
 	}
 
