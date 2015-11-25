@@ -80,7 +80,7 @@ public class FluidEnvironment {
 		if(timer >= 10){
 			timer = 0;
 			for (Flowmeter f: meters){
-				System.out.println(f.pollVelocity(delta));
+				System.out.println(f.update());
 			}
 		}
 	}
@@ -105,8 +105,8 @@ public class FluidEnvironment {
 	 * @param x x-position of the new flow meter
 	 * @param y y-position of the new flow meter
 	 */
-	public void addFlowmeter(float x, float y){
-		meters.add(new Flowmeter(world, new Vec2(x, y)));
+	public void addFlowmeter(float x, float y, int ID){
+		meters.add(new Flowmeter(world, new Vec2(x, y), ID));
 	}
 
 	public void addParticle(float x, float y, float velx, float vely){

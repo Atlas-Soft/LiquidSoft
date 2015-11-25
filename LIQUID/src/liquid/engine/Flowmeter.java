@@ -3,6 +3,7 @@
  */
 package liquid.engine;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
@@ -15,24 +16,33 @@ import org.jbox2d.dynamics.World;
 public class Flowmeter {
 	private World myWorld;
 	private Vec2 myLoc;
-	private float timer;
+	private int myID;
 
 	/**
 	 * 
 	 * @param imHere the world this flow meter is monitoring
 	 * @param loc the location this flow meter monitors
 	 */
-	public Flowmeter(World imHere, Vec2 loc){
+	public Flowmeter(World imHere, Vec2 loc, int ID){
 		myWorld = imHere;
 		myLoc = loc;
-		timer = 0;
+		myID = ID;
 	}
+	
+	public String update(){
+		DecimalFormat adj = new DecimalFormat();
+//		Vec2
+//		adj.setMaximumFractionDigits(4);
+		String send = "" + myID + ": ";
+		
+		return send;
+	}
+	
 	/**
 	 * Gets the average x and y velocities of particles within 2.0 units of this flowmeter's position
 	 * @return Vec2 object containing the average x and y velocities of nearby particles
 	 */
-	public Vec2 pollVelocity(float delta){
-		timer += delta;
+	private Vec2 pollVelocity(){
 		ArrayList<Vec2> vel = new ArrayList<Vec2>();
 		Vec2[] pos = myWorld.getParticlePositionBuffer();
 		Vec2 bounds = new Vec2(10.0f, 10.0f);	//To change boundaries to check, simply change parameters of constructor
