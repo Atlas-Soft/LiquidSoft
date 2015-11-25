@@ -3,6 +3,7 @@ package liquid.gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,11 +22,14 @@ public class EnviroForcesPanel extends JPanel {
 	
 	// list of components needed to create a force
 	JComboBox<String> forceType;
+	JComboBox<Float> forceSpeed;
 	JComboBox<Float> forceX;
 	JComboBox<Float> forceY;
 	JComboBox<Float> forceXComp;
 	JComboBox<Float> forceYComp;
+	
 	String[] foType = {"Source"};
+	ArrayList<Float> params;
 	
 	/**
 	 * Constructor creates the Force (or Initial Force) section of the EnvironmentEditorPanel.
@@ -38,36 +42,41 @@ public class EnviroForcesPanel extends JPanel {
 	 * Method creates the labels and drop-downs associated with creating forces.
 	 */
 	public void initComponents() {
-		setBounds(5,30,240,175);
+		setBounds(5,30,240,205);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		
 		// makes labels specific to creating forces
 		JLabel l = new JLabel("Object Type:");
-		l.setBounds(35,5,(this.getWidth()/2),25);
+		l.setBounds(5,5,(this.getWidth()/2),25);
+		add(l);
+		
+		l = new JLabel("Flow Speed:");
+		l.setBounds(125,5,(this.getWidth()/2),25);
 		add(l);
 		
 		l = new JLabel("X-Coordinate:");
-		l.setBounds(5,30,(this.getWidth()/2),25);
+		l.setBounds(5,60,(this.getWidth()/2),25);
 		add(l);
 		
 		l = new JLabel("Y-Coordinate:");
-		l.setBounds(125,30,(this.getWidth()/2),25);
+		l.setBounds(125,60,(this.getWidth()/2),25);
 		add(l);
 		
 		l = new JLabel("X-Force:");
-		l.setBounds(5,80,(this.getWidth()/2),25);
+		l.setBounds(5,110,(this.getWidth()/2),25);
 		add(l);
 		
 		l = new JLabel("Y-Force:");
-		l.setBounds(125,80,(this.getWidth()/2),25);
+		l.setBounds(125,110,(this.getWidth()/2),25);
 		add(l);
 		
 		// makes the drop-downs needed to create forces
 		forceType = new JComboBox<String>(foType);
-		forceType.setBounds(115,5,(this.getWidth()/2),25);
+		forceType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
 		add(forceType);
-			
+		
+		forceSpeed = new JComboBox<Float>();
 		forceX = new JComboBox<Float>();
 		forceY = new JComboBox<Float>();
 		forceXComp = new JComboBox<Float>();
@@ -83,28 +92,34 @@ public class EnviroForcesPanel extends JPanel {
 	public void forcesParam() {
 		// each drop-down first gets all items removed from it, then gets
 		// populated with items all dependent on the environment boundaries
+		forceSpeed.removeAllItems();
+		for (int i = 0; i <= 50; i++) {
+			forceSpeed.addItem(Float.valueOf(i));}
+		forceSpeed.setBounds(125,30,(int)(this.getWidth()/2.2),25);
+		add(forceSpeed);
+		
 		forceX.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			forceX.addItem(Float.valueOf(i));}
-		forceX.setBounds(5,55,(int)(this.getWidth()/2.2),25);
+		forceX.setBounds(5,85,(int)(this.getWidth()/2.2),25);
 		add(forceX);
 		
 		forceY.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			forceY.addItem(Float.valueOf(i));}
-		forceY.setBounds(125,55,(int)(this.getWidth()/2.2),25);
+		forceY.setBounds(125,85,(int)(this.getWidth()/2.2),25);
 		add(forceY);
 		
 		forceXComp.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			forceXComp.addItem(Float.valueOf(i));}
-		forceXComp.setBounds(5,105,(int)(this.getWidth()/2.2),25);
+		forceXComp.setBounds(5,135,(int)(this.getWidth()/2.2),25);
 		add(forceXComp);
 		
 		forceYComp.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			forceYComp.addItem(Float.valueOf(i));}
-		forceYComp.setBounds(125,105,(int)(this.getWidth()/2.2),25);
+		forceYComp.setBounds(125,135,(int)(this.getWidth()/2.2),25);
 		add(forceYComp);
 		
 		// sets the default parameters even after an environment size change
@@ -117,10 +132,16 @@ public class EnviroForcesPanel extends JPanel {
 	public void createForces() {
 		// button creates the obstacle according to the parameters set
 		JButton create = new JButton("Create");
-		create.setBounds(65,140,(int)(this.getWidth()/2.2),25);
+		create.setBounds(65,170,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
-			LiquidApplication.getGUI().enviroeditor.checkBoundaries(forceType, forceX, forceY, forceXComp, forceYComp);
+			params = new ArrayList<Float>();
+			params.add((Float) forceX.getSelectedItem());
+			params.add((Float) forceY.getSelectedItem());
+			params.add((Float) forceXComp.getSelectedItem());
+			params.add((Float) forceYComp.getSelectedItem());
+			params.add((Float) forceSpeed.getSelectedItem());
+			LiquidApplication.getGUI().enviroeditor.checkBoundaries(forceType, params);
 			}
 		});
 		add(create);
@@ -139,6 +160,7 @@ public class EnviroForcesPanel extends JPanel {
 			forceY.setSelectedItem(tokens[2]);
 			forceXComp.setSelectedItem(tokens[3]);
 			forceYComp.setSelectedItem(tokens[4]);
+			forceSpeed.setSelectedItem(tokens[5]);
 		} catch (Exception e) {
 			e.printStackTrace();}
 	}
@@ -148,6 +170,7 @@ public class EnviroForcesPanel extends JPanel {
 	 */
 	public void resetForces() {
 		forceType.setSelectedIndex(0);
+		forceSpeed.setSelectedIndex(20);
 		forceX.setSelectedIndex(0);
 		forceY.setSelectedIndex(0);
 		forceXComp.setSelectedIndex((int) (EnvironmentEditorPanel.enviroLenLimit/10));

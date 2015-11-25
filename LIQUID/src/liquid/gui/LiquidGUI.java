@@ -159,7 +159,8 @@ public class LiquidGUI implements Interfaceable {
 		param.reset();
 	}
 	
-	public void dispose() {
-		
-	}	
+	/**
+	 * Represents a placeholder method for when necessary to dispose something.
+	 */
+	public void dispose() {}
 }

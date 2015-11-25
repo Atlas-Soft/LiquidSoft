@@ -36,7 +36,7 @@ public class EnviroSensorsPanel extends JPanel {
 	 * Method creates the labels and drop-downs associated with creating sensors.
 	 */
 	public void initComponents() {
-		setBounds(5,30,240,175);
+		setBounds(5,30,240,205);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		

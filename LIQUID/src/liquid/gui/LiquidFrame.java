@@ -1,3 +1,4 @@
+// DONE!
 package liquid.gui;
 
 import javax.swing.JFrame;
@@ -35,7 +36,6 @@ public class LiquidFrame extends JFrame {
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (exitSim == JOptionPane.YES_OPTION) {
 			super.dispose();
-			LiquidApplication.dispose();
-		}		
+			LiquidApplication.dispose();}		
 	}
 }

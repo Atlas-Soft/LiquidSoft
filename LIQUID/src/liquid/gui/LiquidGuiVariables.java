@@ -1,3 +1,4 @@
+// DONE!
 package liquid.gui;
 
 import java.util.ArrayList;
@@ -115,7 +116,7 @@ public class LiquidGuiVariables {
 	}
 	
 	/**
-	 * Un-does the lastest change made by the user.
+	 * Un-does the latest change made by the user.
 	 */
 	public void undo() {
 		// if there are unsaved changes, the latest changes will get be popped
@@ -126,7 +127,7 @@ public class LiquidGuiVariables {
 	}
 	
 	/**
-	 * Re-does the lastest change made by the user.
+	 * Re-does the latest change made by the user.
 	 */
 	public void redo() {
 		// if a set of un-did changes is present, then those set of parameters

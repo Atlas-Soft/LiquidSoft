@@ -256,7 +256,6 @@ public class ParameterPanel extends JPanel {
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
 		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
 		visc.setSelectedItem(LiquidApplication.getGUI().variables.viscosity);
-		System.out.println(LiquidApplication.getGUI().variables.runtime);
 	}
 	
 	/**

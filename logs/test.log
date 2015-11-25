@@ -1,9 +1,11 @@
 C:\Users\Lauren\Documents\GitHub\AtlasSoft\logs\test.log
 Water
-0
+2
 70.0
 1.0
 300
-460.0 400.0
-Rectangular 0.0 0.0 50.0 50.0
+500.0 400.0
+Rectangular 75.0 0.0 50.0 89.0 0.0
+Source 270.0 276.0 172.0 2.0 20.0
+Source 67.0 46.0 99.0 149.0 50.0
 break

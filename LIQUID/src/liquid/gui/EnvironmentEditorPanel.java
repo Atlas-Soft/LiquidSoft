@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,14 +27,14 @@ public class EnvironmentEditorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	String[] options = {"Environment", "Obstacles", "Initial Forces", "Flow Sensors"};
-	static float enviroLenLimit = 500;
-	static float enviroWidLimit = 400;
+	JComboBox<String> select;
 	
 	// defines parameters needed to adjust the environment size
-	JComboBox<String> select;
 	JPanel enviro;
 	JComboBox<Float> enviroLen;
 	JComboBox<Float> enviroWid;
+	static float enviroLenLimit = 500;
+	static float enviroWidLimit = 400;
 	
 	// creates the Obstacles, Forces, and Sensors parts of the panel
 	EnviroObstaclesPanel obstacles;
@@ -98,6 +99,7 @@ public class EnvironmentEditorPanel extends JPanel {
 		sensors.setVisible(false);
 		add(sensors);
 		
+		// creates the additional set of parameters
 		addiParam = new EnviroAddiParamPanel();
 		addiParam.setVisible(true);
 		add(addiParam);
@@ -110,7 +112,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	public void createEnvironment() {
 		// creates the Environment section, which sets the length/width of the environment
 		enviro = new JPanel();
-		enviro.setBounds(5,30,240,175);
+		enviro.setBounds(5,30,240,205);
 		enviro.setBackground(Color.LIGHT_GRAY);
 		enviro.setLayout(null);
 			
@@ -164,101 +166,40 @@ public class EnvironmentEditorPanel extends JPanel {
 	/**
 	 * Method checks the boundaries of the environment and throws error messages
 	 * when the obstacle will go out of the predefined environment size.
+	 * 
+	 * For the ArrayList<Float>:
+	 *  - 1 - X-Coordinate of Obstacle/Force
+	 *  - 2 - Y-Coordinate of Obstacle/Force
+	 *  - 3 - Length of Obstacle/X-Force of Force
+	 *  - 4 - Width of Obstacle/Y-Force of Force
+	 *  - 5 - Rotation of Obstacle/Flow Speed of Force
 	 */
-	public void checkBoundaries(JComboBox<String> type, JComboBox<Float> xCoord, JComboBox<Float> yCoord,
-			JComboBox<Float> length, JComboBox<Float> width) {
+	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params) {
 		// throws error messages when the obstacle will go beyond the environment (determined
 		// by the X-/Y-Coordinates and the Length/Width of the obstacle, respectively)
-		if ((xCoord.getSelectedIndex() + length.getSelectedIndex()) > enviroLenLimit) {
+		if ((params.get(0) + params.get(2)) > enviroLenLimit) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-				"Warning!! Your X-Coordinate must be from 0.0 - " + (enviroLenLimit - length.getSelectedIndex()) +
-				",\n or our Length must be from 0.0 - " + (enviroLenLimit - xCoord.getSelectedIndex()) +
+				"Warning!! Your X-Coordinate must be from 0.0 - " + (enviroLenLimit - params.get(2)) +
+				",\n or our Length must be from 0.0 - " + (enviroLenLimit - params.get(0)) +
 				"\n to be in the boundaries of your desired environment size.",
 				"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
-		} else if ((yCoord.getSelectedIndex() + width.getSelectedIndex() > enviroWidLimit)) {
+		} else if ((params.get(1) + params.get(3) > enviroWidLimit)) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-				"Warning!! Your Y-Coordinate must be from 0.0 - " + (enviroWidLimit - width.getSelectedIndex()) +
-				",\n or your Width must be from 0.0 - " + (enviroWidLimit - yCoord.getSelectedIndex()) +
+				"Warning!! Your Y-Coordinate must be from 0.0 - " + (enviroWidLimit - params.get(3)) +
+				",\n or your Width must be from 0.0 - " + (enviroWidLimit - params.get(1)) +
 				"\n to be in the boundaries of your desired environment size.",
 				"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
 					
 		// else sends the obstacle's information to the ArrayList of objects to store
 		} else {
-			String arg = type.getSelectedItem() + " " +
-				xCoord.getSelectedItem() + " " + yCoord.getSelectedItem() + " " +
-				length.getSelectedItem() + " " + width.getSelectedItem();
+			String arg = type.getSelectedItem() + " " + params.get(0) + " " + params.get(1) + " " +
+				params.get(2) + " " + params.get(3) + " " + params.get(4);
 			LiquidApplication.getGUI().variables.objects.add(arg);
 			LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().sim.repaint();
 		}
     }
-	
-	/**
-	public void additionalParam() {
-		ActionListener snext = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				if (LiquidApplication.getGUI().variables.selectedObject < LiquidApplication.getGUI().variables.objects.size()-1){
-					LiquidApplication.getGUI().variables.selectedObject += 1;
-				} else {
-					LiquidApplication.getGUI().variables.selectedObject = 0;
-				}
-				update();
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
-			}
-		};
-		
-		ActionListener sprev = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				if( LiquidApplication.getGUI().variables.selectedObject > 0) {
-					LiquidApplication.getGUI().variables.selectedObject -= 1;
-				} else {
-					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
-				}
-				update();
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
-			}
-		};
-		
-		JButton selectNext = new JButton("Next Item");
-		selectNext.setBounds(5,200,(int)(this.getWidth())/2,25);
-		selectNext.addActionListener(snext);
-		add(selectNext);
-		
-		JButton selectPrev = new JButton("Prev Item");
-		selectPrev.setBounds(125,200,(int)(this.getWidth()/2),25);
-		selectPrev.addActionListener(sprev);
-		add(selectPrev);
-		
-		JButton selectUpdate = new JButton("Update Item");
-		selectUpdate.setBounds(5,240,(int)(this.getWidth()/2),25);
-		selectUpdate.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent actionEvent) {
-				if (select.getSelectedItem().equals("Obstacles")) {
-					obstacles.createObstacles();
-				} else if (select.getSelectedItem().equals("Initial Forces")) {
-					forces.createForces();
-				} else if (select.getSelectedItem().equals("Flow Sensors")) {
-					sensors.createButton();
-				}
-			}
-        });
-		add(selectUpdate);
-		
-		JButton delete = new JButton("Delete");
-		delete.setBounds(125,240,(int)(this.getWidth()/2),25);
-		delete.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
-				LiquidApplication.getGUI().variables.selectedObject = 0;
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
-			}
-        });
-		add(delete);
-	}*/
 	
 	/**
 	 * Method enables/disables the components of the EnvironmentEditorPanel.

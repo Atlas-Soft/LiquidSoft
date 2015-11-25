@@ -5,6 +5,8 @@ package liquid.engine;
 
 import org.jbox2d.common.Vec2;
 
+import liquid.core.LiquidApplication;
+
 /**
  * @author Rafael Zamora
  *
