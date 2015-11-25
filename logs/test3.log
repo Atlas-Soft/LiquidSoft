@@ -1,0 +1,17 @@
+C:\Users\Will\Documents\GitHub\AtlasSoft\logs\test3.log
+Glycerin
+8
+53.0
+2.0
+15
+400.0 300.0
+Rectangular 0 0 400 50 0.0 
+Rectangular 0 250 400 50 0.0
+Rectangular 0 100 50 150 0.0
+Rectangular 350 50 50 150 0.0
+Rectangular 150.0 100.0 100.0 100.0 0.0
+Source 375.0 225.0 -100.0 0.0 10.0
+Source 25.0 75.0 100.0 0.0 10.0
+Circular 150.0 60.0 100.0 100.0 0.0
+Flowmeter 246.0 60.0
+break

@@ -31,10 +31,9 @@ public class Flowmeter {
 	
 	public String update(){
 		DecimalFormat adj = new DecimalFormat();
-//		Vec2
-//		adj.setMaximumFractionDigits(4);
-		String send = "" + myID + ": ";
-		
+		Vec2 curVel = pollVelocity();
+		adj.setMaximumFractionDigits(4);
+		String send = "" + myID + ": " + "X-Velocity " + adj.format(curVel.x) + " Y-Velocity " + adj.format(curVel.y);
 		return send;
 	}
 	

@@ -135,12 +135,10 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		String[] tokens = args[6].split(" ");
 		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),
 				Float.parseFloat(tokens[1]));
-<<<<<<< HEAD
-		float x, y, l, w;
+
 		int ID = 1;
-=======
 		float x, y, l, w, r;
->>>>>>> origin/master
+
 		for (int i = 7; i < args.length; i++) {
 			tokens = args[i].split(" ");
 			if (tokens[0].equals("Rectangular")) {
