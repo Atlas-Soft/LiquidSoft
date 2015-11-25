@@ -84,7 +84,7 @@ public class EnviroObstaclesPanel extends JPanel {
 		obstacleW = new JComboBox<Float>();
 		create = new JButton("Create");
 		obstaclesParam(); // populates the drop-down information
-		createObstacles(); // makes a Create button
+		createButton(); // makes a Create button
 		
 		//EnviroAddiParamPanel test = new EnviroAddiParamPanel();
 		//add(test);
@@ -134,21 +134,29 @@ public class EnviroObstaclesPanel extends JPanel {
 	/**
 	 * Method used to call the editor panel to make a Create button for Obstacles.
 	 */
-	public void createObstacles() {
+	public void createButton() {
 		// button creates the obstacle according to the parameters set
 		create.setBounds(65,170,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
-			params = new ArrayList<Float>();
-			params.add((Float) obstacleX.getSelectedItem());
-			params.add((Float) obstacleY.getSelectedItem());
-			params.add((Float) obstacleL.getSelectedItem());
-			params.add((Float) obstacleW.getSelectedItem());
-			params.add((Float) obstacleRotation.getSelectedItem());
-			LiquidApplication.getGUI().enviroeditor.checkBoundaries(obstacleType, params);
+			createObstacle(false);
 			}
 		});
 		add(create);
+	}
+	
+	/**
+	 * Method packages data and sends it to editor to check if valid and
+	 * to be added into obstacle list.
+	 */
+	public void createObstacle(boolean update){
+		params = new ArrayList<Float>();
+		params.add((Float) obstacleX.getSelectedItem());
+		params.add((Float) obstacleY.getSelectedItem());
+		params.add((Float) obstacleL.getSelectedItem());
+		params.add((Float) obstacleW.getSelectedItem());
+		params.add((Float) obstacleRotation.getSelectedItem());
+		LiquidApplication.getGUI().enviroeditor.checkBoundaries(obstacleType, params, update);
 	}
 	
 	/**
@@ -160,11 +168,11 @@ public class EnviroObstaclesPanel extends JPanel {
 	public void updateObstacles(String[] tokens) {
 		try {
 			obstacleType.setSelectedItem(tokens[0]);
-			obstacleX.setSelectedItem(tokens[1]);
-			obstacleY.setSelectedItem(tokens[2]);
-			obstacleL.setSelectedItem(tokens[3]);
-			obstacleW.setSelectedItem(tokens[4]);
-			obstacleRotation.setSelectedItem(tokens[5]);
+			obstacleX.setSelectedItem(Float.parseFloat(tokens[1]));
+			obstacleY.setSelectedItem(Float.parseFloat(tokens[2]));
+			obstacleL.setSelectedItem(Float.parseFloat(tokens[3]));
+			obstacleW.setSelectedItem(Float.parseFloat(tokens[4]));
+			obstacleRotation.setSelectedItem(Float.parseFloat(tokens[5]));
 		} catch (Exception e) {
 			e.printStackTrace();}
 	}

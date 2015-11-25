@@ -174,16 +174,18 @@ public class EnvironmentEditorPanel extends JPanel {
 	 *  - 4 - Width of Obstacle/Y-Force of Force
 	 *  - 5 - Rotation of Obstacle/Flow Speed of Force
 	 */
-	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params) {
+	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params, boolean update) {
 		// throws error messages when the obstacle will go beyond the environment (determined
 		// by the X-/Y-Coordinates and the Length/Width of the obstacle, respectively)
-		if ((params.get(0) + params.get(2)) > enviroLenLimit) {
+		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+				&&(params.get(0) + params.get(2) > enviroLenLimit)) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Warning!! Your X-Coordinate must be from 0.0 - " + (enviroLenLimit - params.get(2)) +
 				",\n or our Length must be from 0.0 - " + (enviroLenLimit - params.get(0)) +
 				"\n to be in the boundaries of your desired environment size.",
 				"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
-		} else if ((params.get(1) + params.get(3) > enviroWidLimit)) {
+		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+				&&(params.get(1) + params.get(3) > enviroWidLimit)) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Warning!! Your Y-Coordinate must be from 0.0 - " + (enviroWidLimit - params.get(3)) +
 				",\n or your Width must be from 0.0 - " + (enviroWidLimit - params.get(1)) +
@@ -192,10 +194,14 @@ public class EnvironmentEditorPanel extends JPanel {
 					
 		// else sends the obstacle's information to the ArrayList of objects to store
 		} else {
-			String arg = type.getSelectedItem() + " " + params.get(0) + " " + params.get(1) + " " +
-				params.get(2) + " " + params.get(3) + " " + params.get(4);
-			LiquidApplication.getGUI().variables.objects.add(arg);
-			LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
+			String arg = type.getSelectedItem() + "";
+			for(int i = 0; i < params.size(); i++) arg += " " + params.get(i);
+			if(update){
+				LiquidApplication.getGUI().variables.objects.set(LiquidApplication.getGUI().variables.selectedObject, arg);
+			}else{
+				LiquidApplication.getGUI().variables.objects.add(arg);
+				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
+			}
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().sim.repaint();
 		}

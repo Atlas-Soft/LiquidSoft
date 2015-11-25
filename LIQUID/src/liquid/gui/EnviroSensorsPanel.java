@@ -3,6 +3,7 @@ package liquid.gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,6 +25,7 @@ public class EnviroSensorsPanel extends JPanel {
 	JComboBox<Float> sensorX;
 	JComboBox<Float> sensorY;
 	String[] senType = {"Flowmeter"}; // changed to "Flowmeter" without space to fix "flowmeters" not being rendered
+	ArrayList<Float> params;
 	
 	/**
 	 * Constructor creates the Sensors (or Flow Sensors) section of the EnvironmentEditorPanel.
@@ -96,14 +98,21 @@ public class EnviroSensorsPanel extends JPanel {
 		create.setBounds(65,90,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				String arg = sensorType.getSelectedItem() + " " + sensorX.getSelectedItem() + " " + sensorY.getSelectedItem();
-				LiquidApplication.getGUI().variables.objects.add(arg);
-				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
+				createSensor(false);
 			}
         });
 		add(create);
+	}
+	
+	/**
+	 * Method packages data and sends it to editor to check if valid and
+	 * to be added into object list.
+	 */
+	public void createSensor(boolean update){
+		params = new ArrayList<Float>();
+		params.add((Float) sensorX.getSelectedItem());
+		params.add((Float) sensorY.getSelectedItem());
+		LiquidApplication.getGUI().enviroeditor.checkBoundaries(sensorType, params, update);
 	}
 	
 	/**
@@ -115,8 +124,8 @@ public class EnviroSensorsPanel extends JPanel {
 	public void updateSensors(String[] tokens) {
 		try {
 			sensorType.setSelectedItem(tokens[0]);
-			sensorX.setSelectedItem(tokens[1]);
-			sensorY.setSelectedItem(tokens[2]);
+			sensorX.setSelectedItem(Float.parseFloat(tokens[1]));
+			sensorY.setSelectedItem(Float.parseFloat(tokens[2]));
 		} catch (Exception e) {
 			e.printStackTrace();}
 	}

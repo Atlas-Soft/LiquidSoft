@@ -1,10 +1,9 @@
 C:\Users\GameDesign\Documents\GitHub\AtlasSoft\logs\test2.log
 Water
-1
+0
 70.0
 1.0
-300
-300.0 300.0
-Rectangular 0.0 0.0 50.0 50.0
-Source 299.0 299.0 -100.0 -100.0
+15
+500.0 400.0
+Source 50.0 50.0 1.0 1.0 100.0
 break

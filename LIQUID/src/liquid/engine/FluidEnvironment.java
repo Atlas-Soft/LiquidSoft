@@ -96,8 +96,8 @@ public class FluidEnvironment {
 		b.createFixture(fd);
 	}
 
-	public void addSource(float x, float y, float velx, float vely){
-		sources.add(new Source(this, x, y, velx, vely));
+	public void addSource(float x, float y, float velx, float vely, float flow){
+		sources.add(new Source(this, x, y, velx, vely, flow));
 	}
 
 	/**

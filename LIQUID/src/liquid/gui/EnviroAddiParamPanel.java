@@ -93,11 +93,11 @@ public class EnviroAddiParamPanel extends JPanel {
 		selectUpdate.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent) {
 				if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Obstacles")) {
-					LiquidApplication.getGUI().enviroeditor.obstacles.createObstacles();
+					LiquidApplication.getGUI().enviroeditor.obstacles.createObstacle(true);
 				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Initial Forces")) {
-					LiquidApplication.getGUI().enviroeditor.forces.createForces();
+					LiquidApplication.getGUI().enviroeditor.forces.createForce(true);
 				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Flow Sensors")) {
-					LiquidApplication.getGUI().enviroeditor.sensors.createButton();
+					LiquidApplication.getGUI().enviroeditor.sensors.createSensor(true);
 				}
 			}
         });
