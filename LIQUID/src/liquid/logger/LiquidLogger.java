@@ -7,6 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.Interfaceable;
+import liquid.engine.LiquidEngine;
 import liquid.gui.LiquidGUI;
 
 /**
@@ -93,6 +94,15 @@ public class LiquidLogger implements Interfaceable {
 				break;
 			default:}
 		}
+		
+		if (i instanceof LiquidEngine){
+			switch (request) {
+			case RECORD_SIM:
+				fileWriter.appendtoLogFile(args);
+				break;
+			default:
+			}
+		}
 	}
 	
 	/**
@@ -131,6 +141,6 @@ public class LiquidLogger implements Interfaceable {
 	}
 	
 	public void dispose() {
-		
+		fileWriter.dispose();
 	}
 }

@@ -29,7 +29,15 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		
 		if (i instanceof LiquidLogger) {
 			switch (request) {
-
+			case REQUEST_RECORD_SIM:
+				args = new String[enviro.meters.size() + 2];
+				args[0] = "-Time " + (sec + 1) + ":";
+				for (int f = 0; f < enviro.meters.size(); f++){
+					args[f+1] = enviro.meters.get(f).toString();
+				}
+				args[args.length - 1] = "\n";
+				i.receive(this, request.RECORD_SIM, args);
+				break;
 			default:
 				break;}
 		}
@@ -121,6 +129,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
 				send(LiquidApplication.getGUI(), Request.REQUEST_PRINT_SIM);
+				send(LiquidApplication.getLogger(), Request.REQUEST_RECORD_SIM);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
