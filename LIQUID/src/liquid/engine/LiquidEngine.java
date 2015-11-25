@@ -136,6 +136,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),
 				Float.parseFloat(tokens[1]));
 		float x, y, l, w, r;
+		int ID = 1;
 		for (int i = 7; i < args.length; i++) {
 			tokens = args[i].split(" ");
 			if (tokens[0].equals("Rectangular")) {
@@ -171,7 +172,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			if (tokens[0].equals("Flowmeter")) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
-				enviro.addFlowmeter(x, y);
+				enviro.addFlowmeter(x, y, ID++);
 			}
 		}
 		enviro.init();
