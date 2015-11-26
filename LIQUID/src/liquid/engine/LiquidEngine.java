@@ -23,7 +23,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		super();
 	}
 
-	@SuppressWarnings("static-access")
+
 	@Override
 	public void send(Interfaceable i, Request request) {
 		String[] args;
@@ -31,13 +31,9 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
-				args = new String[enviro.meters.size() + 2];
-				args[0] = "-Time " + (sec + 1) + ":";
-				for (int f = 0; f < enviro.meters.size(); f++){
-					args[f+1] = enviro.meters.get(f).toString();
-				}
-				args[args.length - 1] = "\n";
-				i.receive(this, request.WRITE_LOG_DATA, args);
+				enviro.particleLog.add("end");
+				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
+				i.receive(this, Request.WRITE_LOG_DATA, args);
 				break;
 			default:
 				break;}
@@ -47,20 +43,21 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
-				i.receive(this, request.DISPLAY_SIM, args);
+				enviro.storeData(args);
+				i.receive(this, Request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:
-				args = new String[enviro.meters.size() + 2];
-				args[0] = "-Time " + (sec + 1) + ":";
+				args = new String[1];
+				args[0] = "-Time " + (sec + 1) + ":\n";
 				for (int f = 0; f < enviro.meters.size(); f++){
-					args[f+1] = enviro.meters.get(f).toString();
+					args[0] += enviro.meters.get(f).toString();
+					args[0] += "\n";
 				}
-				args[args.length - 1] = "\n";
-				i.receive(this, request.PRINT_SIM, args);
+				i.receive(this, Request.PRINT_SIM, args);
 				break;
 			case REQUEST_SIM_HAS_ENDED:
 				args = new String[0];
-				i.receive(this, request.SIM_HAS_ENDED, args);
+				i.receive(this, Request.SIM_HAS_ENDED, args);
 				break;
 			default:
 				break;}
@@ -81,7 +78,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case RUN_SIM:
 				if (!simulating) {
-					initiateSim(args);
+					initSim(args);
 					simulating = true;
 					loop = new Thread(this);
 					loop.start();
@@ -89,7 +86,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				break;
 			case STEP_SIM:
 				if (!simulating) {
-					initiateSim(args);
+					initSim(args);
 					simulating = true;
 					loop = new Thread(this);
 					step = true;
@@ -143,7 +140,6 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
 				send(LiquidApplication.getGUI(), Request.REQUEST_PRINT_SIM);
-				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
@@ -159,9 +155,10 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			}
 		}
 		send(LiquidApplication.getGUI(), Request.REQUEST_SIM_HAS_ENDED);
+		send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
 	}
 
-	public void initiateSim(String[] args) {
+	public void initSim(String[] args) {
 		runtime = Integer.parseInt(args[5]);
 		String[] tokens = args[6].split(" ");
 		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),

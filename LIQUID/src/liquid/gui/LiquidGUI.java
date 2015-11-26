@@ -132,12 +132,15 @@ public class LiquidGUI implements Interfaceable {
 				sim.repaint();
 				break;
 			case PRINT_SIM:
-				for(String s: args)
-					console.print_to_Console(s);
+				console.print_to_Console(args[0]);
 				break;
 			case SIM_HAS_ENDED:
-				console.print_to_Console("[Simulation Finished.]\n");
-				param.pause.setEnabled(false);
+				if(variables.simulating){
+					console.print_to_Console("[Simulation Finished.]\n");
+					param.pause.setEnabled(false);
+					param.run.setEnabled(false);
+					param.step.setEnabled(false);
+				}
 				break;
 			default:}
 		}

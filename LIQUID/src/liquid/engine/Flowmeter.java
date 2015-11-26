@@ -10,7 +10,6 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 /**
- * @author Rafael Zamora
  * Edited 11/20 - William Steele
  */
 public class Flowmeter {
@@ -33,7 +32,7 @@ public class Flowmeter {
 		DecimalFormat adj = new DecimalFormat();
 		Vec2 curVel = pollVelocity();
 		adj.setMaximumFractionDigits(4);
-		String send = " F" + myID + ": " + "X-Velocity " + adj.format(curVel.x) + " Y-Velocity " + adj.format(curVel.y);
+		String send = " F" + myID + " ( X-Vel " + adj.format(curVel.x) + ", Y-Vel " + adj.format(curVel.y) +")";
 		return send;
 	}
 	

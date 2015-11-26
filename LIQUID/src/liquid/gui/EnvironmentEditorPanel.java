@@ -178,14 +178,14 @@ public class EnvironmentEditorPanel extends JPanel {
 		// throws error messages when the obstacle will go beyond the environment (determined
 		// by the X-/Y-Coordinates and the Length/Width of the obstacle, respectively)
 		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
-				&&(params.get(0) + params.get(2) > enviroLenLimit)) {
+				&&(params.get(0) + params.get(2) > enviroLenLimit+1)) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Warning!! Your X-Coordinate must be from 0.0 - " + (enviroLenLimit - params.get(2)) +
 				",\n or our Length must be from 0.0 - " + (enviroLenLimit - params.get(0)) +
 				"\n to be in the boundaries of your desired environment size.",
 				"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
 		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
-				&&(params.get(1) + params.get(3) > enviroWidLimit)) {
+				&&(params.get(1) + params.get(3) > enviroWidLimit+1)) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Warning!! Your Y-Coordinate must be from 0.0 - " + (enviroWidLimit - params.get(3)) +
 				",\n or your Width must be from 0.0 - " + (enviroWidLimit - params.get(1)) +

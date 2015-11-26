@@ -3,10 +3,6 @@
  */
 package liquid.engine;
 
-
-import org.jbox2d.callbacks.ParticleQueryCallback;
-import org.jbox2d.callbacks.QueryCallback;
-import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.Shape;
@@ -32,15 +28,16 @@ public class FluidEnvironment {
 	Rectangle2D bounds;
 	ArrayList<Source> sources;
 	ArrayList<Flowmeter> meters;
-
-	private float timer;
+	
+	ArrayList<String> particleLog;
+	float delta;
 
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
 		sources = new ArrayList<Source>();
 		meters = new ArrayList<Flowmeter>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
-		timer = 0;
+		particleLog = new ArrayList<String>();
 
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
@@ -55,33 +52,13 @@ public class FluidEnvironment {
 		world.setParticleRadius(5f);
 		world.setParticleMaxCount(1500);
 		world.setParticleViscousStrength(0.0f);
-
-		for(int i = 0; i < 100; i ++){
-			for(int j = 0; j < 100; j++){
-				ParticleQuery pq = new ParticleQuery();
-				Vec2 p = new Vec2(i*12,j*12);
-				AABB pb = new AABB();
-				pb.lowerBound.set(p.x-10, p.y-10);
-				pb.upperBound.set(p.x+10, p.y+10);
-				world.queryAABB((QueryCallback)pq, (ParticleQueryCallback)pq, pb);
-				if(pq.isOpen() && bounds.contains(p.x, p.y)){
-					//addParticle(p.x,p.y,10,10);
-				}
-			}
-		}
 	}
 
 	public void update(float delta){
-		timer += delta;
+		this.delta = delta;
 		world.step(delta, 6, 3);
-		for(Source s: sources){
-			s.update(delta);
-		}
-		if(timer >= 10){
-			timer = 0;
-			for(Flowmeter f: meters)
-				System.out.println(f);
-		}
+		for(Source s: sources) s.update(delta);
+		
 	}
 
 	public void addObstacle(Shape s,float x, float y){
@@ -132,5 +109,13 @@ public class FluidEnvironment {
 		}catch(Exception e){}		
 		dataArray = dataList.toArray(new String[dataList.size()]);
 		return dataArray;
+	}
+	
+	public void storeData(String[] particles){
+		String data = delta + " ";
+		for(int i = 0; i < particles.length; i++){
+			data += particles[i] + " ";
+		}
+		particleLog.add(data);
 	}
 }

@@ -1,6 +1,7 @@
 package liquid.logger;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -13,8 +14,8 @@ public class LiquidFileWriter {
 	BufferedWriter bw;	//changed to class level variable to keep state of bw
 	
 	public void initLogFile(String fileName){
-		try{
-			bw = new BufferedWriter(new FileWriter(fileName));
+		try{	
+			bw = new BufferedWriter(new FileWriter(new File(fileName).getAbsoluteFile()));
 		} catch (IOException e){
 			e.printStackTrace();
 		}
@@ -27,7 +28,7 @@ public class LiquidFileWriter {
 	 * @param fileName - the file's name to store in
 	 * @param args    - the String[] of parameters
 	 */
-	public void writeLogParam(String fileName, String args[]) {
+	public void writeLogParam(String args[]) {
 		try {
 			// loops through the list of parameters & prints out its contents
 			for (int i = 0; i < args.length; i++) {
@@ -41,16 +42,19 @@ public class LiquidFileWriter {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Used to add strings in args to one line of the log file
 	 * PRECONDITION: writetoLogFile() <b>MUST</b> be called successfully at some point prior to calling this function
 	 * @param args an array of strings to be written to the log file
 	 */
-	public void appendtoLogFile(String args[]){
+	public void writeLogData(String args[]){
 		try {
-			for (String s: args)
-				bw.write(s);
-			bw.newLine();
+			for (int i = 0; i < args.length; i++) {
+				System.out.println(args[i]);
+				bw.write(args[i]);
+				bw.newLine();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -63,8 +67,6 @@ public class LiquidFileWriter {
 		try{
 			bw.close();
 		}
-		catch (IOException e){
-			e.printStackTrace();
-		}
+		catch (IOException e){}
 	}
 }

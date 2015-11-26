@@ -229,11 +229,10 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void prepareSim(SetSim route, String filename) {
 		end.setEnabled(true);
-		
 		// sets parameters for specific cases
 		switch (route) {
 		case PAUSED: // when the simulation has been paused
-			break;
+			return;
 		case YES_FILE: // when a file name is already present
 			LiquidApplication.getGUI().setEnable(false);
 			LiquidApplication.getGUI().variables.simulating = true;
@@ -241,6 +240,7 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
 			LiquidApplication.getGUI().variables.temperature = (float) temp.getSelectedItem();
 			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
 		case NEW_SIM: // when NO file name is present
 			LiquidApplication.getGUI().setEnable(false);

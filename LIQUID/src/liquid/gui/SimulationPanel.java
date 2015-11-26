@@ -71,6 +71,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         	}
         }
         
+        int id = 0;
         for(int i = 0; i < LiquidApplication.getGUI().variables.objects.size(); i++){
         	String[] tokens = LiquidApplication.getGUI().variables.objects.get(i).split(" ");
         	if(i == LiquidApplication.getGUI().variables.selectedObject && !LiquidApplication.getGUI().variables.simulating) g2d.setColor(Color.green);
@@ -101,8 +102,10 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         	if(tokens[0].equals("Flowmeter")){
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
+        		id++;
         		g2d.draw(new Ellipse2D.Float(x-10,y-10,20,20));
-        		g2d.drawString("F", x-3, y+5);
+        		g2d.drawString("F", x-6, y+5);
+        		g2d.drawString(id + "", x-1, y+5);
         	}
         }
            
