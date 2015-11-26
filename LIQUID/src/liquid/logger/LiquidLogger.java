@@ -1,10 +1,6 @@
 package liquid.logger;
 
-import java.awt.Component;
 import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import liquid.core.Interfaceable;
 import liquid.engine.LiquidEngine;
@@ -28,7 +24,7 @@ public class LiquidLogger implements Interfaceable {
 	 * Constructor initializes the Logger component of the simulation.
 	 */
 	public LiquidLogger() {
-		init();
+		initComponents();
 	}
 	
 	/**
@@ -36,7 +32,7 @@ public class LiquidLogger implements Interfaceable {
 	 * Method also checks that the log and config files are located
 	 * in the correct directory and contains the correct ending.
 	 */
-	private void init(){
+	private void initComponents(){
 		fileLoader = new LiquidFileLoader();
 		fileWriter = new LiquidFileWriter();
 		File f = new File("../logs");
@@ -64,8 +60,7 @@ public class LiquidLogger implements Interfaceable {
 		if (i instanceof LiquidGUI) {
 			switch (request) {
 			case REQUEST_SET_LOG_PARAM:
-				String[] args = fileLoader.loadLogFile(currentFile);
-//				fileWriter.initLogFile(currentFile);	//does not fix problem, produces ArrayIndexOutOfBoundsException: 1
+				String[] args = fileLoader.loadLogParam(currentFile);
 				i.receive(this, request.SET_LOG_PARAM, args);
 				break;
 			default:}
@@ -82,64 +77,28 @@ public class LiquidLogger implements Interfaceable {
 	@SuppressWarnings("static-access")
 	@Override
 	public void receive(Interfaceable i, Request request, String[] args) {
-		// loads the parameters by sending a self-request or writes the log file
 		if (i instanceof LiquidGUI) {
 			switch (request) {
-			case LOAD_LOG:
+			case LOAD_LOG_PARAM:
 				currentFile = args[0];
-//				fileWriter.initLogFile(currentFile, args);	//did not work to initialize fileWriter, produces ArrayIndexOutOfBoundsException: 1
 				send(i, request.REQUEST_SET_LOG_PARAM);
 				break;
-			case WRITE_LOG:
+			case WRITE_LOG_PARAM:
 				currentFile = args[0];
-				fileWriter.initLogFile(currentFile, args);
+				fileWriter.initLogFile(currentFile);
+				fileWriter.writeLogParam(currentFile, args);
 				break;
 			default:}
 		}
 		
 		if (i instanceof LiquidEngine){
 			switch (request) {
-			case RECORD_SIM:
-				fileWriter.appendtoLogFile(args);
+			case WRITE_LOG_DATA:
+				//fileWriter.appendtoLogFile(args);
 				break;
 			default:
 			}
 		}
-	}
-	
-	/**
-	 * Sets up the file name by first making sure the 'logs' directory is
-	 * present and filtering all files expect ones that end in '.log'.
-	 * Method can be used both to set up a new file or load an existing one.
-	 * 
-	 * @param set  - determines to save or load a file 
-	 * @param frame - the frame with which JFileChooser will appear in
-	 * @return    - the String name of the file
-	 */
-	public String setUpFile(String set, Component frame) {
-		try {
-			// sets the conditions for a log file:
-			//  - Folder is set to be 'logs'
-			//  - File must end in '.log'
-			JFileChooser fileDialog = new JFileChooser("../logs");
-			fileDialog.setAcceptAllFileFilterUsed(false);
-			fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
-			
-			switch (set) {
-			case "LOAD": // case for when a log file needs to be loaded into the simulator
-				fileDialog.setApproveButtonText("Load");
-				fileDialog.setDialogTitle("Load Log File");
-				return fileLoader.setUpFileToLoad(fileDialog, frame);
-			
-			case "SAVE": // case for when a new log file needs to be created for the simulator
-				fileDialog.setApproveButtonText("Save");
-				fileDialog.setDialogTitle("Create Log File");
-				return fileWriter.setUpFileToSave(fileDialog, frame);
-			default:}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public void dispose() {

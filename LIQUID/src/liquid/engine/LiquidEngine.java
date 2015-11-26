@@ -17,6 +17,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	int sec;
 	boolean simulating;
 	boolean wasPaused;
+	boolean step;
 
 	public LiquidEngine() {
 		super();
@@ -29,14 +30,14 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		
 		if (i instanceof LiquidLogger) {
 			switch (request) {
-			case REQUEST_RECORD_SIM:
+			case REQUEST_WRITE_LOG_DATA:
 				args = new String[enviro.meters.size() + 2];
 				args[0] = "-Time " + (sec + 1) + ":";
 				for (int f = 0; f < enviro.meters.size(); f++){
 					args[f+1] = enviro.meters.get(f).toString();
 				}
 				args[args.length - 1] = "\n";
-				i.receive(this, request.RECORD_SIM, args);
+				i.receive(this, request.WRITE_LOG_DATA, args);
 				break;
 			default:
 				break;}
@@ -84,7 +85,17 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					simulating = true;
 					loop = new Thread(this);
 					loop.start();
-				} else {
+				} else loop.resume();
+				break;
+			case STEP_SIM:
+				if (!simulating) {
+					initiateSim(args);
+					simulating = true;
+					loop = new Thread(this);
+					step = true;
+					loop.start();
+				} else{
+					step = true;
 					loop.resume();
 				}
 				break;
@@ -107,19 +118,22 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 		int fps = 0;
 		float lastFpsTime = 0;
+		long now, updateLength;
+		float delta;
 
 		sec = 0;
-
+		
 		while (sec < runtime && simulating) {
-			long now = System.nanoTime();
-			long updateLength = now - lastLoopTime;
+			now = System.nanoTime();
+			updateLength = now - lastLoopTime;
 			lastLoopTime = now;
 			if(wasPaused){
-				updateLength = 0;
+				if(step) updateLength = 100000000/6;
+				else updateLength = 0;
 				wasPaused = false;
 			}
-			float delta = updateLength / ((float) OPTIMAL_TIME);
-
+			
+			delta = updateLength / ((float) OPTIMAL_TIME);
 			lastFpsTime += updateLength;
 			fps++;
 			
@@ -129,15 +143,19 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
 				send(LiquidApplication.getGUI(), Request.REQUEST_PRINT_SIM);
-				send(LiquidApplication.getLogger(), Request.REQUEST_RECORD_SIM);
+				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
 			}
 			
-			try {
-				Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
-			} catch (Exception e) {
+			try { Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
+			} catch (Exception e) {}
+			
+			if(step){		
+				step = false;
+				wasPaused = true;
+				loop.suspend();
 			}
 		}
 		send(LiquidApplication.getGUI(), Request.REQUEST_SIM_HAS_ENDED);

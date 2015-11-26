@@ -127,17 +127,31 @@ public class ParameterPanel extends JPanel {
 				// for a paused simulation, it is still technically on-going.
 				// Specific parameters need to be set to continue simulating
 				if (LiquidApplication.getGUI().variables.simulating) {
+					run.setEnabled(false);
+					pause.setEnabled(true);
+					step.setEnabled(false);
 					prepareSim(SetSim.PAUSED, null);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 					
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
 						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
+					run.setEnabled(false);
+					pause.setEnabled(true);
+					step.setEnabled(false);
 					prepareSim(SetSim.YES_FILE, null);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 				
 				// for new simulations, path calls Logger to set a valid log file name
 				} else {
-					String filename = LiquidApplication.getLogger().setUpFile("SAVE", LiquidApplication.getGUI().frame);
-					if (filename != null) prepareSim(SetSim.NEW_SIM, filename);
+					String filename = LiquidFileChooser.setUpFile("SAVE", LiquidApplication.getGUI().frame);
+					if (filename != null){
+						run.setEnabled(false);
+						pause.setEnabled(true);
+						step.setEnabled(false);
+						prepareSim(SetSim.NEW_SIM, filename);
+						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
+					}
 				}
 			}
 		});
@@ -165,7 +179,21 @@ public class ParameterPanel extends JPanel {
 		step.setBounds(25,545,115,25);
 		step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-
+				if (LiquidApplication.getGUI().variables.simulating) {
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
+				// sets various parameters for a previously-saved simulation
+				} else if (LiquidApplication.getGUI().variables.filename != null &&
+						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
+					prepareSim(SetSim.YES_FILE, null);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
+				// for new simulations, path calls Logger to set a valid log file name
+				} else {
+					String filename = LiquidFileChooser.setUpFile("SAVE", LiquidApplication.getGUI().frame);
+					if (filename != null){
+						prepareSim(SetSim.NEW_SIM, filename);
+						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
+					}
+				}
 			}
 		});
 		add(step);
@@ -200,9 +228,6 @@ public class ParameterPanel extends JPanel {
 	 * @param filename - to pass in the file name (NewSim only)
 	 */
 	public void prepareSim(SetSim route, String filename) {
-		run.setEnabled(false);
-		pause.setEnabled(true);
-		step.setEnabled(false);
 		end.setEnabled(true);
 		
 		// sets parameters for specific cases
@@ -228,12 +253,11 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG);
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
 		default:
 		}
 		LiquidApplication.getGUI().console.print_to_Console("[Simulation Started.]\n");
-		LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
 	}
 	
 	/**

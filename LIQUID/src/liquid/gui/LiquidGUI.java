@@ -64,14 +64,14 @@ public class LiquidGUI implements Interfaceable {
 		// sends requests to the Logger to begin to load or write a log file
 		if (i instanceof LiquidLogger) {
 			switch (request) {
-			case REQUEST_LOAD_LOG:
+			case REQUEST_LOAD_LOG_PARAM:
 				args = new String[1];
 				args[0] = variables.filename;
-				i.receive(this, request.LOAD_LOG, args);
+				i.receive(this, request.LOAD_LOG_PARAM, args);
 				break;
-			case REQUEST_WRITE_LOG:
+			case REQUEST_WRITE_LOG_PARAM:
 				args = variables.writeArray();
-				i.receive(this, request.WRITE_LOG, args);
+				i.receive(this, request.WRITE_LOG_PARAM, args);
 				break;
 			default:}
 		}
@@ -82,6 +82,10 @@ public class LiquidGUI implements Interfaceable {
 			case REQUEST_RUN_SIM:
 				args = variables.writeArray();
 				i.receive(this, request.RUN_SIM, args);
+				break;
+			case REQUEST_STEP_SIM:
+				args = variables.writeArray();
+				i.receive(this, request.STEP_SIM, args);
 				break;
 			case REQUEST_PAUSE_SIM:
 				args = new String[0];

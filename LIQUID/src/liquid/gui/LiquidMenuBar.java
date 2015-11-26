@@ -73,12 +73,12 @@ public class LiquidMenuBar extends JMenuBar {
 		Load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// calls the Logger to obtain a valid log file to replay on the simulator
-				String filename = LiquidApplication.getLogger().setUpFile("LOAD", LiquidApplication.getGUI().frame);
+				String filename = LiquidFileChooser.setUpFile("LOAD", LiquidApplication.getGUI().frame);
 				
 				// proceeds when a file name is actually present
 				if (filename != null) {
 					LiquidApplication.getGUI().variables.filename = filename;
-					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG);
+					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG_PARAM);
 					LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename + " - LIQUID : 2D Fluid Simulator   ");
 					LiquidApplication.getGUI().variables.savedStates.clear();
 					LiquidApplication.getGUI().variables.saveState();
