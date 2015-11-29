@@ -24,7 +24,9 @@ public class EnviroSensorsPanel extends JPanel {
 	JComboBox<String> sensorType;		
 	JComboBox<Float> sensorX;
 	JComboBox<Float> sensorY;
-	String[] senType = {"Flowmeter"}; // changed to "Flowmeter" without space to fix "flowmeters" not being rendered
+	
+	// changed to "Flowmeter" without space to fix "flowmeters" not being rendered
+	String[] senType = {"Flowmeter"};
 	ArrayList<Float> params;
 	
 	/**
@@ -44,20 +46,20 @@ public class EnviroSensorsPanel extends JPanel {
 		
 		// makes labels specific to creating sensors
 		JLabel l = new JLabel("Object Type:");
-		l.setBounds(35,5,(int)(this.getWidth()/2),25);
+		l.setBounds(30,15,(int)(this.getWidth()/2),25);
 		add(l);
 		
 		l = new JLabel("X-Coordinate:");
-		l.setBounds(5,30,(int)(this.getWidth()/2),25);
+		l.setBounds(5,50,(this.getWidth()/2),25);
 		add(l);
 		
 		l = new JLabel("Y-Coordinate:");
-		l.setBounds(125, 30, 110, 25);
+		l.setBounds(125,50,(this.getWidth()/2),25);
 		add(l);
 		
 		// makes the drop-downs needed to creating sensors
 		sensorType = new JComboBox<String>(senType);
-		sensorType.setBounds(115,5,(int)(this.getWidth()/2),25);
+		sensorType.setBounds(110,15,(int)(this.getWidth()/2),25);
 		add(sensorType);
 			
 		sensorX = new JComboBox<Float>();
@@ -76,13 +78,13 @@ public class EnviroSensorsPanel extends JPanel {
 		sensorX.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			sensorX.addItem(Float.valueOf(i));}
-		sensorX.setBounds(5,55,(int)(this.getWidth()/2.2),25);
+		sensorX.setBounds(5,75,(int)(this.getWidth()/2.2),25);
 		add(sensorX);
 		
 		sensorY.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			sensorY.addItem(Float.valueOf(i));}
-		sensorY.setBounds(125,55,(int)(this.getWidth()/2.2),25);
+		sensorY.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		add(sensorY);
 		
 		// sets the default parameters even after an environment size change
@@ -90,12 +92,12 @@ public class EnviroSensorsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method creates the Create button to add in a sensor.
+	 *  Method used to call the editor panel to make a Create button for Sensors.
 	 */
 	public void createButton() {
 		// button creates the obstacle according to the parameters set
 		JButton create = new JButton("Create");
-		create.setBounds(65,90,(int)(this.getWidth()/2.2),25);
+		create.setBounds(60,110,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				createSensor(false);
@@ -105,10 +107,10 @@ public class EnviroSensorsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method packages data and sends it to editor to check if valid and
-	 * to be added into object list.
+	 * Method packages data and sends it to the editor to check if the
+	 * parameters are valid, and if so to be added into the object list.
 	 */
-	public void createSensor(boolean update){
+	public void createSensor(boolean update) {
 		params = new ArrayList<Float>();
 		params.add((Float) sensorX.getSelectedItem());
 		params.add((Float) sensorY.getSelectedItem());

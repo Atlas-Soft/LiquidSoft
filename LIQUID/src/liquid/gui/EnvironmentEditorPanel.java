@@ -4,15 +4,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -26,17 +22,14 @@ public class EnvironmentEditorPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
+	// defines parameters for the overall structure of the editor panel
 	String[] options = {"Environment", "Obstacles", "Initial Forces", "Flow Sensors"};
 	JComboBox<String> select;
-	
-	// defines parameters needed to adjust the environment size
-	JPanel enviro;
-	JComboBox<Float> enviroLen;
-	JComboBox<Float> enviroWid;
 	static float enviroLenLimit = 500;
 	static float enviroWidLimit = 400;
 	
 	// creates the Obstacles, Forces, and Sensors parts of the panel
+	EnviroPanel enviro;
 	EnviroObstaclesPanel obstacles;
 	EnviroForcesPanel forces;
 	EnviroSensorsPanel sensors;
@@ -81,20 +74,22 @@ public class EnvironmentEditorPanel extends JPanel {
         });
 		add(select);
 		
-		// creates the Environment section
-		createEnvironment();
+		// creates the Environment section, which represents the EnviroPanel class
+		enviro = new EnviroPanel();
+		enviro.setVisible(true);
+		add(enviro);
 		
-		// creates the Obstacle section, which represents the EnviroObstacles class
+		// creates the Obstacle section, which represents the EnviroObstaclesPanel class
 		obstacles = new EnviroObstaclesPanel();
 		obstacles.setVisible(false);
 		add(obstacles);
 		
-		// creates the Initial Forces section, which represents the EnviroForces class
+		// creates the Initial Forces section, which represents the EnviroForcesPanel class
 		forces = new EnviroForcesPanel();
 		forces.setVisible(false);
 		add(forces);
 		
-		// creates the Flow Sensors section, which represents the EnviroSensors class
+		// creates the Flow Sensors section, which represents the EnviroSensorsPanel class
 		sensors = new EnviroSensorsPanel();
 		sensors.setVisible(false);
 		add(sensors);
@@ -102,65 +97,8 @@ public class EnvironmentEditorPanel extends JPanel {
 		// creates the additional set of parameters
 		addiParam = new EnviroAddiParamPanel();
 		addiParam.setVisible(true);
+		addiParam.setEnabled(false);
 		add(addiParam);
-	}
-	
-	/**
-	 * Method creates the parameters to set the length/width of the simulating environment
-	 * itself. A new method is created to provide flexibility in where it is created. 
-	 */
-	public void createEnvironment() {
-		// creates the Environment section, which sets the length/width of the environment
-		enviro = new JPanel();
-		enviro.setBounds(5,30,240,205);
-		enviro.setBackground(Color.LIGHT_GRAY);
-		enviro.setLayout(null);
-			
-		// makes labels for creating an environment
-		JLabel l = new JLabel("Length:");
-		l.setBounds(5,0,110,25);
-		enviro.add(l);
-			
-		l = new JLabel("Width:");
-		l.setBounds(5,50,110,25);
-		enviro.add(l);
-			
-		// makes drop-downs for creating an environment
-		enviroLen = new JComboBox<Float>();
-		for (int i = 0; i <= enviroLenLimit; i++) {
-			enviroLen.addItem(Float.valueOf(i));}
-		enviroLen.setSelectedIndex((int) enviroLenLimit);
-		enviroLen.setBounds(5,25,110,25);
-		enviro.add(enviroLen);
-			
-		enviroWid = new JComboBox<Float>();
-		for (int i = 0; i <= enviroWidLimit; i++) {
-			enviroWid.addItem(Float.valueOf(i));}
-		enviroWid.setSelectedIndex((int) enviroWidLimit);
-		enviroWid.setBounds(5,75,110,25);
-		enviro.add(enviroWid);
-			
-		// draws the size of the environment based on the parameters set
-		JButton draw = new JButton("Draw");
-		draw.setBounds(5,125,110,25);
-		draw.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent actionEvent) {
-			// sets the length/width according to the drop-downs
-			LiquidApplication.getGUI().variables.enviroLength = (float) enviroLen.getSelectedItem();
-			LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedItem();
-			LiquidApplication.getGUI().variables.saveState();
-			LiquidApplication.getGUI().sim.repaint();
-					
-			// resets the limits to adjust the boundaries of creating various objects 
-			enviroLenLimit = (float) enviroLen.getSelectedItem();
-			enviroWidLimit = (float) enviroWid.getSelectedItem();
-			obstacles.obstaclesParam();
-			forces.forcesParam();
-			sensors.sensorsParam();
-			}
-	    });
-		enviro.add(draw);
-		add(enviro);
 	}
 	
 	/**
@@ -168,23 +106,21 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * when the obstacle will go out of the predefined environment size.
 	 * 
 	 * For the ArrayList<Float>:
-	 *  - 1 - X-Coordinate of Obstacle/Force
-	 *  - 2 - Y-Coordinate of Obstacle/Force
-	 *  - 3 - Length of Obstacle/X-Force of Force
-	 *  - 4 - Width of Obstacle/Y-Force of Force
-	 *  - 5 - Rotation of Obstacle/Flow Speed of Force
+	 *  - 0 - X-Coordinate of Obstacle/Force
+	 *  - 1 - Y-Coordinate of Obstacle/Force
+	 *  - 2 - Length of Obstacle/X-Force of Force
+	 *  - 3 - Width of Obstacle/Y-Force of Force
+	 *  - 4 - Rotation of Obstacle/Flow Speed of Force
 	 */
 	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params, boolean update) {
-		// throws error messages when the obstacle will go beyond the environment (determined
-		// by the X-/Y-Coordinates and the Length/Width of the obstacle, respectively)
-		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
-				&&(params.get(0) + params.get(2) > enviroLenLimit+1)) {
-			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-				"Warning!! Your X-Coordinate must be from 0.0 - " + (enviroLenLimit - params.get(2)) +
-				",\n or our Length must be from 0.0 - " + (enviroLenLimit - params.get(0)) +
-				"\n to be in the boundaries of your desired environment size.",
-				"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
-		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+		// when the object has gone beyond the environment in the X direction
+		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular")
+				 || type.getSelectedItem().equals("Source")) && (params.get(0) + params.get(2) > enviroLenLimit+1)) {
+			LiquidApplication.getGUI().message.xExceedsUpperLimit(enviroLenLimit, params);
+		
+		// when the object has gone beyond the environment in the Y direction
+		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular")
+				|| type.getSelectedItem().equals("Source"))
 				&&(params.get(1) + params.get(3) > enviroWidLimit+1)) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Warning!! Your Y-Coordinate must be from 0.0 - " + (enviroWidLimit - params.get(3)) +
@@ -199,6 +135,7 @@ public class EnvironmentEditorPanel extends JPanel {
 			if(update){
 				LiquidApplication.getGUI().variables.objects.set(LiquidApplication.getGUI().variables.selectedObject, arg);
 			}else{
+				addiParam.setEnabled(true);
 				LiquidApplication.getGUI().variables.objects.add(arg);
 				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
 			}
@@ -224,8 +161,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * Method updates the simulation with the information presented in the log file. 
 	 */
 	public void update() {
-		enviroLen.setSelectedItem(Float.toString(LiquidApplication.getGUI().variables.enviroLength));
-		enviroWid.setSelectedItem(Float.toString(LiquidApplication.getGUI().variables.enviroWidth));
+		enviro.updateEnviro();
 		try {
 			// obtains the line of parameters associated with a EnvironmentEditorPanel item
 			String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
@@ -262,8 +198,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	 */
 	public void reset() {
 		select.setSelectedItem("Environment");
-		enviroLen.setSelectedItem(enviroLenLimit);
-		enviroWid.setSelectedItem(enviroWidLimit);
+		enviro.resetEnviro();
 		obstacles.resetObstacles();
 		forces.resetForces();
 		sensors.resetSensors();

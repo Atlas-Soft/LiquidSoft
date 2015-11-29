@@ -16,6 +16,7 @@ import liquid.logger.LiquidLogger;
 public class LiquidGUI implements Interfaceable {
 	
 	// initializes all classes of the GUI
+	VariousMessages message;
 	LiquidGuiVariables variables;
 	LiquidFrame frame;
 	LiquidMenuBar menubar;
@@ -35,6 +36,7 @@ public class LiquidGUI implements Interfaceable {
 	 * Method defines the components of the GUI.
 	 */
 	private void initComponents() {
+		message = new VariousMessages();
 		variables = new LiquidGuiVariables();
 		frame = new LiquidFrame();
 		frame.setJMenuBar(menubar = new LiquidMenuBar());

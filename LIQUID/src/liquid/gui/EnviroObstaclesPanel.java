@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 import liquid.core.LiquidApplication;
 
 /**
- * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
- * to creating an obstacle are present, such as the X-/Y-Coordinates. 
+ * Class is a branch of the EnvironmentEditorPanel. Here, all elements
+ * linked to creating an obstacle are present, such as the X-/Y-Coordinates.
  */
 public class EnviroObstaclesPanel extends JPanel {
 	
@@ -27,7 +27,6 @@ public class EnviroObstaclesPanel extends JPanel {
 	JComboBox<Float> obstacleY;
 	JComboBox<Float> obstacleL;
 	JComboBox<Float> obstacleW;
-	JButton create;
 	
 	String[] obsType = {"Rectangular", "Circular"};
 	ArrayList<Float> params;
@@ -82,12 +81,8 @@ public class EnviroObstaclesPanel extends JPanel {
 		obstacleY = new JComboBox<Float>();
 		obstacleL = new JComboBox<Float>();
 		obstacleW = new JComboBox<Float>();
-		create = new JButton("Create");
 		obstaclesParam(); // populates the drop-down information
 		createButton(); // makes a Create button
-		
-		//EnviroAddiParamPanel test = new EnviroAddiParamPanel();
-		//add(test);
 	}
 	
 	/**
@@ -136,6 +131,7 @@ public class EnviroObstaclesPanel extends JPanel {
 	 */
 	public void createButton() {
 		// button creates the obstacle according to the parameters set
+		JButton create = new JButton("Create");
 		create.setBounds(65,170,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
@@ -146,11 +142,11 @@ public class EnviroObstaclesPanel extends JPanel {
 	}
 	
 	/**
-	 * Method packages data and sends it to editor to check if valid and
-	 * to be added into obstacle list.
+	 * Method packages data and sends it to the editor to check if the
+	 * parameters are valid, and if so to be added into the object list.
 	 */
-	public void createObstacle(boolean update){
-		params = new ArrayList<Float>();
+	public void createObstacle(boolean update) {
+		params = new ArrayList<Float>(5);
 		params.add((Float) obstacleX.getSelectedItem());
 		params.add((Float) obstacleY.getSelectedItem());
 		params.add((Float) obstacleL.getSelectedItem());

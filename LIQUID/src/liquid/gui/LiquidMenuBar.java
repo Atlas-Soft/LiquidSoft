@@ -1,4 +1,5 @@
 // DONE!
+// OPTIONAL: ADD ABOUT
 package liquid.gui;
 
 import java.awt.Font;

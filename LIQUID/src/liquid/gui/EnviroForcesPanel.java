@@ -32,7 +32,7 @@ public class EnviroForcesPanel extends JPanel {
 	ArrayList<Float> params;
 	
 	/**
-	 * Constructor creates the Force (or Initial Force) section of the EnvironmentEditorPanel.
+	 * Constructor creates the Force (or Initial Forces) section of the EnvironmentEditorPanel.
 	 */
 	public EnviroForcesPanel() {
 		initComponents();
@@ -142,10 +142,10 @@ public class EnviroForcesPanel extends JPanel {
 	}
 	
 	/**
-	 * Method packages data and sends it to editor to check if valid and
-	 * to be added into object list.
+	 * Method packages data and sends it to the editor to check if the
+	 * parameters are valid, and if so to be added into the object list.
 	 */
-	public void createForce(boolean update){
+	public void createForce(boolean update) {
 		params = new ArrayList<Float>();
 		params.add((Float) forceX.getSelectedItem());
 		params.add((Float) forceY.getSelectedItem());

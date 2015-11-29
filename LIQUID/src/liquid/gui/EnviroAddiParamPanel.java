@@ -18,8 +18,8 @@ public class EnviroAddiParamPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	// defines variables of the additional parameters
-	JButton selectNext;
 	JButton selectPrev;
+	JButton selectNext;
 	JButton selectUpdate;
 	JButton delete;
 
@@ -37,44 +37,27 @@ public class EnviroAddiParamPanel extends JPanel {
 		setBounds(5,240,240,65);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
-		
-		//selectNext = new JButton("Next Item");
-		//selectNext.setBounds(35,5,(this.getWidth()/2),25);
-		//add(selectNext);
-		
-		selectNext = new JButton("Next Item");
+
 		selectPrev = new JButton("Prev Item");
+		selectNext = new JButton("Next Item");
 		selectUpdate = new JButton("Update Item");
 		delete = new JButton("Delete");
-		nextParam();
 		prevParam();
+		nextParam();
 		updateParam();
 		deleteParam();
 	}
 	
-	public void nextParam() {
-		selectNext.setBounds(5,4,(int)(this.getWidth()/2.2),25);
-		ActionListener next = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				if (LiquidApplication.getGUI().variables.selectedObject < LiquidApplication.getGUI().variables.objects.size()-1){
-					LiquidApplication.getGUI().variables.selectedObject += 1;
-				} else {
-					LiquidApplication.getGUI().variables.selectedObject = 0;
-				}
-				LiquidApplication.getGUI().enviroeditor.update();
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
-			}
-		};
-		selectNext.addActionListener(next);
-		add(selectNext);
-	}
-	
+	/**
+	 * Method adds the "Prev Item" button, which is designed to scroll backwards and
+	 * select the previous object, whether it be an obstacle, source, or sensor.
+	 */
 	public void prevParam() {
-		selectPrev.setBounds(125,4,(int)(this.getWidth()/2.2),25);
+		selectPrev.setBounds(5,4,(int)(this.getWidth()/2.2),25);
 		ActionListener prev = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				if( LiquidApplication.getGUI().variables.selectedObject > 0) {
+				// if multiple objects are present, then the simulator will select the previous item
+				if (LiquidApplication.getGUI().variables.selectedObject > 0) {
 					LiquidApplication.getGUI().variables.selectedObject -= 1;
 				} else {
 					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
@@ -88,10 +71,39 @@ public class EnviroAddiParamPanel extends JPanel {
 		add(selectPrev);
 	}
 	
+	/**
+	 * Method adds the "Next Item" button, which is designed to scroll forward
+	 * and select the next object, whether it be an obstacle, source, or sensor.
+	 */
+	public void nextParam() {
+		selectNext.setBounds(125,4,(int)(this.getWidth()/2.2),25);
+		ActionListener next = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// if multiple objects are present, then the simulator will select the next item
+				if (LiquidApplication.getGUI().variables.selectedObject < LiquidApplication.getGUI().variables.objects.size()-1) {
+					LiquidApplication.getGUI().variables.selectedObject += 1;
+				} else {
+					LiquidApplication.getGUI().variables.selectedObject = 0;
+				}
+				LiquidApplication.getGUI().enviroeditor.update();
+				LiquidApplication.getGUI().variables.saveState();
+				LiquidApplication.getGUI().sim.repaint();
+			}
+		};
+		selectNext.addActionListener(next);
+		add(selectNext);
+	}
+	
+	/**
+	 * Method is used to update the parameters of an object, whether it will be an
+	 * obstacle, source, or sensor. This will do a quick check to ensure that the
+	 * new parameters will not go beyond the boundaries of the environment itself.
+	 */
 	public void updateParam() {
 		selectUpdate.setBounds(5,34,(int)(this.getWidth()/2.2),25);
-		selectUpdate.addActionListener(new ActionListener(){
+		selectUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
+				// determines which object is to be updated by its type
 				if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Obstacles")) {
 					LiquidApplication.getGUI().enviroeditor.obstacles.createObstacle(true);
 				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Initial Forces")) {
@@ -104,16 +116,36 @@ public class EnviroAddiParamPanel extends JPanel {
 		add(selectUpdate);
 	}
 	
+	/**
+	 * Method deletes the currently selected object, whether it be an obstacle, source, or sensor.
+	 */
 	public void deleteParam() {
 		delete.setBounds(125,34,(int)(this.getWidth()/2.2),25);
-		delete.addActionListener(new ActionListener(){
+		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
+				
+				// additional parameters get disabled when there are no objects present
+				if (LiquidApplication.getGUI().variables.objects.size() == 0) {
+					setEnabled(false);
+				}
 				LiquidApplication.getGUI().variables.selectedObject = 0;
 				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
 		add(delete);
+	}
+	
+	/**
+	 * Method to enable/disable the additional parameter buttons. HOWEVER, this
+	 * is separate from enabling/disabling features when the simulation is
+	 * running. This enables the buttons ONLY IF there are any objects present. 
+	 */
+	public void setEnabled(boolean enable) {
+		selectPrev.setEnabled(enable);
+		selectNext.setEnabled(enable);
+		selectUpdate.setEnabled(enable);
+		delete.setEnabled(enable);
 	}
 }
