@@ -31,11 +31,8 @@ public class LiquidFrame extends JFrame {
 	 */
 	@Override
 	public void dispose() {
-		int exitSim = JOptionPane.showConfirmDialog(LiquidFrame.this,
-				"Are you sure you want to exit the simulator?", "Exit Simulator?",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (exitSim == JOptionPane.YES_OPTION) {
+		if (LiquidApplication.getGUI().message.exitSimulation() == JOptionPane.YES_OPTION) {
 			super.dispose();
-			LiquidApplication.dispose();}		
+			LiquidApplication.dispose();}
 	}
 }

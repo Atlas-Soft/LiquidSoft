@@ -1,6 +1,7 @@
 package liquid.gui;
 
 import liquid.core.Interfaceable;
+import liquid.core.LiquidApplication;
 import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 
@@ -119,7 +120,7 @@ public class LiquidGUI implements Interfaceable {
 			case SET_LOG_PARAM:
 				variables.readArray(args);
 				param.update();
-				enviroeditor.update();
+				enviroeditor.setSelectedObject();
 				sim.repaint();
 				console.print_to_Console("[Log File Loaded.]\n");
 				break;

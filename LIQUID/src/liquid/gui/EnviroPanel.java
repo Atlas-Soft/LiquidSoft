@@ -88,12 +88,8 @@ public class EnviroPanel extends JPanel {
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().sim.repaint();
 					
-			// resets the limits to adjust the boundaries of creating various objects 
-			EnvironmentEditorPanel.enviroLenLimit = (float) enviroLen.getSelectedItem();
-			EnvironmentEditorPanel.enviroWidLimit = (float) enviroWid.getSelectedItem();
-			LiquidApplication.getGUI().enviroeditor.obstacles.obstaclesParam();
-			LiquidApplication.getGUI().enviroeditor.forces.forcesParam();
-			LiquidApplication.getGUI().enviroeditor.sensors.sensorsParam();
+			// resets the boundary limits
+			updateLimits();
 			}
 		});
 		add(draw);
@@ -103,8 +99,20 @@ public class EnviroPanel extends JPanel {
 	 * Method sets the parameters of the Environment section of the EnvironmentEditorPanel.
 	 */
 	public void updateEnviro() {
-		enviroLen.setSelectedItem(Float.toString(LiquidApplication.getGUI().variables.enviroLength));
-		enviroWid.setSelectedItem(Float.toString(LiquidApplication.getGUI().variables.enviroWidth));
+		enviroLen.setSelectedItem(LiquidApplication.getGUI().variables.enviroLength);
+		enviroWid.setSelectedItem(LiquidApplication.getGUI().variables.enviroWidth);
+		updateLimits();
+	}
+	
+	/**
+	 * Resets the limits to adjust the boundaries of creating various objects.
+	 */
+	public void updateLimits() {
+		EnvironmentEditorPanel.enviroLenLimit = (float) enviroLen.getSelectedItem();
+		EnvironmentEditorPanel.enviroWidLimit = (float) enviroWid.getSelectedItem();
+		LiquidApplication.getGUI().enviroeditor.obstacles.obstaclesParam();
+		LiquidApplication.getGUI().enviroeditor.forces.forcesParam();
+		LiquidApplication.getGUI().enviroeditor.sensors.sensorsParam();
 	}
 	
 	/**

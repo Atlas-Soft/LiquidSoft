@@ -9,7 +9,6 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import liquid.core.LiquidApplication;
@@ -27,7 +26,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	JComboBox<String> select;
 	static float enviroLenLimit = 500;
 	static float enviroWidLimit = 400;
-	
+		
 	// creates the Obstacles, Forces, and Sensors parts of the panel
 	EnviroPanel enviro;
 	EnviroObstaclesPanel obstacles;
@@ -113,29 +112,28 @@ public class EnvironmentEditorPanel extends JPanel {
 	 *  - 4 - Rotation of Obstacle/Flow Speed of Force
 	 */
 	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params, boolean update) {
-		// when the object has gone beyond the environment in the X direction
-		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular")
-				 || type.getSelectedItem().equals("Source")) && (params.get(0) + params.get(2) > enviroLenLimit+1)) {
-			LiquidApplication.getGUI().message.xExceedsUpperLimit(enviroLenLimit, params);
+		// when the obstacle has gone beyond the environment in the X direction (upper limit)
+		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+				&& (params.get(0) + params.get(2) > enviroLenLimit+1)) {
+			LiquidApplication.getGUI().message.xObsExceedsUpperLimit(enviroLenLimit, params);
 		
-		// when the object has gone beyond the environment in the Y direction
-		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular")
-				|| type.getSelectedItem().equals("Source"))
-				&&(params.get(1) + params.get(3) > enviroWidLimit+1)) {
-			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-				"Warning!! Your Y-Coordinate must be from 0.0 - " + (enviroWidLimit - params.get(3)) +
-				",\n or your Width must be from 0.0 - " + (enviroWidLimit - params.get(1)) +
-				"\n to be in the boundaries of your desired environment size.",
-				"Invalid Parameters!!", JOptionPane.WARNING_MESSAGE);
-					
+		// when the obstacle has gone beyond the environment in the Y direction (upper limit)
+		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+				&& (params.get(1) + params.get(3) > enviroWidLimit+1)) {
+			LiquidApplication.getGUI().message.yObsExceedsUpperLimit(enviroWidLimit, params);
+		
+		// when the source has gone below the environment in the X direction (lower limit)
+		} else if ((type.getSelectedItem().equals("Source")) && (params.get(0) + params.get(2) < 0)) {
+			LiquidApplication.getGUI().message.xForExceedsLowerLimit(enviroLenLimit, params);
+			
 		// else sends the obstacle's information to the ArrayList of objects to store
 		} else {
+			addiParam.setEnabled(true);
 			String arg = type.getSelectedItem() + "";
-			for(int i = 0; i < params.size(); i++) arg += " " + params.get(i);
-			if(update){
+			for (int i = 0; i < params.size(); i++) arg += " " + params.get(i);
+			if (update) {
 				LiquidApplication.getGUI().variables.objects.set(LiquidApplication.getGUI().variables.selectedObject, arg);
-			}else{
-				addiParam.setEnabled(true);
+			} else {
 				LiquidApplication.getGUI().variables.objects.add(arg);
 				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
 			}
@@ -145,22 +143,9 @@ public class EnvironmentEditorPanel extends JPanel {
     }
 	
 	/**
-	 * Method enables/disables the components of the EnvironmentEditorPanel.
-	 */
-	public void setEnabled(boolean enable) {
-		for (Component x : getComponents()) {
-			x.setEnabled(enable);
-			if (x instanceof Container) {
-				for (Component y : ((Container) x).getComponents()) {
-					y.setEnabled(enable);}
-			}
-		}
-	}
-	
-	/**
 	 * Method updates the simulation with the information presented in the log file. 
 	 */
-	public void update() {
+	public void setSelectedObject() {
 		enviro.updateEnviro();
 		try {
 			// obtains the line of parameters associated with a EnvironmentEditorPanel item
@@ -191,6 +176,19 @@ public class EnvironmentEditorPanel extends JPanel {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();}
+	}
+	
+	/**
+	 * Method enables/disables the components of the EnvironmentEditorPanel.
+	 */
+	public void setEnabled(boolean enable) {
+		for (Component x : getComponents()) {
+			x.setEnabled(enable);
+			if (x instanceof Container) {
+				for (Component y : ((Container) x).getComponents()) {
+					y.setEnabled(enable);}
+			}
+		}
 	}
 	
 	/**

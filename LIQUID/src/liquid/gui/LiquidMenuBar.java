@@ -58,10 +58,7 @@ public class LiquidMenuBar extends JMenuBar {
 		New = new JMenuItem("New");
 		New.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				int newSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
-						"Are you sure you want to make a new simulation?", "Create New Simulation?",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (newSim == JOptionPane.YES_OPTION) {
+				if (LiquidApplication.getGUI().message.newSimulation() == JOptionPane.YES_OPTION) {
 					LiquidApplication.getGUI().reset();
 					LiquidApplication.getGUI().sim.repaint();
 				}
@@ -79,6 +76,7 @@ public class LiquidMenuBar extends JMenuBar {
 				// proceeds when a file name is actually present
 				if (filename != null) {
 					LiquidApplication.getGUI().variables.filename = filename;
+					LiquidApplication.getGUI().enviroeditor.addiParam.setEnabled(true);
 					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG_PARAM);
 					LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename + " - LIQUID : 2D Fluid Simulator   ");
 					LiquidApplication.getGUI().variables.savedStates.clear();
@@ -106,7 +104,7 @@ public class LiquidMenuBar extends JMenuBar {
 		Undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.undo();
-				LiquidApplication.getGUI().enviroeditor.update();
+				LiquidApplication.getGUI().enviroeditor.setSelectedObject();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
@@ -117,7 +115,7 @@ public class LiquidMenuBar extends JMenuBar {
 		Redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.redo();
-				LiquidApplication.getGUI().enviroeditor.update();
+				LiquidApplication.getGUI().enviroeditor.setSelectedObject();
 				LiquidApplication.getGUI().sim.repaint();
 			}
         });
