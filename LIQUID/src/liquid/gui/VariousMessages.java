@@ -2,7 +2,6 @@ package liquid.gui;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import liquid.core.LiquidApplication;
@@ -18,10 +17,9 @@ public class VariousMessages {
 	 * @return - the yes or no option chosen
 	 */
 	public int exitSimulation() {
-		int exitSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+		return JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
 				"Are you sure you want to exit the simulator?", "Exit Simulator?",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		return exitSim;
 	}
 	
 	/**
@@ -30,43 +28,14 @@ public class VariousMessages {
 	 * @return - the yes or no option chosen
 	 */
 	public int newSimulation() {
-		int newSim = JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+		return JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
 				"Are you sure you want to make a new simulation?", "Create New Simulation?",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		return newSim;
 	}
 	
 	/**
-	 * Method checks when the object (obstacle or source) goes
-	 * beyond the limit in the X direction, that is, the upper limit.
-	 * 
-	 * @param enviroLenLimit - the length's limit
-	 * @param params   - the ArrayList<Float> of parameters
-	 */
-	public void xForExceedsLowerLimit(float enviroLenLimit, ArrayList<Float> params) {
-		// asks the user if the X-Coordinate or Length/Force parameter is preferred
-		int option = JOptionPane.showOptionDialog(LiquidApplication.getGUI().frame,
-			"Do you want the X-Coordinate " + params.get(0) + " or the X-Force " + params.get(2) + "?",
-			"Invalid Parameters!!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-			null, new String[]{"X-Coordinate", "X-Force"}, "default");
-		
-		// lets the user know the range of acceptable X-Force values
-		if (option == JOptionPane.YES_OPTION) {
-			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-				"Then your X-Force must be greater than or equal to " + (0 - params.get(0)) + ". Thank you!",
-				"Choose A Different X-Force", JOptionPane.WARNING_MESSAGE);
-		
-		// lets the user know the range of acceptable X-Coordinate values
-		} else if (option == JOptionPane.NO_OPTION){
-			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-				"Then your X-Coordinate must be greater than or equal to " + (0 - params.get(2)) + ". Thank you!",
-				"Choose A Different X-Coordinate", JOptionPane.WARNING_MESSAGE);
-		}
-	}
-	
-	/**
-	 * Method checks when the object (obstacle or source) goes
-	 * beyond the limit in the X direction, that is, the upper limit.
+	 * Method checks when the obstacle goes beyond the
+	 * limit in the X direction, that is, the upper limit.
 	 * 
 	 * @param enviroLenLimit - the length's limit
 	 * @param params   - the ArrayList<Float> of parameters
@@ -88,13 +57,12 @@ public class VariousMessages {
 		} else if (option == JOptionPane.NO_OPTION){
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Then your X-Coordinate must be from 0.0 to " + (enviroLenLimit - params.get(2)) + ". Thank you!",
-				"Choose A Different X-Coordinate", JOptionPane.WARNING_MESSAGE);
-		}
+				"Choose A Different X-Coordinate", JOptionPane.WARNING_MESSAGE);}
 	}
 	
 	/**
-	 * Method checks when the object (obstacle or source) goes
-	 * beyond the limit in the Y direction, that is, the upper limit.
+	 * Method checks when the obstacle goes beyond the 
+	 * limit in the Y direction, that is, the upper limit.
 	 * 
 	 * @param enviroWidLimit - the width's limit
 	 * @param params   - the ArrayList<Float> of parameters
@@ -116,7 +84,27 @@ public class VariousMessages {
 		} else {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Then your Y-Coordinate must be from 0.0 to " + (enviroWidLimit - params.get(3)) + ". Thank you!",
-				"Choose A Different Y-Coordinate", JOptionPane.WARNING_MESSAGE);
-		}
+				"Choose A Different Y-Coordinate", JOptionPane.WARNING_MESSAGE);}
+	}
+	
+	/**
+	 * Method shows the message dialog that the directory has been changed to be under AtlasSoft's 'logs' folder.
+	 */
+	public void changedDirectory() {
+		JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
+			"The directory of your log file has been changed to be under AtlasSoft's 'logs'"
+			+ "\nfolder to preserve uniformity. Sorry for any inconveniences!",
+			"WARNING: Directory Change!!", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	/**
+	 * Method prompts the user whether or not to actually override the file selected.
+	 * 
+	 * @return - the yes or no option chosen
+	 */
+	public int fileOverride() {
+		return JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
+			"Are you sure you want to overwrite this log file?", "Overwrite File?",
+			JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	}
 }

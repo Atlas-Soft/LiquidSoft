@@ -144,7 +144,7 @@ public class ParameterPanel extends JPanel {
 				
 				// for new simulations, path calls Logger to set a valid log file name
 				} else {
-					String filename = LiquidFileChooser.setUpFile("SAVE", LiquidApplication.getGUI().frame);
+					String filename = LiquidFileChooser.setUpFile("SAVE");
 					if (filename != null){
 						run.setEnabled(false);
 						pause.setEnabled(true);
@@ -188,7 +188,7 @@ public class ParameterPanel extends JPanel {
 					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
 				// for new simulations, path calls Logger to set a valid log file name
 				} else {
-					String filename = LiquidFileChooser.setUpFile("SAVE", LiquidApplication.getGUI().frame);
+					String filename = LiquidFileChooser.setUpFile("SAVE");
 					if (filename != null){
 						prepareSim(SetSim.NEW_SIM, filename);
 						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);

@@ -122,10 +122,6 @@ public class EnvironmentEditorPanel extends JPanel {
 				&& (params.get(1) + params.get(3) > enviroWidLimit+1)) {
 			LiquidApplication.getGUI().message.yObsExceedsUpperLimit(enviroWidLimit, params);
 		
-		// when the source has gone below the environment in the X direction (lower limit)
-		} else if ((type.getSelectedItem().equals("Source")) && (params.get(0) + params.get(2) < 0)) {
-			LiquidApplication.getGUI().message.xForExceedsLowerLimit(enviroLenLimit, params);
-			
 		// else sends the obstacle's information to the ArrayList of objects to store
 		} else {
 			addiParam.setEnabled(true);

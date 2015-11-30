@@ -1,7 +1,6 @@
 package liquid.gui;
 
 import liquid.core.Interfaceable;
-import liquid.core.LiquidApplication;
 import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 

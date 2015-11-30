@@ -1,5 +1,4 @@
 // DONE!
-// OPTIONAL: ADD ABOUT
 package liquid.gui;
 
 import java.awt.Font;
@@ -71,7 +70,7 @@ public class LiquidMenuBar extends JMenuBar {
 		Load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// calls the Logger to obtain a valid log file to replay on the simulator
-				String filename = LiquidFileChooser.setUpFile("LOAD", LiquidApplication.getGUI().frame);
+				String filename = LiquidFileChooser.setUpFile("LOAD");
 				
 				// proceeds when a file name is actually present
 				if (filename != null) {
