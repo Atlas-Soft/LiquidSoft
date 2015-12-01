@@ -51,10 +51,11 @@ public class LiquidFileWriter {
 	public void writeLogData(String args[]){
 		try {
 			for (int i = 0; i < args.length; i++) {
-				System.out.println(args[i]);
+//				System.out.println(args[i]);
 				bw.write(args[i]);
 				bw.newLine();
 			}
+			System.out.println("Done!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

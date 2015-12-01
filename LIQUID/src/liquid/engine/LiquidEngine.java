@@ -34,6 +34,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.particleLog.add("end");
 				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
 				i.receive(this, Request.WRITE_LOG_DATA, args);
+				System.out.println(args.length - 1);
 				break;
 			default:
 				break;}
@@ -43,7 +44,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
-				enviro.storeData(args);
+//				enviro.storeData(args);
 				i.receive(this, Request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:

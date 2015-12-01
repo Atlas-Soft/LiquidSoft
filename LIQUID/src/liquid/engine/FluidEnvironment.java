@@ -16,6 +16,7 @@ import org.jbox2d.particle.ParticleGroupDef;
 import org.jbox2d.particle.ParticleType;
 
 import java.awt.geom.Rectangle2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -28,16 +29,24 @@ public class FluidEnvironment {
 	Rectangle2D bounds;
 	ArrayList<Source> sources;
 	ArrayList<Flowmeter> meters;
+	ArrayList<String> dataList;
+	
+	DecimalFormat adj;
 	
 	ArrayList<String> particleLog;
 	float delta;
+	String dataLog;
 
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
 		sources = new ArrayList<Source>();
 		meters = new ArrayList<Flowmeter>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
-		particleLog = new ArrayList<String>();
+		particleLog = new ArrayList<String>(18000);
+		dataList = new ArrayList<String>(1500);
+		adj = new DecimalFormat();
+		adj.setMaximumFractionDigits(4);
+		
 
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
@@ -98,24 +107,29 @@ public class FluidEnvironment {
 
 	public String[] getParticleData(){
 		String[] dataArray = new String[0];
-		ArrayList<String> dataList = new ArrayList<String>();
+		dataList.clear();
 		Vec2[] particlePos = world.getParticlePositionBuffer();
 		Vec2[] particleVel = world.getParticleVelocityBuffer();
+		String data = "";	//used for displaying particles
+		String dataLog = delta + " ";	//used for logging particle data
 		try{
 			for(int i = 0; i < particlePos.length; i++){
-				String data = "P " + particlePos[i].x + " " + particlePos[i].y + " " + (particleVel[i].length() + 1.0);
+				data = "P " + adj.format(particlePos[i].x) + " " + adj.format(particlePos[i].y) + " " + (particleVel[i].length() + 1.0);
 				dataList.add(data);
+				dataLog += data + " ";
+				
 			}
+			particleLog.add(dataLog);
 		}catch(Exception e){}		
 		dataArray = dataList.toArray(new String[dataList.size()]);
 		return dataArray;
 	}
-	
-	public void storeData(String[] particles){
-		String data = delta + " ";
-		for(int i = 0; i < particles.length; i++){
-			data += particles[i] + " ";
-		}
-		particleLog.add(data);
-	}
 }
+//	public void storeData(String[] particles){
+//		String data = delta + " ";
+//		for(int i = 0; i < particles.length; i++){
+//			data += particles[i] + " ";
+//		}
+//		particleLog.add(data);
+//	}
+//}
