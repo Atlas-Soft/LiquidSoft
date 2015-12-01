@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import liquid.core.LiquidApplication;
 
 /**
- * Class stores the details of the EnvironmentEditorPanel section of the ParameterPanel
- * class. Here, users will be able to create obstacles, liquid sources, or flow meters.
+ * Class stores the details of the EnvironmentEditorPanel section of the ParameterPanel class.
+ * Here, users will be able to adjust environment size and create obstacles, sources, or flow meters.
  */
 public class EnvironmentEditorPanel extends JPanel {
 	
@@ -27,7 +27,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	static float enviroLenLimit = 500;
 	static float enviroWidLimit = 400;
 		
-	// creates the Obstacles, Forces, and Sensors parts of the panel
+	// creates the Environment, Obstacles, Forces, and Sensors parts of the panel
 	EnviroPanel enviro;
 	EnviroObstaclesPanel obstacles;
 	EnviroForcesPanel forces;
@@ -105,11 +105,11 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * when the obstacle will go out of the predefined environment size.
 	 * 
 	 * For the ArrayList<Float>:
-	 *  - 0 - X-Coordinate of Obstacle/Force
-	 *  - 1 - Y-Coordinate of Obstacle/Force
-	 *  - 2 - Length of Obstacle/X-Force of Force
-	 *  - 3 - Width of Obstacle/Y-Force of Force
-	 *  - 4 - Rotation of Obstacle/Flow Speed of Force
+	 *  - 0 - X-Coordinate of Obstacle
+	 *  - 1 - Y-Coordinate of Obstacle
+	 *  - 2 - Length of Obstacle
+	 *  - 3 - Width of Obstacle
+	 *  - 4 - Rotation of Obstacle
 	 */
 	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params, boolean update) {
 		// when the obstacle has gone beyond the environment in the X direction (upper limit)
@@ -127,11 +127,13 @@ public class EnvironmentEditorPanel extends JPanel {
 			addiParam.setEnabled(true);
 			String arg = type.getSelectedItem() + "";
 			for (int i = 0; i < params.size(); i++) arg += " " + params.get(i);
+			
+			// sets the object's parameters if it's to update, else adds another object 
 			if (update) {
 				LiquidApplication.getGUI().variables.objects.set(LiquidApplication.getGUI().variables.selectedObject, arg);
 			} else {
 				LiquidApplication.getGUI().variables.objects.add(arg);
-				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size() - 1;
+				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 			}
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().sim.repaint();
@@ -146,7 +148,7 @@ public class EnvironmentEditorPanel extends JPanel {
 		try {
 			// obtains the line of parameters associated with a EnvironmentEditorPanel item
 			String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
-			// creates obstacle items, if any present
+			// creates an obstacle if it's the last item
 			if (tokens[0].equals("Rectangular") || tokens[0].equals("Circular")) {
 				select.setSelectedItem("Obstacles");
 				obstacles.setVisible(true);
@@ -154,7 +156,7 @@ public class EnvironmentEditorPanel extends JPanel {
 				sensors.setVisible(false);
 				obstacles.updateObstacles(tokens);
 				
-			// creates source items, if any present
+			// creates a source if it's the last item
 			} else if (tokens[0].equals("Source")) {
 				select.setSelectedItem("Initial Forces");
 				obstacles.setVisible(false);
@@ -162,12 +164,12 @@ public class EnvironmentEditorPanel extends JPanel {
 				sensors.setVisible(false);
 				forces.updateForces(tokens);
 			
-			// creates flow meter items, if any present
+			// creates a flow meter if it's the last item
 			} else if (tokens[0].equals("Flowmeter")) {
 				select.setSelectedItem("Flow Sensors");
 				obstacles.setVisible(false);
-				sensors.setVisible(true);
 				forces.setVisible(false);
+				sensors.setVisible(true);
 				sensors.updateSensors(tokens);
 			}
 		} catch(Exception e) {
@@ -191,6 +193,12 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * Resets all parts of the EnvironmentEditorPanel to its default settings.
 	 */
 	public void reset() {
+		enviroLenLimit = 500;
+		enviroWidLimit = 400;
+		obstacles.obstaclesParam();
+		forces.forcesParam();
+		sensors.sensorsParam();
+		
 		select.setSelectedItem("Environment");
 		enviro.resetEnviro();
 		obstacles.resetObstacles();

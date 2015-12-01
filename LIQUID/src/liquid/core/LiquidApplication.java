@@ -1,4 +1,3 @@
-// DONE!
 package liquid.core;
 
 import liquid.engine.LiquidEngine;

@@ -1,4 +1,3 @@
-// DONE!
 package liquid.gui;
 
 import java.awt.Font;
@@ -58,6 +57,7 @@ public class LiquidMenuBar extends JMenuBar {
 		New.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				if (LiquidApplication.getGUI().message.newSimulation() == JOptionPane.YES_OPTION) {
+					
 					LiquidApplication.getGUI().reset();
 					LiquidApplication.getGUI().sim.repaint();
 				}

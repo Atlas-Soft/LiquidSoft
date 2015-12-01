@@ -54,7 +54,7 @@ public class VariousMessages {
 				"Choose A Different Length", JOptionPane.WARNING_MESSAGE);
 		
 		// lets the user know the range of acceptable X-Coordinate values
-		} else if (option == JOptionPane.NO_OPTION){
+		} else if (option == JOptionPane.NO_OPTION) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Then your X-Coordinate must be from 0.0 to " + (enviroLenLimit - params.get(2)) + ". Thank you!",
 				"Choose A Different X-Coordinate", JOptionPane.WARNING_MESSAGE);}
@@ -104,7 +104,7 @@ public class VariousMessages {
 	 */
 	public int fileOverride() {
 		return JOptionPane.showConfirmDialog(LiquidApplication.getGUI().frame,
-			"Are you sure you want to overwrite this log file?", "Overwrite File?",
-			JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				"Are you sure you want to overwrite this log file?", "Overwrite File?",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	}
 }

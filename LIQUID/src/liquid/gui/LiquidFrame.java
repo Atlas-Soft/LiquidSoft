@@ -1,4 +1,3 @@
-// DONE!
 package liquid.gui;
 
 import javax.swing.JFrame;

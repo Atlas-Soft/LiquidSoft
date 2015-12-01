@@ -85,13 +85,13 @@ public class LiquidGUI implements Interfaceable {
 				args = variables.writeArray();
 				i.receive(this, request.RUN_SIM, args);
 				break;
-			case REQUEST_STEP_SIM:
-				args = variables.writeArray();
-				i.receive(this, request.STEP_SIM, args);
-				break;
 			case REQUEST_PAUSE_SIM:
 				args = new String[0];
 				i.receive(this, request.PAUSE_SIM, args);
+				break;
+			case REQUEST_STEP_SIM:
+				args = variables.writeArray();
+				i.receive(this, request.STEP_SIM, args);
 				break;
 			case REQUEST_END_SIM:
 				args = new String[0];
@@ -137,12 +137,11 @@ public class LiquidGUI implements Interfaceable {
 				console.print_to_Console(args[0]);
 				break;
 			case SIM_HAS_ENDED:
-				if(variables.simulating){
-					console.print_to_Console("[Simulation Finished.]\n");
-					param.pause.setEnabled(false);
+				if (variables.simulating) {
 					param.run.setEnabled(false);
+					param.pause.setEnabled(false);
 					param.step.setEnabled(false);
-				}
+					console.print_to_Console("[Simulation Finished.]\n");}
 				break;
 			default:}
 		}
