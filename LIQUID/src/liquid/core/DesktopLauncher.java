@@ -6,7 +6,7 @@ package liquid.core;
 public class DesktopLauncher {
 
 	/**
-	 * Method creates a new Liquid Simulation.
+	 * Method creates a new 2D Fluid Dynamics Liquid Simulation.
 	 * 
 	 * @param args
 	 */

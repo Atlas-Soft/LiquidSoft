@@ -10,43 +10,41 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
- * Class is a branch of the EnvironmentEditorPanel. Here, all elements
- * linked to creating an obstacle are present, such as the X-/Y-Coordinates.
+ * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
+ * to creating an obstacle or drain are present, such as the X-/Y-Coordinates.
  */
 public class EnviroObstaclesPanel extends JPanel {
 	
+	// list of components needed to create an obstacle or drain
 	private static final long serialVersionUID = 1L;
-	
-	// list of components needed to create an obstacle
 	JComboBox<String> obstacleType;
 	JComboBox<Float> obstacleRotation;
 	JComboBox<Float> obstacleX;
 	JComboBox<Float> obstacleY;
 	JComboBox<Float> obstacleL;
 	JComboBox<Float> obstacleW;
-	
-	String[] obsType = {"Rectangular", "Circular"};
 	ArrayList<Float> params;
 	
 	/**
-	 * Constructor creates the Obstacles section of the EnvironmentEditorPanel.
+	 * Constructor creates the Obstacles and Drains section of the EnvironmentEditorPanel.
 	 */
 	public EnviroObstaclesPanel() {
 		initComponents();
 	}
 	
 	/**
-	 * Method creates the labels and drop-downs associated with creating obstacles.
+	 * Method creates the labels and drop-downs associated with creating obstacles and drains.
 	 */
 	public void initComponents() {
 		setBounds(5,30,240,205);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		
-		// makes labels specific to creating obstacles
+		// makes labels specific to creating obstacles and drains
 		JLabel l = new JLabel("Object Type:");
 		l.setBounds(5,5,(this.getWidth()/2),25);
 		add(l);
@@ -71,8 +69,12 @@ public class EnviroObstaclesPanel extends JPanel {
 		l.setBounds(125,110,(this.getWidth()/2),25);
 		add(l);
 		
-		// makes the drop-downs needed to creating obstacles
-		obstacleType = new JComboBox<String>(obsType);
+		// makes the drop-downs needed to creating obstacles and drains
+		obstacleType = new JComboBox<String>();
+		obstacleType.addItem(GlobalVar.ObsType.Rectangular.toString());
+		obstacleType.addItem(GlobalVar.ObsType.Circular.toString());
+		obstacleType.addItem(GlobalVar.ObsType.Rect_Drain.toString());
+		obstacleType.addItem(GlobalVar.ObsType.Circ_Drain.toString());
 		obstacleType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
 		add(obstacleType);
 		
@@ -86,7 +88,7 @@ public class EnviroObstaclesPanel extends JPanel {
 	}
 	
 	/**
-	 * Method adjusts the obstacle's settings to be within the limit of the environment's size. It also provides
+	 * Method adjusts the obstacle/drain's settings to be within the limit of the environment's size. It also provides
 	 * a real-time update of the obstacle parameters to prevent them from exceeding the environment's boundaries.
 	 */
 	public void obstaclesParam() {
@@ -122,20 +124,19 @@ public class EnviroObstaclesPanel extends JPanel {
 		obstacleW.setBounds(125,135,(int)(this.getWidth()/2.2),25);
 		add(obstacleW);
 		
-		// sets the default parameters even after an environment size change
-		resetObstacles();
+		resetObstacles(); // sets the parameters even after the environment size changes
 	}
 	
 	/**
 	 * Method used to call the editor panel to make a Create button for Obstacles.
 	 */
 	public void createButton() {
-		// button creates the obstacle according to the parameters set
+		// button creates the obstacle/drain according to the parameters set
 		JButton create = new JButton("Create");
 		create.setBounds(65,170,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent actionEvent) {
-			createObstacle(false);
+			public void actionPerformed(ActionEvent actionEvent) {
+				createObstacle(false);
 			}
 		});
 		add(create);

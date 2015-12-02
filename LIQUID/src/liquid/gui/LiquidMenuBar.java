@@ -9,6 +9,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import liquid.core.GlobalVar;
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 
@@ -76,7 +77,7 @@ public class LiquidMenuBar extends JMenuBar {
 				if (filename != null) {
 					LiquidApplication.getGUI().variables.filename = filename;
 					LiquidApplication.getGUI().enviroeditor.addiParam.setEnabled(true);
-					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_LOAD_LOG_PARAM);
+					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_LOG_PARAM);
 					LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename + " - LIQUID : 2D Fluid Simulator   ");
 					LiquidApplication.getGUI().variables.savedStates.clear();
 					LiquidApplication.getGUI().variables.saveState();

@@ -17,9 +17,8 @@ import liquid.core.LiquidApplication;
  */
 public class EnviroPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	
 	// components needed to configure the size of the environment
+	private static final long serialVersionUID = 1L;
 	JComboBox<Float> enviroLen;
 	JComboBox<Float> enviroWid;
 	
@@ -54,8 +53,8 @@ public class EnviroPanel extends JPanel {
 	}
 	
 	/**
-	 * Method sets the boundaries, or size, of the environment. The limit of the length
-	 * and width are defined separately, to allow the programmer to adjust, as accordingly.
+	 * Method sets the boundaries, or size, of the environment. The limit of the length and width
+	 * are defined separately in order for real-time updates of the other parameters to occur.
 	 */
 	public void enviroParam() {
 		// makes drop-downs for creating an environment
@@ -69,8 +68,7 @@ public class EnviroPanel extends JPanel {
 		enviroWid.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		add(enviroWid);
 		
-		// sets the default parameters even after an environment size change
-		resetEnviro();
+		resetEnviro(); // sets the parameters even after an environment size changes
 	}
 	
 	/**
@@ -87,9 +85,10 @@ public class EnviroPanel extends JPanel {
 			LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedItem();
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().sim.repaint();
-					
-			// resets the boundary limits
-			updateLimits();
+			
+			EnvironmentEditorPanel.enviroLenLimit = (float) enviroLen.getSelectedItem();
+			EnvironmentEditorPanel.enviroWidLimit = (float) enviroWid.getSelectedItem();
+			updateLimits(); // resets the boundary limits
 			}
 		});
 		add(draw);
@@ -108,10 +107,8 @@ public class EnviroPanel extends JPanel {
 	 * Resets the limits to adjust the boundaries of creating various objects.
 	 */
 	public void updateLimits() {
-		EnvironmentEditorPanel.enviroLenLimit = (float) enviroLen.getSelectedItem();
-		EnvironmentEditorPanel.enviroWidLimit = (float) enviroWid.getSelectedItem();
 		LiquidApplication.getGUI().enviroeditor.obstacles.obstaclesParam();
-		LiquidApplication.getGUI().enviroeditor.forces.forcesParam();
+		LiquidApplication.getGUI().enviroeditor.sources.sourcesParam();
 		LiquidApplication.getGUI().enviroeditor.sensors.sensorsParam();
 	}
 	

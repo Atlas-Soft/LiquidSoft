@@ -30,7 +30,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	// creates the Environment, Obstacles, Forces, and Sensors parts of the panel
 	EnviroPanel enviro;
 	EnviroObstaclesPanel obstacles;
-	EnviroForcesPanel forces;
+	EnviroSourcesPanel sources;
 	EnviroSensorsPanel sensors;
 	EnviroAddiParamPanel addiParam;
 	
@@ -65,8 +65,8 @@ public class EnvironmentEditorPanel extends JPanel {
 				else enviro.setVisible(false);
 				if (arg0.getItem().toString() == "Obstacles") obstacles.setVisible(true);
 				else obstacles.setVisible(false);
-				if(arg0.getItem().toString() == "Initial Forces") forces.setVisible(true);
-				else forces.setVisible(false);
+				if(arg0.getItem().toString() == "Initial Forces") sources.setVisible(true);
+				else sources.setVisible(false);
 				if(arg0.getItem().toString() == "Flow Sensors") sensors.setVisible(true);
 				else sensors.setVisible(false);
 			}
@@ -84,9 +84,9 @@ public class EnvironmentEditorPanel extends JPanel {
 		add(obstacles);
 		
 		// creates the Initial Forces section, which represents the EnviroForcesPanel class
-		forces = new EnviroForcesPanel();
-		forces.setVisible(false);
-		add(forces);
+		sources = new EnviroSourcesPanel();
+		sources.setVisible(false);
+		add(sources);
 		
 		// creates the Flow Sensors section, which represents the EnviroSensorsPanel class
 		sensors = new EnviroSensorsPanel();
@@ -113,12 +113,14 @@ public class EnvironmentEditorPanel extends JPanel {
 	 */
 	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params, boolean update) {
 		// when the obstacle has gone beyond the environment in the X direction (upper limit)
-		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+		if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular")
+				|| type.getSelectedItem().equals("RectDrain") ||  type.getSelectedItem().equals("CircDrain"))
 				&& (params.get(0) + params.get(2) > enviroLenLimit+1)) {
 			LiquidApplication.getGUI().message.xObsExceedsUpperLimit(enviroLenLimit, params);
 		
 		// when the obstacle has gone beyond the environment in the Y direction (upper limit)
-		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular"))
+		} else if ((type.getSelectedItem().equals("Rectangular") ||  type.getSelectedItem().equals("Circular")
+				|| type.getSelectedItem().equals("RectDrain") ||  type.getSelectedItem().equals("CircDrain"))
 				&& (params.get(1) + params.get(3) > enviroWidLimit+1)) {
 			LiquidApplication.getGUI().message.yObsExceedsUpperLimit(enviroWidLimit, params);
 		
@@ -144,6 +146,8 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * Method updates the simulation with the information presented in the log file. 
 	 */
 	public void setSelectedObject() {
+		enviroLenLimit = LiquidApplication.getGUI().variables.enviroLength;
+		enviroWidLimit = LiquidApplication.getGUI().variables.enviroWidth;
 		enviro.updateEnviro();
 		try {
 			// obtains the line of parameters associated with a EnvironmentEditorPanel item
@@ -152,7 +156,7 @@ public class EnvironmentEditorPanel extends JPanel {
 			if (tokens[0].equals("Rectangular") || tokens[0].equals("Circular")) {
 				select.setSelectedItem("Obstacles");
 				obstacles.setVisible(true);
-				forces.setVisible(false);
+				sources.setVisible(false);
 				sensors.setVisible(false);
 				obstacles.updateObstacles(tokens);
 				
@@ -160,15 +164,15 @@ public class EnvironmentEditorPanel extends JPanel {
 			} else if (tokens[0].equals("Source")) {
 				select.setSelectedItem("Initial Forces");
 				obstacles.setVisible(false);
-				forces.setVisible(true);
+				sources.setVisible(true);
 				sensors.setVisible(false);
-				forces.updateForces(tokens);
+				sources.updateSources(tokens);
 			
 			// creates a flow meter if it's the last item
 			} else if (tokens[0].equals("Flowmeter")) {
 				select.setSelectedItem("Flow Sensors");
 				obstacles.setVisible(false);
-				forces.setVisible(false);
+				sources.setVisible(false);
 				sensors.setVisible(true);
 				sensors.updateSensors(tokens);
 			}
@@ -195,14 +199,12 @@ public class EnvironmentEditorPanel extends JPanel {
 	public void reset() {
 		enviroLenLimit = 500;
 		enviroWidLimit = 400;
-		obstacles.obstaclesParam();
-		forces.forcesParam();
-		sensors.sensorsParam();
+		enviro.updateLimits();
 		
 		select.setSelectedItem("Environment");
 		enviro.resetEnviro();
 		obstacles.resetObstacles();
-		forces.resetForces();
+		sources.resetSources();
 		sensors.resetSensors();
 	}
 }

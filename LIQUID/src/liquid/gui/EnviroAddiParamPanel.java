@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
@@ -15,9 +16,8 @@ import liquid.core.LiquidApplication;
  */
 public class EnviroAddiParamPanel extends JPanel {
 	
-	private static final long serialVersionUID = 1L;
-	
 	// defines variables of the additional parameters
+	private static final long serialVersionUID = 1L;
 	JButton selectPrev;
 	JButton selectNext;
 	JButton selectUpdate;
@@ -95,20 +95,26 @@ public class EnviroAddiParamPanel extends JPanel {
 	}
 	
 	/**
-	 * Method is used to update the parameters of an object, whether it will be an
-	 * obstacle, source, or sensor. This will do a quick check to ensure that the
-	 * new parameters will not go beyond the boundaries of the environment itself.
+	 * Method is used to update the parameters of an object, whether it will be an obstacle, source, or sensor. This will
+	 * do a quick check to ensure that the new parameters will not go beyond the boundaries of the environment itself.
 	 */
 	public void updateParam() {
 		selectUpdate.setBounds(5,34,(int)(this.getWidth()/2.2),25);
 		selectUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				// determines which object is to be updated by its type
-				if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Obstacles")) {
+				// updates an obstacle or drain item
+				if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
+						GlobalVar.EnviroOptions.Obstacles_And_Drains.toString())) {
 					LiquidApplication.getGUI().enviroeditor.obstacles.createObstacle(true);
-				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Initial Forces")) {
-					LiquidApplication.getGUI().enviroeditor.forces.createForce(true);
-				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals("Flow Sensors")) {
+
+				// updates a source item
+				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
+						GlobalVar.EnviroOptions.Sources.toString())) {
+					LiquidApplication.getGUI().enviroeditor.sources.createSource(true);
+				
+				// updates a flow meter item
+				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
+						GlobalVar.EnviroOptions.Flowmeters.toString())) {
 					LiquidApplication.getGUI().enviroeditor.sensors.createSensor(true);
 				}
 			}
@@ -138,9 +144,8 @@ public class EnviroAddiParamPanel extends JPanel {
 	}
 	
 	/**
-	 * Method to enable/disable the additional parameter buttons. HOWEVER, this
-	 * is separate from enabling/disabling features when the simulation is
-	 * running. This enables the buttons ONLY IF there are any objects present. 
+	 * Method to enable/disable the additional parameter buttons. HOWEVER, this is separate from enabling/disabling
+	 * features when the simulation is running. This enables the buttons ONLY IF there are any objects present. 
 	 */
 	public void setEnabled(boolean enable) {
 		selectPrev.setEnabled(enable);

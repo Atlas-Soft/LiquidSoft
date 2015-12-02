@@ -5,9 +5,8 @@ import liquid.gui.LiquidGUI;
 import liquid.logger.LiquidLogger;
 
 /**
- * The Liquid Application class initializes the
- * Fluid Engine, GUI, and Logger components. It
- * also provides static access to these components.
+ * The Liquid Application class initializes the Fluid Engine, GUI, and
+ * Logger components. It also provides static access to these components.
  */
 public class LiquidApplication {
 	

@@ -107,7 +107,15 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
         		g2d.fill(new Rectangle2D.Float(x,y,l,w));
-        		
+        
+        	// in this instance a rectangular drain
+        	} else if (tokens[0].equals("RectDrain")) {
+           		x = environment.x+Float.parseFloat(tokens[1]);
+           		y = environment.y+Float.parseFloat(tokens[2]);
+           		l = Float.parseFloat(tokens[3]);
+           		w = Float.parseFloat(tokens[4]);
+           		g2d.draw(new Rectangle2D.Float(x,y,l,w));
+            	
         	// in this instance, creates a circular obstacle
         	} else if (tokens[0].equals("Circular")) {
         		x = environment.x+Float.parseFloat(tokens[1]);
@@ -115,6 +123,14 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
         		g2d.fill(new Ellipse2D.Float(x,y,l,w));
+        	
+        	// in this instance, creates a circular drain
+        	} else if (tokens[0].equals("CircDrain")) {
+        		x = environment.x+Float.parseFloat(tokens[1]);
+        		y = environment.y+Float.parseFloat(tokens[2]);
+        		l = Float.parseFloat(tokens[3]);
+        		w = Float.parseFloat(tokens[4]);
+        		g2d.draw(new Ellipse2D.Float(x,y,l,w));
         	
         	// in this instance, creates a source
         	} else if (tokens[0].equals("Source")) {

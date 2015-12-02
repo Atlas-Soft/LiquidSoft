@@ -18,9 +18,8 @@ import liquid.core.LiquidApplication;
  */
 public class EnviroSensorsPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	
 	// list of components needed to create a source
+	private static final long serialVersionUID = 1L;
 	JComboBox<String> sensorType;		
 	JComboBox<Float> sensorX;
 	JComboBox<Float> sensorY;

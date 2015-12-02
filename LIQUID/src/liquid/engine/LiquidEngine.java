@@ -4,6 +4,7 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
+import liquid.core.GlobalVar;
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 import liquid.gui.LiquidGUI;
@@ -25,14 +26,14 @@ public class LiquidEngine implements Interfaceable, Runnable {
 
 
 	@Override
-	public void send(Interfaceable i, Request request) {
+	public void send(Interfaceable i, GlobalVar.Request request) {
 		String[] args;
 		
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
 				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
-				i.receive(this, Request.WRITE_LOG_DATA, args);
+				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
 				break;
 			default:
 				break;}
@@ -43,7 +44,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
 //				enviro.storeData(args);
-				i.receive(this, Request.DISPLAY_SIM, args);
+				i.receive(this, GlobalVar.Request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:
 				args = new String[1];
@@ -52,11 +53,11 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					args[0] += enviro.meters.get(f).toString();
 					args[0] += "\n";
 				}
-				i.receive(this, Request.PRINT_SIM, args);
+				i.receive(this, GlobalVar.Request.PRINT_SIM, args);
 				break;
 			case REQUEST_SIM_HAS_ENDED:
 				args = new String[0];
-				i.receive(this, Request.SIM_HAS_ENDED, args);
+				i.receive(this, GlobalVar.Request.SIM_HAS_ENDED, args);
 				break;
 			default:
 				break;}
@@ -64,7 +65,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	}
 	
 	@Override
-	public void receive(Interfaceable i, Request request, String[] args) {
+	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 
@@ -135,11 +136,11 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			fps++;
 			
 			enviro.update(delta);
-			send(LiquidApplication.getGUI(), Request.REQUEST_DISPLAY_SIM);
+			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
-				send(LiquidApplication.getGUI(), Request.REQUEST_PRINT_SIM);
+				send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_PRINT_SIM);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
@@ -148,7 +149,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			
 			if (sec % 30 == 0 && logWrite){
 				logWrite = false;
-				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
+				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 				enviro.particleLog.clear();
 			}
 			
@@ -161,8 +162,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				loop.suspend();
 			}
 		}
-		send(LiquidApplication.getGUI(), Request.REQUEST_SIM_HAS_ENDED);
-		send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
+		send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_SIM_HAS_ENDED);
+		send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 	}
 
 	public void initSim(String[] args) {

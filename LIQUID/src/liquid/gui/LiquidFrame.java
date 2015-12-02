@@ -3,6 +3,7 @@ package liquid.gui;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
@@ -16,8 +17,8 @@ public class LiquidFrame extends JFrame {
 	 * Constructor sets the parameters of the frame, such as the size.
 	 */
 	public LiquidFrame() {
-		super("Untitled - LIQUID : 2D Fluid Simulator");
-		setSize(800, 640);
+		super("Untitled"+GlobalVar.title);
+		setSize(800,640);
 		setResizable(false);
 		setLayout(null);
 		setLocationRelativeTo(null);
@@ -25,8 +26,7 @@ public class LiquidFrame extends JFrame {
 	}
 	
 	/**
-	 * Method disposes the GUI, or exits the entire simulator
-	 * by first confirming this action with the user.
+	 * Method disposes the GUI, or exits the entire simulator by first confirming this action with the user.
 	 */
 	@Override
 	public void dispose() {

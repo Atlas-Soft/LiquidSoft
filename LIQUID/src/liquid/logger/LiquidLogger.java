@@ -2,6 +2,7 @@ package liquid.logger;
 
 import java.io.File;
 
+import liquid.core.GlobalVar;
 import liquid.core.Interfaceable;
 import liquid.engine.LiquidEngine;
 import liquid.gui.LiquidGUI;
@@ -55,7 +56,7 @@ public class LiquidLogger implements Interfaceable {
 	 */
 	@SuppressWarnings("static-access")
 	@Override
-	public void send(Interfaceable i, Request request) {
+	public void send(Interfaceable i, GlobalVar.Request request) {
 		// sends a String[] of parameters for the GUI to separate
 		if (i instanceof LiquidGUI) {
 			switch (request) {
@@ -76,7 +77,7 @@ public class LiquidLogger implements Interfaceable {
 	 */
 	@SuppressWarnings("static-access")
 	@Override
-	public void receive(Interfaceable i, Request request, String[] args) {
+	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
 		if (i instanceof LiquidGUI) {
 			switch (request) {
 			case LOAD_LOG_PARAM:

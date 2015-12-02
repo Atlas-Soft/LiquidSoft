@@ -1,5 +1,6 @@
 package liquid.gui;
 
+import liquid.core.GlobalVar;
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 import liquid.engine.LiquidEngine;
@@ -61,7 +62,7 @@ public class LiquidGUI implements Interfaceable {
 	 */
 	@SuppressWarnings("static-access")
 	@Override
-	public void send(Interfaceable i, Request request) {
+	public void send(Interfaceable i, GlobalVar.Request request) {
 		String[] args;
 		
 		// sends requests to the Logger to begin to load or write a log file
@@ -75,12 +76,12 @@ public class LiquidGUI implements Interfaceable {
 			case REQUEST_INIT_WRITE_LOG:
 				args = new String[1];
 				args[0] = variables.filename;
-				i.receive(this, Request.INIT_WRITE_LOG, args);
+				i.receive(this, GlobalVar.Request.INIT_WRITE_LOG, args);
 				break;
 			case REQUEST_WRITE_LOG_PARAM:
 				args = variables.writeArray();
-				send(LiquidApplication.getLogger(), Request.REQUEST_INIT_WRITE_LOG);
-				i.receive(this, Request.WRITE_LOG_PARAM, args);
+				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_INIT_WRITE_LOG);
+				i.receive(this, GlobalVar.Request.WRITE_LOG_PARAM, args);
 				break;
 			default:}
 		}
@@ -118,7 +119,7 @@ public class LiquidGUI implements Interfaceable {
 	 *  - PRINT_SIM - receives information from the Engine to print onto the console
 	 */
 	@Override
-	public void receive(Interfaceable i, Request request, String[] args) {
+	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
 		
 		// receives information from the Logger to set parameters of the simulator
 		if (i instanceof LiquidLogger) {

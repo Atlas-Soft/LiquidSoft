@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import liquid.core.GlobalVar;
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 
@@ -130,7 +131,7 @@ public class ParameterPanel extends JPanel {
 					pause.setEnabled(true);
 					step.setEnabled(false);
 					prepareSim(SetSim.PAUSED, null);
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);
 					
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
@@ -139,7 +140,7 @@ public class ParameterPanel extends JPanel {
 					pause.setEnabled(true);
 					step.setEnabled(false);
 					prepareSim(SetSim.YES_FILE, null);
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);
 				
 				// for new simulations, path calls Logger to set a valid log file name
 				} else {
@@ -149,7 +150,7 @@ public class ParameterPanel extends JPanel {
 						pause.setEnabled(true);
 						step.setEnabled(false);
 						prepareSim(SetSim.NEW_SIM, filename);
-						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_RUN_SIM);
+						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);
 					}
 				}
 			}
@@ -167,7 +168,7 @@ public class ParameterPanel extends JPanel {
 				pause.setEnabled(false);
 				step.setEnabled(true);
 				LiquidApplication.getGUI().console.print_to_Console("[Simulation Paused.]\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_PAUSE_SIM);
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_PAUSE_SIM);
 			}
 		});
 		add(pause);
@@ -179,18 +180,18 @@ public class ParameterPanel extends JPanel {
 		step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				if (LiquidApplication.getGUI().variables.simulating) {
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
 						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
 					prepareSim(SetSim.YES_FILE, null);
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
+					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
 				// for new simulations, path calls Logger to set a valid log file name
 				} else {
 					String filename = LiquidFileChooser.setUpFile("SAVE");
 					if (filename != null){
 						prepareSim(SetSim.NEW_SIM, filename);
-						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_STEP_SIM);
+						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
 					}
 				}
 			}
@@ -212,7 +213,7 @@ public class ParameterPanel extends JPanel {
 				LiquidApplication.getGUI().variables.particles = new String[0];
 				LiquidApplication.getGUI().sim.repaint();
 				LiquidApplication.getGUI().console.print_to_Console("[Simulation Ended.]\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), Interfaceable.Request.REQUEST_END_SIM);
+				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_END_SIM);
 			}
 		});
 		add(end);
@@ -239,7 +240,7 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
 			LiquidApplication.getGUI().variables.temperature = (float) temp.getSelectedItem();
 			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG_PARAM);
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
 		case NEW_SIM: // when NO file name is present
 			LiquidApplication.getGUI().setEnable(false);
@@ -252,7 +253,7 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().frame.setTitle(filename + " - LIQUID : 2D Fluid Simulator   ");
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), Interfaceable.Request.REQUEST_WRITE_LOG_PARAM);
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
 		default:
 		}

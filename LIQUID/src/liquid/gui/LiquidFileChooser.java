@@ -9,24 +9,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import liquid.core.LiquidApplication;
 
 /**
- * Class extracts the process of file creation. Here, it is set
- * up to either load an old log file or create a new log file.
+ * Class extracts the process of file creation. Here, it is set up to either load an old log file or create a new log file.
  */
 class LiquidFileChooser {
 
 	/**
-	 * Sets up the file name by first making sure the 'logs' directory is
-	 * present and filtering all files expect ones that end in '.log'. Method
-	 * can be used both to set up a new file or load an existing one.
+	 * Sets up the file name by first making sure the 'logs' directory is present and filtering all files
+	 * expect ones that end in '.log'. Method can be used both to set up a new file or load an existing one.
 	 * 
 	 * @param set - determines to save or load a file
-	 * @return  - the String name of the file
+	 * @return    - the String name of the file
 	 */
 	public static String setUpFile(String set) {
 		try {
 			// sets the conditions for a log file:
-			// - Folder is set to be 'logs'
-			// - File must end in '.log'
+			// - Folder is set to be 'logs' | - File must end in '.log'
 			JFileChooser fileDialog = new JFileChooser("../logs");
 			fileDialog.setAcceptAllFileFilterUsed(false);
 			fileDialog.setFileFilter(new FileNameExtensionFilter("Log File", "log"));
@@ -53,7 +50,7 @@ class LiquidFileChooser {
 	 * is saved in the correct directory and whether or not it will override an existing file.
 	 * 
 	 * @param fileDialog - uses same JFileChooser to keep consistency
-	 * @return    - String name of the file
+	 * @return           - String name of the file
 	 */
 	private static String setUpFileToSave(JFileChooser fileDialog) {
 		File origFile = fileDialog.getCurrentDirectory();
@@ -79,7 +76,7 @@ class LiquidFileChooser {
 	 * Method used to set up to load a log file. It returns the whole file name, including directory.
 	 * 
 	 * @param fileDialog - uses same JFileChooser to keep consistency
-	 * @return    - String name of the file
+	 * @return           - String name of the file
 	 */
 	private static String setUpFileToLoad(JFileChooser fileDialog) {
 		// opens up a new dialog box to select the file, and proceeds only when it passes the '.log' ending
