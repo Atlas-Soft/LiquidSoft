@@ -31,10 +31,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
-				enviro.particleLog.add("end");
 				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
 				i.receive(this, Request.WRITE_LOG_DATA, args);
-				System.out.println(args.length - 1);
 				break;
 			default:
 				break;}
@@ -118,6 +116,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		float lastFpsTime = 0;
 		long now, updateLength;
 		float delta;
+		boolean logWrite = false;
 
 		sec = 0;
 		
@@ -144,6 +143,13 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
+				logWrite = true;
+			}
+			
+			if (sec % 30 == 0 && logWrite){
+				logWrite = false;
+				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
+				enviro.particleLog.clear();
 			}
 			
 			try { Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
