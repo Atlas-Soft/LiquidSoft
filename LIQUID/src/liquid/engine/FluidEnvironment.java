@@ -5,6 +5,7 @@ package liquid.engine;
 
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -29,8 +30,8 @@ public class FluidEnvironment {
 	Rectangle2D bounds;
 	ArrayList<Source> sources;
 	ArrayList<Flowmeter> meters;
+	ArrayList<Drain> drains;
 	ArrayList<String> dataList;
-	
 	DecimalFormat adj;
 	
 	ArrayList<String> particleLog;
@@ -41,6 +42,7 @@ public class FluidEnvironment {
 		world = new World(new Vec2(0, 0));
 		sources = new ArrayList<Source>();
 		meters = new ArrayList<Flowmeter>();
+		drains = new ArrayList<Drain>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
 		particleLog = new ArrayList<String>(18000);
 		dataList = new ArrayList<String>(1500);
@@ -67,6 +69,7 @@ public class FluidEnvironment {
 		this.delta = delta;
 		world.step(delta, 6, 3);
 		for(Source s: sources) s.update(delta);
+		for(Drain d: drains)	d.update();
 		
 	}
 
@@ -92,6 +95,10 @@ public class FluidEnvironment {
 	 */
 	public void addFlowmeter(float x, float y, int ID){
 		meters.add(new Flowmeter(world, new Vec2(x, y), ID));
+	}
+	
+	public void addDrain(PolygonShape shape){
+		drains.add(new Drain(world, shape));
 	}
 
 	public void addParticle(float x, float y, float velx, float vely){
