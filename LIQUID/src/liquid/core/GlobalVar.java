@@ -22,11 +22,11 @@ public class GlobalVar {
 						REQUEST_SIM_HAS_ENDED, SIM_HAS_ENDED,
 						REQUEST_APPEND_LOG_DATA, APPEND_LOG_DATA,
 						REQUEST_INIT_WRITE_LOG, INIT_WRITE_LOG
-					};
+						};
 	
 	// global variable to set up the drop-downs of the EnvironmentEditorPanel
 	public enum EnviroOptions{Environment, Obstacles_And_Drains, Sources, Flowmeters};
 	
-	// global variable to set up the drop-downs of the Obstacles section
+	// global variable to set up the drop-downs of the Obstacles and Drains section
 	public enum ObsType{Rectangular, Circular, Rect_Drain, Circ_Drain};
 }

@@ -54,7 +54,6 @@ public class LiquidMenuBar extends JMenuBar {
 		New.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				if (LiquidApplication.getGUI().message.newSimulation() == JOptionPane.YES_OPTION) {
-					
 					LiquidApplication.getGUI().reset();
 					LiquidApplication.getGUI().sim.repaint();
 				}
@@ -74,7 +73,7 @@ public class LiquidMenuBar extends JMenuBar {
 					LiquidApplication.getGUI().variables.filename = filename;
 					LiquidApplication.getGUI().enviroeditor.addiParam.setEnabled(true);
 					LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_LOG_PARAM);
-					LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.filename + " - LIQUID : 2D Fluid Simulator   ");
+					LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
 					LiquidApplication.getGUI().variables.savedStates.clear();
 					LiquidApplication.getGUI().variables.saveState();
 				}

@@ -15,6 +15,7 @@ public class LiquidGuiVariables {
 	// declares various parameters regarding the GUI
 	boolean simulating;
 	String filename;
+	String onlyFileName; // the actual file name itself; is not stored
 	String liquid;
 	int selectedObject;
 	float temperature;
@@ -35,6 +36,7 @@ public class LiquidGuiVariables {
 	public LiquidGuiVariables() {
 		// initializes parameters regarding the GUI
 		simulating = false;
+		onlyFileName = "Untitled";
 		selectedObject = 0;
 		enviroLength = 500;
 		enviroWidth = 400;
@@ -104,10 +106,7 @@ public class LiquidGuiVariables {
 		savedStates.push(writeArray());
 		undoStates.clear();
 		if (savedStates.size() > 1) {
-			if (filename == null)
-				LiquidApplication.getGUI().frame.setTitle("*Untitled"+GlobalVar.title);
-			else
-				LiquidApplication.getGUI().frame.setTitle("*"+filename+GlobalVar.title);}
+			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);}
 	}
 	
 	/**
@@ -138,6 +137,7 @@ public class LiquidGuiVariables {
 	public void reset() {
 		simulating = false;
 		filename = null;
+		onlyFileName = "Untitled";
 		liquid = null;
 		selectedObject = 0;
 		enviroLength = 500;

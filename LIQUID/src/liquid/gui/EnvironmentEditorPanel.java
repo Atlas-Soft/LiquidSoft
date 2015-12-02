@@ -158,33 +158,35 @@ public class EnvironmentEditorPanel extends JPanel {
 		enviro.updateEnviro();
 		try {
 			// obtains the line of parameters associated the selected object
-			String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
-			// creates an obstacle if it's the last item
-			if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString()) ||
-					tokens[0].equals(GlobalVar.ObsType.Circular.toString()) ||
-					tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
-					tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
-				select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles_And_Drains.toString());
-				obstacles.setVisible(true);
-				sources.setVisible(false);
-				sensors.setVisible(false);
-				obstacles.updateObstacles(tokens);
+			if (LiquidApplication.getGUI().variables.objects.size() != 0) {
+				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
+				// creates an obstacle if it's the last item
+				if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString()) ||
+						tokens[0].equals(GlobalVar.ObsType.Circular.toString()) ||
+						tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
+						tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
+					select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles_And_Drains.toString());
+					obstacles.setVisible(true);
+					sources.setVisible(false);
+					sensors.setVisible(false);
+					obstacles.updateObstacles(tokens);
 				
-			// creates a source if it's the last item
-			} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
-				select.setSelectedItem(GlobalVar.EnviroOptions.Sources.toString());
-				obstacles.setVisible(false);
-				sources.setVisible(true);
-				sensors.setVisible(false);
-				sources.updateSources(tokens);
+					// creates a source if it's the last item
+				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
+					select.setSelectedItem(GlobalVar.EnviroOptions.Sources.toString());
+					obstacles.setVisible(false);
+					sources.setVisible(true);
+					sensors.setVisible(false);
+					sources.updateSources(tokens);
 			
-			// creates a flow meter if it's the last item
-			} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
-				select.setSelectedItem(GlobalVar.EnviroOptions.Flowmeters.toString());
-				obstacles.setVisible(false);
-				sources.setVisible(false);
-				sensors.setVisible(true);
-				sensors.updateSensors(tokens);
+					// creates a flow meter if it's the last item
+				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
+					select.setSelectedItem(GlobalVar.EnviroOptions.Flowmeters.toString());
+					obstacles.setVisible(false);
+					sources.setVisible(false);
+					sensors.setVisible(true);
+					sensors.updateSensors(tokens);
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();}
