@@ -83,9 +83,11 @@ public class LiquidLogger implements Interfaceable {
 				currentFile = args[0];
 				send(i, request.REQUEST_SET_LOG_PARAM);
 				break;
-			case WRITE_LOG_PARAM:
+			case INIT_WRITE_LOG:
 				currentFile = args[0];
 				fileWriter.initLogFile(currentFile);
+				break;
+			case WRITE_LOG_PARAM:
 				fileWriter.writeLogParam(args);
 				break;
 			default:}

@@ -1,6 +1,7 @@
 package liquid.gui;
 
 import liquid.core.Interfaceable;
+import liquid.core.LiquidApplication;
 import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 
@@ -71,9 +72,15 @@ public class LiquidGUI implements Interfaceable {
 				args[0] = variables.filename;
 				i.receive(this, request.LOAD_LOG_PARAM, args);
 				break;
+			case REQUEST_INIT_WRITE_LOG:
+				args = new String[1];
+				args[0] = variables.filename;
+				i.receive(this, Request.INIT_WRITE_LOG, args);
+				break;
 			case REQUEST_WRITE_LOG_PARAM:
 				args = variables.writeArray();
-				i.receive(this, request.WRITE_LOG_PARAM, args);
+				send(LiquidApplication.getLogger(), Request.REQUEST_INIT_WRITE_LOG);
+				i.receive(this, Request.WRITE_LOG_PARAM, args);
 				break;
 			default:}
 		}
