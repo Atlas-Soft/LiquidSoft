@@ -68,6 +68,6 @@ public class LiquidFileWriter {
 		try{
 			bw.close();
 		}
-		catch (IOException e){}
+		catch (Exception e){}
 	}
 }

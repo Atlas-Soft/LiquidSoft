@@ -177,7 +177,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				shape.setAsBox(l/2, w/2);
 				enviro.addObstacle(shape, (l/2)+x, (w/2)+y);
 			}
-			if (tokens[0].equals("Circular")) {
+			else if (tokens[0].equals("Circular")) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -190,7 +190,30 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				shape.set(vertices, vertices.length);
 				enviro.addObstacle(shape, x, y);
 			}
-			if (tokens[0].equals("Source")) {
+			else if (tokens[0].equals("RectDrain")){
+				x = Float.parseFloat(tokens[1]);
+				y = Float.parseFloat(tokens[2]);
+				l = Float.parseFloat(tokens[3]);
+				w = Float.parseFloat(tokens[4]);
+				PolygonShape shape = new PolygonShape();
+				shape.setAsBox(x + l/2, y + w/2);
+				enviro.addDrain(shape);
+			}
+			else if (tokens[0].equals("CircDrain")){
+				x = Float.parseFloat(tokens[1]);
+				y = Float.parseFloat(tokens[2]);
+				l = Float.parseFloat(tokens[3]);
+				w = Float.parseFloat(tokens[4]);
+				PolygonShape shape = new PolygonShape();
+				Vec2[] vertices = new Vec2[90];
+				for(int t = 0; t < vertices.length; t ++){
+					vertices[t] = new Vec2(x + ((l/2)*MathUtils.cos(t*(360.0f/vertices.length)))+(l/2), y + ((w/2)*MathUtils.sin(t*(360.0f/vertices.length))+(w/2))); 	
+				}
+				shape.set(vertices, vertices.length);
+				enviro.addDrain(shape);
+			}
+			
+			else if (tokens[0].equals("Source")) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -198,7 +221,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				r = Float.parseFloat(tokens[5]);
 				enviro.addSource(x, y, l, w, r);
 			}
-			if (tokens[0].equals("Flowmeter")) {
+			else if (tokens[0].equals("Flowmeter")) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				enviro.addFlowmeter(x, y, ID++);
