@@ -17,7 +17,7 @@ import liquid.core.LiquidApplication;
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
  * to creating an obstacle or drain are present, such as the X-/Y-Coordinates.
  */
-public class EnviroObstaclesPanel extends JPanel {
+public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	
 	// list of components needed to create an obstacle or drain
 	private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class EnviroObstaclesPanel extends JPanel {
 	/**
 	 * Constructor creates the Obstacles and Drains section of the EnvironmentEditorPanel.
 	 */
-	public EnviroObstaclesPanel() {
+	public EnviroObstaclesAndDrainsPanel() {
 		initComponents();
 	}
 	

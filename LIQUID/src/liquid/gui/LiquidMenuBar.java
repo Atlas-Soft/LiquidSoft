@@ -10,22 +10,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import liquid.core.GlobalVar;
-import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 
 /**
- * Class creates the menu bar along the top of the simulator. This is
- * in relation to other programs, where you can create a new program
- * or view the specifics of the program (the "About" section).
+ * Class creates the menu bar along the top of the simulator. This is in relation to other programs,
+ * where you can create a new program or view the specifics of the program (the "About" section).
  * 
- * For our simulation, you can also load a log file
- * to "replay" it or undo/redo the last move performed.
+ * For our simulation, you can also load a log file to "replay" it or undo/redo the last move performed.
  */
 public class LiquidMenuBar extends JMenuBar {
 
-	private static final long serialVersionUID = 1L;
-	
 	// creates the individual sections of the menu bar, including the file name
+	private static final long serialVersionUID = 1L;
 	JMenuItem New;
 	JMenuItem Load;
 	JMenuItem Exit;

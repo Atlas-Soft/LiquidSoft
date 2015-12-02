@@ -34,11 +34,10 @@ public class VariousMessages {
 	}
 	
 	/**
-	 * Method checks when the obstacle goes beyond the
-	 * limit in the X direction, that is, the upper limit.
+	 * Method checks when the obstacle or drain goes beyond the limit in the X direction, that is, the upper limit.
 	 * 
 	 * @param enviroLenLimit - the length's limit
-	 * @param params   - the ArrayList<Float> of parameters
+	 * @param params         - the ArrayList<Float> of parameters
 	 */
 	public void xObsExceedsUpperLimit(float enviroLenLimit, ArrayList<Float> params) {
 		// asks the user if the X-Coordinate or Length parameter is preferred
@@ -61,11 +60,10 @@ public class VariousMessages {
 	}
 	
 	/**
-	 * Method checks when the obstacle goes beyond the 
-	 * limit in the Y direction, that is, the upper limit.
+	 * Method checks when the obstacle goes beyond the limit in the Y direction, that is, the upper limit.
 	 * 
 	 * @param enviroWidLimit - the width's limit
-	 * @param params   - the ArrayList<Float> of parameters
+	 * @param params         - the ArrayList<Float> of parameters
 	 */
 	public void yObsExceedsUpperLimit(float enviroWidLimit, ArrayList<Float> params) {
 		// asks the user if the Y-Coordinate or Width parameter is preferred
@@ -81,7 +79,7 @@ public class VariousMessages {
 				"Choose A Different Width", JOptionPane.WARNING_MESSAGE);
 		
 		// lets the user know the range of acceptable Y-Coordinate values
-		} else {
+		} else if (option == JOptionPane.NO_OPTION) {
 			JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
 				"Then your Y-Coordinate must be from 0.0 to " + (enviroWidLimit - params.get(3)) + ". Thank you!",
 				"Choose A Different Y-Coordinate", JOptionPane.WARNING_MESSAGE);}
@@ -92,8 +90,8 @@ public class VariousMessages {
 	 */
 	public void changedDirectory() {
 		JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame,
-			"The directory of your log file has been changed to be under AtlasSoft's 'logs'"
-			+ "\nfolder to preserve uniformity. Sorry for any inconveniences!",
+			"The directory of your log file has been changed to be under AtlasSoft's 'logs'" +
+			"\nfolder to preserve uniformity. Sorry for any inconveniences!",
 			"WARNING: Directory Change!!", JOptionPane.WARNING_MESSAGE);
 	}
 	

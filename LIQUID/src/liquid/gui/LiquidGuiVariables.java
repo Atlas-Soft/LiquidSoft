@@ -1,15 +1,14 @@
-// DONE!
 package liquid.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
- * Class will store all of the parameters associated with
- * the simulation. This includes file name, liquid type,
- * temperature, viscosity, and various others.
+ * Class will store all of the parameters associated with the simulation. This
+ * includes file name, liquid type, temperature, viscosity, and various others.
  */
 public class LiquidGuiVariables {
 	
@@ -36,10 +35,10 @@ public class LiquidGuiVariables {
 	public LiquidGuiVariables() {
 		// initializes parameters regarding the GUI
 		simulating = false;
+		selectedObject = 0;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects = new ArrayList<String>();
-		selectedObject = 0;
 		
 		// initializes parameters regarding the Engine
 		savedStates = new LinkedList<String[]>();
@@ -49,15 +48,13 @@ public class LiquidGuiVariables {
 	}
 	
 	/**
-	 * Stores all of the necessary parameters into an array list
-	 * as String values, which will then be passed from the GUI
-	 * to the Logger and written into the log file.
+	 * Stores all of the necessary parameters into an array list as String values, which
+	 * will then be passed from the GUI to the Logger and written into the log file.
 	 * 
 	 * @return - the string array of parameters
 	 */
 	public String[] writeArray() {
 		ArrayList<String> list = new ArrayList<String>();
-		
 		list.add(filename);
 		list.add(liquid);
 		list.add(Integer.toString(selectedObject));
@@ -76,9 +73,8 @@ public class LiquidGuiVariables {
 	}	
 
 	/**
-	 * Obtains an array list of necessary parameters from the
-	 * Logger to be read. This method will then set them
-	 * as their respective native variables of this class.
+	 * Obtains an array list of necessary parameters from the Logger to be read. This
+	 * method will then set them as their respective native variables of this class.
 	 * 
 	 * @param args - array that holds parameter info
 	 */
@@ -89,8 +85,7 @@ public class LiquidGuiVariables {
 		viscosity = Float.parseFloat(args[4]);
 		runtime = Integer.parseInt(args[5]);
 		
-		// splits the sixth item into 2 parts, the length/width
-		// of the environment. It is stored as "'length' 'width'"
+		// splits the sixth item into 2 parts, the length/width of the environment, stored as "'length' 'width'"
 		String[] tokens = args[6].split(" ");
 		enviroLength = Float.parseFloat(tokens[0]);
 		enviroWidth = Float.parseFloat(tokens[1]);
@@ -110,9 +105,9 @@ public class LiquidGuiVariables {
 		undoStates.clear();
 		if (savedStates.size() > 1) {
 			if (filename == null)
-				LiquidApplication.getGUI().frame.setTitle("*Untitled - LIQUID : 2D Fluid Simulator   ");
+				LiquidApplication.getGUI().frame.setTitle("*Untitled"+GlobalVar.title);
 			else
-				LiquidApplication.getGUI().frame.setTitle("*"+filename + " - LIQUID : 2D Fluid Simulator   ");}
+				LiquidApplication.getGUI().frame.setTitle("*"+filename+GlobalVar.title);}
 	}
 	
 	/**
@@ -144,10 +139,10 @@ public class LiquidGuiVariables {
 		simulating = false;
 		filename = null;
 		liquid = null;
+		selectedObject = 0;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects.clear();
-		selectedObject = 0;
 		savedStates.clear();
 		undoStates.clear();
 		particles = new String[0];

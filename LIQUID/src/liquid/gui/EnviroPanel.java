@@ -68,7 +68,7 @@ public class EnviroPanel extends JPanel {
 		enviroWid.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		add(enviroWid);
 		
-		resetEnviro(); // sets the parameters even after an environment size changes
+		resetEnviro(); // sets the parameters even after the environment size changes
 	}
 	
 	/**

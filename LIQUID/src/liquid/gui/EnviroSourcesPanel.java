@@ -121,7 +121,7 @@ public class EnviroSourcesPanel extends JPanel {
 		sourceYComp.setBounds(125,135,(int)(this.getWidth()/2.2),25);
 		add(sourceYComp);
 		
-		resetSources(); // sets the parameters even after an environment size changes
+		resetSources(); // sets the parameters even after the environment size changes
 	}
 	
 	/**

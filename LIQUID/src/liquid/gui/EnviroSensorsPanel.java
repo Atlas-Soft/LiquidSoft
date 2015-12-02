@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
@@ -18,18 +19,15 @@ import liquid.core.LiquidApplication;
  */
 public class EnviroSensorsPanel extends JPanel {
 
-	// list of components needed to create a source
+	// list of components needed to create a sensor
 	private static final long serialVersionUID = 1L;
 	JComboBox<String> sensorType;		
 	JComboBox<Float> sensorX;
 	JComboBox<Float> sensorY;
-	
-	// changed to "Flowmeter" without space to fix "flowmeters" not being rendered
-	String[] senType = {"Flowmeter"};
 	ArrayList<Float> params;
 	
 	/**
-	 * Constructor creates the Sensors (or Flow Sensors) section of the EnvironmentEditorPanel.
+	 * Constructor creates the Sensors section of the EnvironmentEditorPanel.
 	 */
 	public EnviroSensorsPanel() {
 		initComponents();
@@ -57,7 +55,8 @@ public class EnviroSensorsPanel extends JPanel {
 		add(l);
 		
 		// makes the drop-downs needed to creating sensors
-		sensorType = new JComboBox<String>(senType);
+		sensorType = new JComboBox<String>();
+		sensorType.addItem(GlobalVar.EnviroOptions.Flowmeters.toString());
 		sensorType.setBounds(110,15,(int)(this.getWidth()/2),25);
 		add(sensorType);
 			
@@ -86,8 +85,7 @@ public class EnviroSensorsPanel extends JPanel {
 		sensorY.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		add(sensorY);
 		
-		// sets the default parameters even after an environment size change
-		resetSensors();
+		resetSensors(); // sets the parameters even after the environment size changes
 	}
 	
 	/**

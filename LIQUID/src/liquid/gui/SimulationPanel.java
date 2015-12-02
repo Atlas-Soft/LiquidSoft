@@ -14,17 +14,17 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
  * Class creates a panel to display the simulation itself. All objects created in the
- * environment editor panel (if any present) will be drawn into the current simulation.
+ * EnvironmentEditorPanel (if any present) will be drawn into the current simulation.
  */
 public class SimulationPanel extends JPanel implements MouseListener, MouseMotionListener {
 	
-	private static final long serialVersionUID = 1L;
-	
 	// variables used to display and determine the X/Y location
+	private static final long serialVersionUID = 1L;
 	private float x;
 	private float y;
 	private JLabel xLabel;
@@ -32,7 +32,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
 	private Rectangle2D.Float environment;
 	
 	/**
-	 * Constructor for the simulation panel. It is currently located on the lower left-hand side of the simulator. 
+	 * Constructor for the SimulationPanel. It is currently located on the lower left-hand side of the simulator. 
 	 */
 	public SimulationPanel() {
 		super();
@@ -65,8 +65,8 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
 	}
 	
 	/**
-	 * Method creates all components in the simulation panel. This includes the color
-	 * of a particle, as well as the various objects--obstacles, sources, and flow meters.
+	 * Method creates all components in the simulation panel. This includes the color of a
+	 * particle, as well as the various objects--obstacles, drains, sources, and flow meters.
 	 * 
 	 * @param g - graphics to be casted to a 2D graphics
 	 */
@@ -75,7 +75,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
 		Graphics2D g2d = (Graphics2D) g;
 		float len = LiquidApplication.getGUI().variables.enviroLength;
         float wid = LiquidApplication.getGUI().variables.enviroWidth;
-        environment.setRect((500/2)-(len/2),(400/2)-(wid/2),len,wid);
+        environment.setRect(((500/2)-(len/2)),((400/2)-(wid/2)),len,wid);
         g2d.setColor(Color.BLACK);
         g2d.draw(environment);
         
@@ -101,15 +101,15 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         	else g2d.setColor(Color.BLACK);
         	
         	// creates an object based on the type, in this instance a rectangular obstacle
-        	if (tokens[0].equals("Rectangular")) {
+        	if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
         		g2d.fill(new Rectangle2D.Float(x,y,l,w));
         
-        	// in this instance a rectangular drain
-        	} else if (tokens[0].equals("RectDrain")) {
+        	// in this instance, creates a rectangular drain
+        	} else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())) {
            		x = environment.x+Float.parseFloat(tokens[1]);
            		y = environment.y+Float.parseFloat(tokens[2]);
            		l = Float.parseFloat(tokens[3]);
@@ -117,7 +117,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
            		g2d.draw(new Rectangle2D.Float(x,y,l,w));
             	
         	// in this instance, creates a circular obstacle
-        	} else if (tokens[0].equals("Circular")) {
+        	} else if (tokens[0].equals(GlobalVar.ObsType.Circular.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
@@ -125,7 +125,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		g2d.fill(new Ellipse2D.Float(x,y,l,w));
         	
         	// in this instance, creates a circular drain
-        	} else if (tokens[0].equals("CircDrain")) {
+        	} else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
@@ -133,7 +133,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		g2d.draw(new Ellipse2D.Float(x,y,l,w));
         	
         	// in this instance, creates a source
-        	} else if (tokens[0].equals("Source")) {
+        	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
@@ -143,7 +143,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		g2d.draw(new Line2D.Float(x,y,(x+l),(y+w)));
         	
         	// in this instance, creates a flow meter
-        	} else if (tokens[0].equals("Flowmeter")) {
+        	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
         		id++;

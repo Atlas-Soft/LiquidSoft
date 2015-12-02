@@ -34,13 +34,10 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
-<<<<<<< HEAD
 				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
 				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
-=======
 				args = enviro.getParticleData();
-				i.receive(this, Request.WRITE_LOG_DATA, args);
->>>>>>> origin/master
+				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
 				break;
 			default:
 				break;}
@@ -143,12 +140,9 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			fps++;
 			
 			enviro.update(delta);
-<<<<<<< HEAD
 			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
-=======
-			send(LiquidApplication.getGUI(), Request.REQUEST_DISPLAY_SIM);
-			send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
->>>>>>> origin/master
+			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
+			send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
@@ -159,19 +153,17 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				logWrite = true;
 			}
 			
-<<<<<<< HEAD
 			if (sec % 30 == 0 && logWrite){
 				logWrite = false;
 				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 				enviro.particleLog.clear();
 			}
-=======
+			
 //			if (sec % 2 == 0 && logWrite){
 //				logWrite = false;
 //				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
 ////				enviro.particleLog.clear();
 //			}
->>>>>>> origin/master
 			
 			try { Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
 			} catch (Exception e) {}
@@ -195,7 +187,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		int ID = 1;
 		for (int i = 7; i < args.length; i++) {
 			tokens = args[i].split(" ");
-			if (tokens[0].equals("Rectangular")) {
+			if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -204,7 +196,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				shape.setAsBox(l/2, w/2);
 				enviro.addObstacle(shape, (l/2)+x, (w/2)+y);
 			}
-			else if (tokens[0].equals("Circular")) {
+			else if (tokens[0].equals(GlobalVar.ObsType.Circular.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -217,7 +209,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				shape.set(vertices, vertices.length);
 				enviro.addObstacle(shape, x, y);
 			}
-			else if (tokens[0].equals("RectDrain")){
+			else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())){
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -226,7 +218,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				shape.setAsBox(x + l/2, y + w/2);
 				enviro.addDrain(shape);
 			}
-			else if (tokens[0].equals("CircDrain")){
+			else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())){
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -240,7 +232,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addDrain(shape);
 			}
 			
-			else if (tokens[0].equals("Source")) {
+			else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -248,7 +240,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				r = Float.parseFloat(tokens[5]);
 				enviro.addSource(x, y, l, w, r);
 			}
-			else if (tokens[0].equals("Flowmeter")) {
+			else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				enviro.addFlowmeter(x, y, ID++);
