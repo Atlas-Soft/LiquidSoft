@@ -97,7 +97,7 @@ public class LiquidLogger implements Interfaceable {
 		if (i instanceof LiquidEngine){
 			switch (request) {
 			case WRITE_LOG_DATA:
-				System.out.println("hi");
+//				System.out.println("hi");
 				fileWriter.writeLogData(args);
 				break;
 			default:

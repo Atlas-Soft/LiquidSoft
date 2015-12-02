@@ -34,7 +34,7 @@ public class FluidEnvironment {
 	ArrayList<String> dataList;
 	DecimalFormat adj;
 	
-	ArrayList<String> particleLog;
+//	ArrayList<String> particleLog;
 	float delta;
 	String dataLog;
 
@@ -44,7 +44,7 @@ public class FluidEnvironment {
 		meters = new ArrayList<Flowmeter>();
 		drains = new ArrayList<Drain>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
-		particleLog = new ArrayList<String>(18000);
+//		particleLog = new ArrayList<String>();
 		dataList = new ArrayList<String>(1500);
 		adj = new DecimalFormat();
 		adj.setMaximumFractionDigits(4);
@@ -115,18 +115,19 @@ public class FluidEnvironment {
 	public String[] getParticleData(){
 		String[] dataArray = new String[0];
 		dataList.clear();
+		dataList.add(""+delta);
 		Vec2[] particlePos = world.getParticlePositionBuffer();
 		Vec2[] particleVel = world.getParticleVelocityBuffer();
 		String data = "";	//used for displaying particles
-		String dataLog = delta + " ";	//used for logging particle data
+//		dataLog = delta + " ";	//used for logging particle data
 		try{
 			for(int i = 0; i < particlePos.length; i++){
 				data = "P " + adj.format(particlePos[i].x) + " " + adj.format(particlePos[i].y) + " " + (particleVel[i].length() + 1.0);
 				dataList.add(data);
-				dataLog += data + " ";
+//				dataLog += data + " ";
 				
 			}
-			particleLog.add(dataLog);
+//			particleLog.add(dataLog);
 		}catch(Exception e){}		
 		dataArray = dataList.toArray(new String[dataList.size()]);
 		return dataArray;

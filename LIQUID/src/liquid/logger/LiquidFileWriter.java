@@ -36,7 +36,7 @@ public class LiquidFileWriter {
 				bw.write(args[i]);
 				bw.newLine();
 			}
-			
+			bw.flush();
 			//bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -52,10 +52,12 @@ public class LiquidFileWriter {
 		try {
 			for (int i = 0; i < args.length; i++) {
 //				System.out.println(args[i]);
-				bw.write(args[i]);
-				bw.newLine();
+				bw.write(args[i] + " ");
+//				bw.newLine();
 			}
-			System.out.println("Done!");
+			bw.newLine();
+			bw.flush();
+//			System.out.println("Done!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

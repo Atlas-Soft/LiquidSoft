@@ -1,5 +1,7 @@
 package liquid.engine;
 
+import java.util.ArrayList;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
@@ -32,8 +34,13 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
+<<<<<<< HEAD
 				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
 				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
+=======
+				args = enviro.getParticleData();
+				i.receive(this, Request.WRITE_LOG_DATA, args);
+>>>>>>> origin/master
 				break;
 			default:
 				break;}
@@ -136,7 +143,12 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			fps++;
 			
 			enviro.update(delta);
+<<<<<<< HEAD
 			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
+=======
+			send(LiquidApplication.getGUI(), Request.REQUEST_DISPLAY_SIM);
+			send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
+>>>>>>> origin/master
 			
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: " + fps + ")");
@@ -147,11 +159,19 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				logWrite = true;
 			}
 			
+<<<<<<< HEAD
 			if (sec % 30 == 0 && logWrite){
 				logWrite = false;
 				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 				enviro.particleLog.clear();
 			}
+=======
+//			if (sec % 2 == 0 && logWrite){
+//				logWrite = false;
+//				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
+////				enviro.particleLog.clear();
+//			}
+>>>>>>> origin/master
 			
 			try { Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
 			} catch (Exception e) {}
