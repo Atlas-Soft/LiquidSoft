@@ -321,6 +321,7 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
+			LiquidApplication.getGUI().variables.changed = false;
 			LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
@@ -337,6 +338,7 @@ public class ParameterPanel extends JPanel {
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
 		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
 		visc.setSelectedItem(LiquidApplication.getGUI().variables.viscosity);
+		LiquidApplication.getGUI().variables.changed = false;
 	}
 	
 	/**
