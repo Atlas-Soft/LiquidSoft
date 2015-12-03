@@ -26,6 +26,7 @@ public class LiquidGuiVariables {
 	ArrayList<String> objects;
 
 	// declares various parameters regarding the Engine
+	boolean changed;
 	LinkedList<String[]> savedStates;
 	LinkedList<String[]> undoStates;
 	String[] particles;
@@ -43,6 +44,7 @@ public class LiquidGuiVariables {
 		objects = new ArrayList<String>();
 		
 		// initializes parameters regarding the Engine
+		changed = false;
 		savedStates = new LinkedList<String[]>();
 		undoStates = new LinkedList<String[]>();
 		particles = new String[0];
@@ -106,7 +108,9 @@ public class LiquidGuiVariables {
 		savedStates.push(writeArray());
 		undoStates.clear();
 		if (savedStates.size() > 1) {
-			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);}
+			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);
+			changed = true;
+		}
 	}
 	
 	/**

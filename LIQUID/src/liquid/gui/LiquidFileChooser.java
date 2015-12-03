@@ -81,10 +81,11 @@ class LiquidFileChooser {
 				LiquidApplication.getGUI().message.changedDirectory();}
 
 			String filename = origFile + "/" + fileDialog.getSelectedFile().getName();
-			LiquidApplication.getGUI().variables.onlyFileName = fileDialog.getSelectedFile().getName()+".log";
 			if (filename.endsWith(".log") && LiquidApplication.getGUI().message.fileOverride() == JOptionPane.YES_OPTION) {
+				LiquidApplication.getGUI().variables.onlyFileName = fileDialog.getSelectedFile().getName();
 				return filename;
 			} else if (!filename.endsWith(".log")) {
+				LiquidApplication.getGUI().variables.onlyFileName = fileDialog.getSelectedFile().getName()+".log";
 				return filename + ".log";
 			}
 		}

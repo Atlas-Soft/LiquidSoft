@@ -31,6 +31,7 @@ public class ParameterPanel extends JPanel {
 	float tempMin = -100;
 	float tempMax = 100;
 	
+	ActionListener changed;
 	JComboBox<String> liqs; // a drop-down menu
 	JComboBox<Integer> time;
 	JComboBox<Float> temp;
@@ -87,9 +88,17 @@ public class ParameterPanel extends JPanel {
 		add(l);
 
 		// creates drop-downs for the basic parameters
+		changed = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				LiquidApplication.getGUI().frame.setTitle("*"+LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
+				LiquidApplication.getGUI().variables.changed = true;
+			}
+		};
+		
 		liqs = new JComboBox<String>(options);
 		liqs.setSelectedIndex(0);
 		liqs.setBounds(25,40,120,25);
+		liqs.addActionListener(changed);
 		add(liqs);
 		
 		replay = new JCheckBox("Run Replay?");
@@ -119,6 +128,7 @@ public class ParameterPanel extends JPanel {
 			time.addItem(i);}
 		time.setSelectedIndex(300);
 		time.setBounds(155,40,120,25);
+		time.addActionListener(changed);
 		add(time);
 		
 		temp.removeAllItems();
@@ -126,6 +136,7 @@ public class ParameterPanel extends JPanel {
 			temp.addItem(Float.valueOf(i));}
 		temp.setSelectedIndex((int)(((tempMax-tempMin)*17)/20));
 		temp.setBounds(25,90,120,25);
+		temp.addActionListener(changed);
 		add(temp);
 		
 		visc.removeAllItems();
@@ -133,6 +144,7 @@ public class ParameterPanel extends JPanel {
 			visc.addItem(Float.valueOf(i));}
 		visc.setSelectedIndex(1);
 		visc.setBounds(155,90,120,25);
+		visc.addActionListener(changed);
 		add(visc);
 	}
 
@@ -157,7 +169,7 @@ public class ParameterPanel extends JPanel {
 					
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
-						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
+						!LiquidApplication.getGUI().variables.changed) {
 					run.setEnabled(false);
 					pause.setEnabled(true);
 					step.setEnabled(false);
@@ -217,7 +229,7 @@ public class ParameterPanel extends JPanel {
 					
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
-						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
+						!LiquidApplication.getGUI().variables.changed) {
 					prepareSim(SetSim.YES_FILE, null);
 					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
 
@@ -290,6 +302,7 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
+			LiquidApplication.getGUI().variables.changed = false;
 			LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
@@ -306,6 +319,7 @@ public class ParameterPanel extends JPanel {
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
 		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
 		visc.setSelectedItem(LiquidApplication.getGUI().variables.viscosity);
+		LiquidApplication.getGUI().variables.changed = false;
 	}
 	
 	/**
