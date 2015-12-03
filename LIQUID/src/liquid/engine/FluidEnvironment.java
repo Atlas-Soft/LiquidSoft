@@ -70,11 +70,12 @@ public class FluidEnvironment {
 		
 	}
 
-	public void addObstacle(Shape s,float x, float y){
+	public void addObstacle(Shape s, float x, float y, float r){
 		Body b;
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.STATIC;
 		bd.position.set(x, y);
+		bd.setAngle((float) Math.toRadians(r));
 		b = world.createBody(bd);
 		FixtureDef fd = new FixtureDef();
 		fd.shape = s;
@@ -94,8 +95,8 @@ public class FluidEnvironment {
 		meters.add(new Flowmeter(world, new Vec2(x, y), ID));
 	}
 	
-	public void addDrain(PolygonShape shape, float x, float y){
-		drains.add(new Drain(world, shape, x, y));
+	public void addDrain(PolygonShape shape){
+		drains.add(new Drain(world, shape));
 	}
 
 	public void addParticle(float x, float y, float velx, float vely){

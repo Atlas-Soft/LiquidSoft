@@ -80,7 +80,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         g2d.draw(environment);
         
         // sets the color of the particles depending on the flow speed
-        float x,y,l,w;
+        float x,y,l,w,r;
         if (LiquidApplication.getGUI().variables.simulating) {
         	for (int i = 1; i < LiquidApplication.getGUI().variables.particles.length; i++) {
         		String[] tokens = LiquidApplication.getGUI().variables.particles[i].split(" ");
@@ -106,15 +106,20 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
+        		r = Float.parseFloat(tokens[5]);
+        		g2d.rotate(Math.toRadians(r),x+(l/2), y+(w/2));
         		g2d.fill(new Rectangle2D.Float(x,y,l,w));
-        
+        		g2d.rotate(Math.toRadians(-r),x+(l/2), y+(w/2));    
         	// in this instance, creates a rectangular drain
         	} else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())) {
            		x = environment.x+Float.parseFloat(tokens[1]);
            		y = environment.y+Float.parseFloat(tokens[2]);
            		l = Float.parseFloat(tokens[3]);
            		w = Float.parseFloat(tokens[4]);
+           		r = Float.parseFloat(tokens[5]);
+           		g2d.rotate(Math.toRadians(r),x+(l/2), y+(w/2));
            		g2d.draw(new Rectangle2D.Float(x,y,l,w));
+           		g2d.rotate(Math.toRadians(-r),x+(l/2), y+(w/2)); 
             	
         	// in this instance, creates a circular obstacle
         	} else if (tokens[0].equals(GlobalVar.ObsType.Circular.toString())) {
@@ -122,7 +127,10 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
+        		r = Float.parseFloat(tokens[5]);
+           		g2d.rotate(Math.toRadians(r),x+(l/2), y+(w/2));
         		g2d.fill(new Ellipse2D.Float(x,y,l,w));
+        		g2d.rotate(Math.toRadians(-r),x+(l/2), y+(w/2)); 
         	
         	// in this instance, creates a circular drain
         	} else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
@@ -130,7 +138,10 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
+        		r = Float.parseFloat(tokens[5]);
+           		g2d.rotate(Math.toRadians(r),x+(l/2), y+(w/2));
         		g2d.draw(new Ellipse2D.Float(x,y,l,w));
+        		g2d.rotate(Math.toRadians(-r),x+(l/2), y+(w/2)); 
         	
         	// in this instance, creates a source
         	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {

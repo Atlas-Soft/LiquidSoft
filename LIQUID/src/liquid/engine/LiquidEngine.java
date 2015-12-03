@@ -2,6 +2,7 @@ package liquid.engine;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.MathUtils;
+import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
 
 import liquid.core.GlobalVar;
@@ -171,22 +172,24 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
+				r = Float.parseFloat(tokens[5]);
 				PolygonShape shape = new PolygonShape();
 				shape.setAsBox(l/2, w/2);
-				enviro.addObstacle(shape, (l/2)+x, (w/2)+y);
+				enviro.addObstacle(shape, (l/2)+x, (w/2)+y, r);
 			}
 			else if (tokens[0].equals(GlobalVar.ObsType.Circular.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
+				r = Float.parseFloat(tokens[5]);
 				PolygonShape shape = new PolygonShape();
 				Vec2[] vertices = new Vec2[90];
 				for(int t = 0; t < vertices.length; t ++){
-					vertices[t] = new Vec2(((l/2)*MathUtils.cos(t*(360.0f/vertices.length)))+(l/2),((w/2)*MathUtils.sin(t*(360.0f/vertices.length))+(w/2))); 	
+					vertices[t] = new Vec2(((l/2)*MathUtils.cos(t*(360.0f/vertices.length))),((w/2)*MathUtils.sin(t*(360.0f/vertices.length)))); 	
 				}
 				shape.set(vertices, vertices.length);
-				enviro.addObstacle(shape, x, y);
+				enviro.addObstacle(shape, (l/2)+x, (w/2)+y, r);
 			}
 			else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())){
 				x = Float.parseFloat(tokens[1]);
@@ -195,12 +198,12 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				w = Float.parseFloat(tokens[4]);
 				PolygonShape shape = new PolygonShape();
 				Vec2[] vertices = new Vec2[4];
-				vertices[0] = new Vec2(x, y);
-				vertices[1] = new Vec2(x + l, y);
-				vertices[2] = new Vec2(x + l, y + w);
-				vertices[3] = new Vec2(x, y + w);
-				shape.set(vertices, 4);
-				enviro.addDrain(shape, x, y);
+				vertices[0] = new Vec2(x,y);
+				vertices[1] = new Vec2(x + l,y);
+				vertices[2] = new Vec2(x,y + w);
+				vertices[3] = new Vec2(x + l,y + w);
+				shape.set(vertices, vertices.length);
+				enviro.addDrain(shape);
 			}
 			else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())){
 				x = Float.parseFloat(tokens[1]);
@@ -213,7 +216,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					vertices[t] = new Vec2(x + ((l/2)*MathUtils.cos(t*(360.0f/vertices.length)))+(l/2), y + ((w/2)*MathUtils.sin(t*(360.0f/vertices.length))+(w/2))); 	
 				}
 				shape.set(vertices, vertices.length);
-				enviro.addDrain(shape, x, y);
+				enviro.addDrain(shape);
 			}
 			
 			else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {

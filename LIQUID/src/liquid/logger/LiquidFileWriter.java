@@ -36,7 +36,6 @@ public class LiquidFileWriter {
 				bw.newLine();
 			}
 			bw.flush();
-			//bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
