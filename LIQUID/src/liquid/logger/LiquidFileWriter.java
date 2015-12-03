@@ -15,7 +15,7 @@ public class LiquidFileWriter {
 	
 	public void initLogFile(String fileName){
 		try{	
-			bw = new BufferedWriter(new FileWriter(new File(fileName).getAbsoluteFile()));
+			bw = new BufferedWriter(new FileWriter(new File(fileName)));
 		} catch (IOException e){
 			e.printStackTrace();
 		}

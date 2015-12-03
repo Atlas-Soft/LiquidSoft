@@ -80,7 +80,7 @@ class LiquidFileChooser {
 			if (!fileDialog.getCurrentDirectory().getName().contains("logs")) {
 				LiquidApplication.getGUI().message.changedDirectory();}
 
-			String filename = origFile + "\\" + fileDialog.getSelectedFile().getName();
+			String filename = origFile + "/" + fileDialog.getSelectedFile().getName();
 			LiquidApplication.getGUI().variables.onlyFileName = fileDialog.getSelectedFile().getName()+".log";
 			if (filename.endsWith(".log") && LiquidApplication.getGUI().message.fileOverride() == JOptionPane.YES_OPTION) {
 				return filename;

@@ -91,13 +91,13 @@ public class LiquidLogger implements Interfaceable {
 			case WRITE_LOG_PARAM:
 				fileWriter.writeLogParam(args);
 				break;
-			default:}
+			default:
+			}
 		}
 		
 		if (i instanceof LiquidEngine){
 			switch (request) {
 			case WRITE_LOG_DATA:
-//				System.out.println("hi");
 				fileWriter.writeLogData(args);
 				break;
 			default:
