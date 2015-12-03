@@ -85,35 +85,8 @@ public class ParameterPanel extends JPanel {
 		l = new JLabel("Environment Editor:");
 		l.setBounds(25,125,140,25);
 		add(l);
-
-		// creates drop-downs for the basic parameters
-		liqs = new JComboBox<String>(options);
-		liqs.setSelectedIndex(0);
-		liqs.setBounds(25,40,120,25);
-		add(liqs);
-		
-		replay = new JCheckBox("Run Replay?");
-		replay.setSelected(false);
-		replay.setBounds(95,475,100,25);
-		add(replay);
 		
 		time = new JComboBox<Integer>();
-		temp = new JComboBox<Float>();
-		visc = new JComboBox<Float>();
-		basicParam(); // populates the drop-down information
-		runButton(); // creates the Run button
-		pauseButton(); // creates the Pause button
-		stepButton(); // creates the Step button
-		endButton(); // creates the End button
-	}
-		
-	/**
-	 * Method adjusts the basic parameter's settings to be within the limitations of a liquid type.
-	 * This prevents the simulation from running when a liquid type has become a solid or a gas.
-	 */
-	public void basicParam() {
-		// each drop-down first gets all items removed from it, then gets
-		// populated with items all dependent on the environment boundaries
 		time.removeAllItems();
 		for (int i = 0; i <= 300; i++) {
 			time.addItem(i);}
@@ -121,10 +94,56 @@ public class ParameterPanel extends JPanel {
 		time.setBounds(155,40,120,25);
 		add(time);
 		
+		replay = new JCheckBox("Run Replay?");
+		replay.setSelected(false);
+		replay.setBounds(95,475,100,25);
+		add(replay);
+		
+		temp = new JComboBox<Float>();
+		visc = new JComboBox<Float>();
+		liqsParam(); // populates the drop-down information for the liquid types
+		tempAndViscParam(); // populates the drop-down information for the temperature and viscosity
+		runButton(); // creates the Run button
+		pauseButton(); // creates the Pause button
+		stepButton(); // creates the Step button
+		endButton(); // creates the End button
+	}
+	
+	public void liqsParam() {
+		// creates drop-downs for the basic parameters
+		liqs = new JComboBox<String>(options);
+		liqs.setSelectedIndex(0);
+		liqs.setBounds(25,40,120,25);
+		liqs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent actionevent) {
+				String liquid = (String) liqs.getSelectedItem();
+				switch (liquid) {
+				case "Water":
+					tempMin = 0; tempMax = 100;
+					tempAndViscParam();
+					break;
+				case "Glycerin":
+					tempMin = -100; tempMax = 100;
+					tempAndViscParam();
+				default:
+					break;
+				}
+			}
+		});
+		add(liqs);
+	}
+	
+	/**
+	 * Method adjusts the temperature/viscosity parameters to be within the limitations of a liquid type, determined
+	 * by the config file. This prevents the simulation from running when a liquid has become a solid or a gas.
+	 */
+	public void tempAndViscParam() {
+		// all items are first removed, then gets populated with items dependent on the melting/boiling points
 		temp.removeAllItems();
 		for (int i = (int) tempMin; i <= tempMax; i++) {
 			temp.addItem(Float.valueOf(i));}
-		temp.setSelectedIndex((int)(((tempMax-tempMin)*17)/20));
+		if (21 > tempMin && 21 < tempMax) temp.setSelectedIndex(21);
+		else temp.setSelectedIndex((int)(((tempMax-tempMin)*121)/200));
 		temp.setBounds(25,90,120,25);
 		add(temp);
 		
@@ -301,7 +320,7 @@ public class ParameterPanel extends JPanel {
 	/**
 	 * The parameters in the parameter panel will get their values updated based on the information from the log file.
 	 */
-	public void update() {
+	public void logUpdate() {
 		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
 		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
@@ -325,7 +344,8 @@ public class ParameterPanel extends JPanel {
 	public void reset() {
 		liqs.setSelectedIndex(0);
 		time.setSelectedIndex(300);
-		temp.setSelectedIndex((int)(((tempMax-tempMin)*17)/20));
+		if (21 > tempMin && 21 < tempMax) temp.setSelectedIndex(21);
+		else temp.setSelectedIndex((int)(((tempMax-tempMin)*121)/200));
 		visc.setSelectedIndex(1);
 		replay.setSelected(false);
 	}

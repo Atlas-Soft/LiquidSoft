@@ -54,7 +54,7 @@ public class EnviroAddiParamPanel extends JPanel {
 	 */
 	public void prevParam() {
 		selectPrev.setBounds(5,4,(int)(this.getWidth()/2.2),25);
-		ActionListener prev = new ActionListener() {
+		selectPrev.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// if multiple objects are present, then the simulator will select the previous item
 				if (LiquidApplication.getGUI().variables.selectedObject > 0) {
@@ -66,8 +66,7 @@ public class EnviroAddiParamPanel extends JPanel {
 				LiquidApplication.getGUI().variables.saveState();
 				LiquidApplication.getGUI().sim.repaint();
 			}
-		};
-		selectPrev.addActionListener(prev);
+		});
 		add(selectPrev);
 	}
 	
