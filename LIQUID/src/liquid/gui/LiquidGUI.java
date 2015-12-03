@@ -7,9 +7,8 @@ import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 
 /**
- * LiquidGUI is the central class of the GUI, where all
- * components of the GUI are initialized here and available
- * for other components to access them when necessary.
+ * LiquidGUI is the central class of the GUI, where all components of the GUI are
+ * initialized here and available for other components to access them when necessary.
  * 
  * This class also interfaces between the Logger and Engine.
  * 
@@ -53,11 +52,13 @@ public class LiquidGUI implements Interfaceable {
 	 * Method defines requested interactions to the Logger and Engine.
 	 * 
 	 * Current Send Interactions:
-	 *  - REQUEST_LOAD_LOG - sends the Logger the file name of the log file needed to be loaded
-	 *  - REQUEST_WRITE_LOG - sends the Logger the variables needed to write a log file
+	 *  - REQUEST_LOAD_LOG_PARAM - sends the Logger the file name of the log file needed to be loaded
+	 *  - REQUEST_INIT_WRITE_LOG - sends the Logger a notice to initialize writing a log file
+	 *  - REQUEST_WRITE_LOG_PARAM - sends the Logger the variables needed to write a log file
 	 *  
 	 *  - REQUEST_RUN_SIM - sends the Engine the variables needed to begin simulation
 	 *  - REQUEST_PAUSE_SIM - sends the Engine a notice to pause the simulation
+	 *  - REQUEST_STEP_SIM - sends the Engine a notice to step through the simulation by a frame
 	 *  - REQUEST_END_SIM - sends the Engine a notice to end a simulation
 	 */
 	@SuppressWarnings("static-access")
@@ -117,6 +118,7 @@ public class LiquidGUI implements Interfaceable {
 	 *  
 	 *  - DISPLAY_SIM - receives particle information from the Engine to display
 	 *  - PRINT_SIM - receives information from the Engine to print onto the console
+	 *  - SIM_HAS_ENDED - 
 	 */
 	@Override
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
@@ -170,10 +172,10 @@ public class LiquidGUI implements Interfaceable {
 	 * Method resets GUI to initial conditions and parameters.
 	 */
 	public void reset() {
-		frame.setTitle("Untitled - LIQUID : 2D Fluid Simulator");
 		variables.reset();
 		enviroeditor.reset();
 		param.reset();
+		frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
 	}
 	
 	/**

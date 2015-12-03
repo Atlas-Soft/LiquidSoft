@@ -27,12 +27,14 @@ public class ParameterPanel extends JPanel {
 	// declares some of the parameter components, such as temperature and viscosity,
 	// as well as the buttons to allow the user to begin, pause, and end a simulation
 	private static final long serialVersionUID = 1L;
+	String[] options = {"Water", "Glycerin"};
+	float tempMin = -100;
+	float tempMax = 100;
+	
 	JComboBox<String> liqs; // a drop-down menu
 	JComboBox<Integer> time;
 	JComboBox<Float> temp;
 	JComboBox<Float> visc;
-	float tempMin = -100;
-	float tempMax = 100;
 	JCheckBox replay;
 	JButton run;
 	JButton pause;
@@ -85,7 +87,6 @@ public class ParameterPanel extends JPanel {
 		add(l);
 
 		// creates drop-downs for the basic parameters
-		String[] options = {"Water", "Glycerin"};
 		liqs = new JComboBox<String>(options);
 		liqs.setSelectedIndex(0);
 		liqs.setBounds(25,40,120,25);
@@ -123,7 +124,7 @@ public class ParameterPanel extends JPanel {
 		temp.removeAllItems();
 		for (int i = (int) tempMin; i <= tempMax; i++) {
 			temp.addItem(Float.valueOf(i));}
-		temp.setSelectedIndex((int)(tempMax*(17/20)));
+		temp.setSelectedIndex((int)(((tempMax-tempMin)*17)/20));
 		temp.setBounds(25,90,120,25);
 		add(temp);
 		
@@ -324,7 +325,7 @@ public class ParameterPanel extends JPanel {
 	public void reset() {
 		liqs.setSelectedIndex(0);
 		time.setSelectedIndex(300);
-		temp.setSelectedIndex((int)(tempMax*(17/20)));
+		temp.setSelectedIndex((int)(((tempMax-tempMin)*17)/20));
 		visc.setSelectedIndex(1);
 		replay.setSelected(false);
 	}

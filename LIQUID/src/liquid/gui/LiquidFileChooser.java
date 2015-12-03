@@ -69,6 +69,10 @@ class LiquidFileChooser {
 	private static String setUpFileToSave(JFileChooser fileDialog) {
 		File origFile = fileDialog.getCurrentDirectory();
 
+		// when a file name exists and there are unsaved changes, the original file name is recommended
+		if (LiquidApplication.getGUI().variables.filename != null)
+			fileDialog.setSelectedFile(new File(LiquidApplication.getGUI().variables.onlyFileName));
+		
 		// continues through the loop only if "Save" has been pressed; otherwise exits
 		if (fileDialog.showSaveDialog(LiquidApplication.getGUI().frame) == JFileChooser.APPROVE_OPTION) {
 
