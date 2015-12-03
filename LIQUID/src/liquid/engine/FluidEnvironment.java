@@ -94,8 +94,8 @@ public class FluidEnvironment {
 		meters.add(new Flowmeter(world, new Vec2(x, y), ID));
 	}
 	
-	public void addDrain(PolygonShape shape){
-		drains.add(new Drain(world, shape));
+	public void addDrain(PolygonShape shape, float x, float y){
+		drains.add(new Drain(world, shape, x, y));
 	}
 
 	public void addParticle(float x, float y, float velx, float vely){

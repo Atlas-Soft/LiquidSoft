@@ -194,8 +194,13 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				l = Float.parseFloat(tokens[3]);
 				w = Float.parseFloat(tokens[4]);
 				PolygonShape shape = new PolygonShape();
-				shape.setAsBox(x + l/2, y + w/2);
-				enviro.addDrain(shape);
+				Vec2[] vertices = new Vec2[4];
+				vertices[0] = new Vec2(x, y);
+				vertices[1] = new Vec2(x + l, y);
+				vertices[2] = new Vec2(x + l, y + w);
+				vertices[3] = new Vec2(x, y + w);
+				shape.set(vertices, 4);
+				enviro.addDrain(shape, x, y);
 			}
 			else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())){
 				x = Float.parseFloat(tokens[1]);
@@ -208,7 +213,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					vertices[t] = new Vec2(x + ((l/2)*MathUtils.cos(t*(360.0f/vertices.length)))+(l/2), y + ((w/2)*MathUtils.sin(t*(360.0f/vertices.length))+(w/2))); 	
 				}
 				shape.set(vertices, vertices.length);
-				enviro.addDrain(shape);
+				enviro.addDrain(shape, x, y);
 			}
 			
 			else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
