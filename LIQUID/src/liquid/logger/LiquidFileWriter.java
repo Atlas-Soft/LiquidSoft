@@ -15,7 +15,7 @@ public class LiquidFileWriter {
 	
 	public void initLogFile(String fileName){
 		try{	
-			bw = new BufferedWriter(new FileWriter(new File(fileName).getAbsoluteFile()));
+			bw = new BufferedWriter(new FileWriter(new File(fileName)));
 		} catch (IOException e){
 			e.printStackTrace();
 		}
@@ -32,7 +32,6 @@ public class LiquidFileWriter {
 		try {
 			// loops through the list of parameters & prints out its contents
 			for (int i = 0; i < args.length; i++) {
-				System.out.println(args[i]);
 				bw.write(args[i]);
 				bw.newLine();
 			}
@@ -51,13 +50,10 @@ public class LiquidFileWriter {
 	public void writeLogData(String args[]){
 		try {
 			for (int i = 0; i < args.length; i++) {
-//				System.out.println(args[i]);
 				bw.write(args[i] + " ");
-//				bw.newLine();
 			}
 			bw.newLine();
 			bw.flush();
-//			System.out.println("Done!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

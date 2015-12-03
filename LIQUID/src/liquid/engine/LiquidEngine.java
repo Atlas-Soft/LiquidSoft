@@ -1,7 +1,5 @@
 package liquid.engine;
 
-import java.util.ArrayList;
-
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
@@ -34,8 +32,6 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		if (i instanceof LiquidLogger) {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
-				args = enviro.particleLog.toArray(new String[enviro.particleLog.size()]);
-				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
 				args = enviro.getParticleData();
 				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
 				break;
@@ -47,7 +43,6 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
-//				enviro.storeData(args);
 				i.receive(this, GlobalVar.Request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:
@@ -121,7 +116,6 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		float lastFpsTime = 0;
 		long now, updateLength;
 		float delta;
-		boolean logWrite = false;
 
 		sec = 0;
 		
@@ -141,7 +135,6 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			
 			enviro.update(delta);
 			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
-			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
 			send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 			
 			if (lastFpsTime >= 1000000000) {
@@ -150,20 +143,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
-				logWrite = true;
 			}
-			
-			if (sec % 30 == 0 && logWrite){
-				logWrite = false;
-				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
-				enviro.particleLog.clear();
-			}
-			
-//			if (sec % 2 == 0 && logWrite){
-//				logWrite = false;
-//				send(LiquidApplication.getLogger(), Request.REQUEST_WRITE_LOG_DATA);
-////				enviro.particleLog.clear();
-//			}
 			
 			try { Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
 			} catch (Exception e) {}
@@ -175,7 +155,6 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			}
 		}
 		send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_SIM_HAS_ENDED);
-		send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
 	}
 
 	public void initSim(String[] args) {
