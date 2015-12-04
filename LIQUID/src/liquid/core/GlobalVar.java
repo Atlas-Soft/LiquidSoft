@@ -25,7 +25,7 @@ public class GlobalVar {
 						};
 	
 	// global variable to set up the drop-downs of the EnvironmentEditorPanel
-	public enum EnviroOptions{Environment, Obstacles_And_Drains, Sources, Flowmeters};
+	public enum EnviroOptions{Environment, Obstacles_And_Drains, Sources, Flowmeters, Breakpoint};
 	
 	// global variable to set up the drop-downs of the Obstacles and Drains section
 	public enum ObsType{Rectangular, Circular, Rect_Drain, Circ_Drain};

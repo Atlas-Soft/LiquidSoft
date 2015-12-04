@@ -30,6 +30,7 @@ public class FluidEnvironment {
 	Rectangle2D bounds;
 	ArrayList<Source> sources;
 	ArrayList<Flowmeter> meters;
+	ArrayList<Breakpoint> brkpts;
 	ArrayList<Drain> drains;
 	ArrayList<String> dataList;
 	DecimalFormat adj;
@@ -40,6 +41,7 @@ public class FluidEnvironment {
 		world = new World(new Vec2(0, 0));
 		sources = new ArrayList<Source>();
 		meters = new ArrayList<Flowmeter>();
+		brkpts = new ArrayList<Breakpoint>();
 		drains = new ArrayList<Drain>();
 		bounds = new Rectangle2D.Float(10, 10, len-10, wid-10);
 		dataList = new ArrayList<String>(1500);
@@ -93,6 +95,10 @@ public class FluidEnvironment {
 	 */
 	public void addFlowmeter(float x, float y, int ID){
 		meters.add(new Flowmeter(world, new Vec2(x, y), ID));
+	}
+	
+	public void addBreakpoint(float x, float y, float l, float w, int ID){
+		brkpts.add(new Breakpoint(world, new Vec2(x, y), l, w, ID));
 	}
 	
 	public void addDrain(PolygonShape shape){

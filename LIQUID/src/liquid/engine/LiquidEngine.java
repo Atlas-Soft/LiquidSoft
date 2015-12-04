@@ -53,6 +53,10 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					args[0] += enviro.meters.get(f).toString();
 					args[0] += "\n";
 				}
+				for (int f =  0; f < enviro.brkpts.size(); f++){
+					args[0] += enviro.brkpts.get(f).toString();
+					args[0] += "\n";
+				}
 				i.receive(this, GlobalVar.Request.PRINT_SIM, args);
 				break;
 			case REQUEST_SIM_HAS_ENDED:
@@ -164,7 +168,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),
 				Float.parseFloat(tokens[1]));
 		float x, y, l, w, r;
-		int ID = 1;
+		int FID = 1;
+		int BID = 1;
 		for (int i = 7; i < args.length; i++) {
 			tokens = args[i].split(" ");
 			if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString())) {
@@ -230,7 +235,14 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
-				enviro.addFlowmeter(x, y, ID++);
+				enviro.addFlowmeter(x, y, FID++);
+			}
+			else if (tokens[0].equals(GlobalVar.EnviroOptions.Breakpoint.toString())) {
+				x = Float.parseFloat(tokens[1]);
+				y = Float.parseFloat(tokens[2]);
+				l = Float.parseFloat(tokens[3]);
+				w = Float.parseFloat(tokens[4]);
+				
 			}
 		}
 		enviro.init();

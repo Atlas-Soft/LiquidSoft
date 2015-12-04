@@ -12,41 +12,47 @@ import org.jbox2d.dynamics.World;
 /**
  * Edited 11/20 - William Steele
  */
-public class Flowmeter {
+public class Breakpoint {
 	private World myWorld;
 	private Vec2 myLoc;
+	private float myWid;
+	private float myHit;
 	private int myID;
 
 	/**
 	 * 
-	 * @param imHere the world this flow meter is monitoring
-	 * @param loc the location this flow meter monitors
+	 * @param imHere the world this breakpoint is monitoring
+	 * @param loc the center of the area this breakpoint monitors
+	 * @param width the width of the area this breakpoint monitors
+	 * @param 
 	 */
-	public Flowmeter(World imHere, Vec2 loc, int ID){
+	public Breakpoint(World imHere, Vec2 loc, float width, float height, int ID){
 		myWorld = imHere;
 		myLoc = loc;
+		myWid = width;
+		myHit = height;
 		myID = ID;
 	}
 	/**
-	 * @return the average velocity of all particles within an area of 20.0 * 20.0 centered around loc
+	 * @return the average velocity of all particles within an area of width * height centered around loc
 	 */
 	public String toString(){
 		DecimalFormat adj = new DecimalFormat();
 		Vec2 curVel = pollVelocity();
 		adj.setMaximumFractionDigits(4);
-		String send = " F" + myID + " ( X-Vel " + adj.format(curVel.x) + ", Y-Vel " + adj.format(curVel.y) +")";
+		String send = " B" + myID + " ( X-Vel " + adj.format(curVel.x) + ", Y-Vel " + adj.format(curVel.y) +")";
 		return send;
 	}
 	
 	/**
 	 * Helper Method
-	 * Gets the average x and y velocities of particles within 10.0 units of this flowmeter's position
+	 * Gets the average x and y velocities of particles within an area of width * height centered around loc
 	 * @return Vec2 object containing the average x and y velocities of nearby particles
 	 */
 	private Vec2 pollVelocity(){
 		ArrayList<Vec2> vel = new ArrayList<Vec2>();
 		Vec2[] pos = myWorld.getParticlePositionBuffer();
-		Vec2 bounds = new Vec2(10.0f, 10.0f);	//To change boundaries to check, simply change parameters of constructor
+		Vec2 bounds = new Vec2(myWid/2, myHit/2);	//To change boundaries to check, simply change parameters of constructor
 		for (int i = 0; i < pos.length; i++){
 			if(almostEqual(myLoc, pos[i], bounds)){
 				vel.add(myWorld.getParticleVelocityBuffer()[i]);	//may need to be changed to local variable depending on performance
