@@ -1,6 +1,7 @@
 package liquid.logger;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 import liquid.core.GlobalVar;
 import liquid.core.Interfaceable;
@@ -20,7 +21,8 @@ public class LiquidLogger implements Interfaceable {
 	private LiquidFileLoader fileLoader;
 	private LiquidFileWriter fileWriter;
 	private String currentFile;
-	
+	private String configFile;
+	String[] args;
 	/**
 	 * Constructor initializes the Logger component of the simulation.
 	 */
@@ -33,7 +35,7 @@ public class LiquidLogger implements Interfaceable {
 	 * Method also checks that the log and config files are located
 	 * in the correct directory and contains the correct ending.
 	 */
-	private void initComponents(){
+	private void initComponents() {
 		fileLoader = new LiquidFileLoader();
 		fileWriter = new LiquidFileWriter();
 		File f = new File("../logs");
@@ -41,9 +43,14 @@ public class LiquidLogger implements Interfaceable {
 			
 		f = new File("../configs");
 		if (f.exists() && f.isDirectory()) {
-			
-		}
-		else{
+			File[] list = f.listFiles();
+			if (list != null) {
+				for (File file : list) {
+					if (file.getName().equals("LiquidType.txt")) {
+						configFile = file.getAbsolutePath();}
+				}
+			}
+		} else {
 			f.mkdirs();
 		}
 	}
@@ -60,8 +67,12 @@ public class LiquidLogger implements Interfaceable {
 		// sends a String[] of parameters for the GUI to separate
 		if (i instanceof LiquidGUI) {
 			switch (request) {
+			case REQUEST_SET_CONFIG:
+				args = fileLoader.loadConfigFile(configFile);
+				i.receive(this, request.SET_CONFIG, args);
+				break;
 			case REQUEST_SET_LOG_PARAM:
-				String[] args = fileLoader.loadLogParam(currentFile);
+				args = fileLoader.loadLogParam(currentFile);
 				i.receive(this, request.SET_LOG_PARAM, args);
 				break;
 			default:}
@@ -80,6 +91,10 @@ public class LiquidLogger implements Interfaceable {
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
 		if (i instanceof LiquidGUI) {
 			switch (request) {
+			case LOAD_CONFIG_FILE:
+				args[0] = configFile;
+				send(i, request.REQUEST_SET_CONFIG);
+				break;
 			case LOAD_LOG_PARAM:
 				currentFile = args[0];
 				send(i, request.REQUEST_SET_LOG_PARAM);

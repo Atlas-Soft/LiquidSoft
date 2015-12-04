@@ -150,7 +150,7 @@ public class EnviroSourcesPanel extends JPanel {
 		params.add((Float) sourceXComp.getSelectedItem());
 		params.add((Float) sourceYComp.getSelectedItem());
 		params.add((Float) sourceSpeed.getSelectedItem());
-		LiquidApplication.getGUI().enviroeditor.checkBoundaries(sourceType, params, update);
+		LiquidApplication.getGUI().enviroeditor.addObject(sourceType, params, update);
 	}
 	
 	/**

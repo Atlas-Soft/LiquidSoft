@@ -107,7 +107,8 @@ public class EnviroPanel extends JPanel {
 	 * Resets the limits to adjust the boundaries of creating various objects.
 	 */
 	public void updateLimits() {
-		LiquidApplication.getGUI().enviroeditor.obstacles.obstaclesParam();
+		LiquidApplication.getGUI().enviroeditor.obstacles.xYParam(true);
+		LiquidApplication.getGUI().enviroeditor.obstacles.lenWidParam(true, true, 0);
 		LiquidApplication.getGUI().enviroeditor.sources.sourcesParam();
 		LiquidApplication.getGUI().enviroeditor.sensors.sensorsParam();
 	}

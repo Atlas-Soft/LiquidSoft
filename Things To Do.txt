@@ -4,5 +4,4 @@ Things To Do:
   - Logger Review Comments (All Classes) -- Lauren
   - Viscosity -- Raf/Lauren?
   - Replay Checkbox -- Raf/Lauren?
-  - Drain -- Will
   - About (Optional) -- Raf

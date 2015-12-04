@@ -114,40 +114,22 @@ public class EnvironmentEditorPanel extends JPanel {
 	 *  - 3 - Width of Obstacle/Drain
 	 *  - 4 - Rotation of Obstacle/Drain
 	 */
-	public void checkBoundaries(JComboBox<String> type, ArrayList<Float> params, boolean update) {
-		// when the obstacle has gone beyond the environment in the X direction (upper limit)
-		if ((type.getSelectedItem().equals(GlobalVar.ObsType.Rectangular.toString()) ||
-				type.getSelectedItem().equals(GlobalVar.ObsType.Circular.toString()) ||
-				type.getSelectedItem().equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
-				type.getSelectedItem().equals(GlobalVar.ObsType.Circ_Drain.toString()))
-				&& (params.get(0) + params.get(2) > enviroLenLimit+1)) {
-			LiquidApplication.getGUI().message.xObsExceedsUpperLimit(enviroLenLimit, params);
-		
-		// when the obstacle has gone beyond the environment in the Y direction (upper limit)
-		} else if ((type.getSelectedItem().equals(GlobalVar.ObsType.Rectangular.toString()) || 
-				type.getSelectedItem().equals(GlobalVar.ObsType.Circular.toString()) ||
-				type.getSelectedItem().equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
-				type.getSelectedItem().equals(GlobalVar.ObsType.Circ_Drain.toString()))
-				&& (params.get(1) + params.get(3) > enviroWidLimit+1)) {
-			LiquidApplication.getGUI().message.yObsExceedsUpperLimit(enviroWidLimit, params);
-		
-		// else sends the obstacle's information to the ArrayList of objects to store
-		} else {
-			addiParam.setEnabled(true);
-			String arg = type.getSelectedItem() + "";
-			for (int i = 0; i < params.size(); i++) arg += " " + params.get(i);
+	public void addObject(JComboBox<String> type, ArrayList<Float> params, boolean update) {
+		// sends the object's information to the ArrayList of objects to store
+		addiParam.setEnabled(true);
+		String arg = type.getSelectedItem() + "";
+		for (int i = 0; i < params.size(); i++) arg += " " + params.get(i);
 			
-			// sets the object's parameters if it's to update, else adds another object 
-			if (update) {
-				LiquidApplication.getGUI().variables.objects.set(LiquidApplication.getGUI().variables.selectedObject, arg);
-			} else {
-				LiquidApplication.getGUI().variables.objects.add(arg);
-				LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
-			}
-			LiquidApplication.getGUI().variables.saveState();
-			LiquidApplication.getGUI().sim.repaint();
+		// sets the object's parameters if it's to update, else adds another object 
+		if (update) {
+			LiquidApplication.getGUI().variables.objects.set(LiquidApplication.getGUI().variables.selectedObject, arg);
+		} else {
+			LiquidApplication.getGUI().variables.objects.add(arg);
+			LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
 		}
-    }
+		LiquidApplication.getGUI().variables.saveState();
+		LiquidApplication.getGUI().sim.repaint();
+	}
 	
 	/**
 	 * Method sets the panel according to the previously-selected object type when a log file has been loaded.
@@ -171,7 +153,7 @@ public class EnvironmentEditorPanel extends JPanel {
 					sensors.setVisible(false);
 					obstacles.updateObstacles(tokens);
 				
-					// creates a source if it's the last item
+				// creates a source if it's the last item
 				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
 					select.setSelectedItem(GlobalVar.EnviroOptions.Sources.toString());
 					obstacles.setVisible(false);
@@ -179,7 +161,7 @@ public class EnvironmentEditorPanel extends JPanel {
 					sensors.setVisible(false);
 					sources.updateSources(tokens);
 			
-					// creates a flow meter if it's the last item
+				// creates a flow meter if it's the last item
 				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
 					select.setSelectedItem(GlobalVar.EnviroOptions.Flowmeters.toString());
 					obstacles.setVisible(false);
@@ -211,7 +193,6 @@ public class EnvironmentEditorPanel extends JPanel {
 	public void reset() {
 		enviroLenLimit = 500;
 		enviroWidLimit = 400;
-		enviro.updateLimits();
 		
 		select.setSelectedItem(GlobalVar.EnviroOptions.Environment.toString());
 		enviro.resetEnviro();

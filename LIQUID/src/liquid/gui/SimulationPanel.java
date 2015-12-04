@@ -110,6 +110,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		g2d.rotate(Math.toRadians(r),x+(l/2), y+(w/2));
         		g2d.fill(new Rectangle2D.Float(x,y,l,w));
         		g2d.rotate(Math.toRadians(-r),x+(l/2), y+(w/2));    
+        		
         	// in this instance, creates a rectangular drain
         	} else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())) {
            		x = environment.x+Float.parseFloat(tokens[1]);

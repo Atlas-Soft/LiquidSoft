@@ -75,13 +75,12 @@ class LiquidFileChooser {
 		
 		// continues through the loop only if "Save" has been pressed; otherwise exits
 		if (fileDialog.showSaveDialog(LiquidApplication.getGUI().frame) == JFileChooser.APPROVE_OPTION) {
-
 			// checks if file directory is in the "..AtlasSoft\logs\" directory
 			if (!fileDialog.getCurrentDirectory().getName().contains("logs")) {
 				LiquidApplication.getGUI().message.changedDirectory();}
 
 			String filename = origFile + "/" + fileDialog.getSelectedFile().getName();
-			if (filename.endsWith(".log") && LiquidApplication.getGUI().message.fileOverride() == JOptionPane.YES_OPTION) {
+			if (filename.endsWith(".log") && LiquidApplication.getGUI().message.fileOverride(fileDialog.getSelectedFile().getName()) == JOptionPane.YES_OPTION) {
 				LiquidApplication.getGUI().variables.onlyFileName = fileDialog.getSelectedFile().getName();
 				return filename;
 			} else if (!filename.endsWith(".log")) {

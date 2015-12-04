@@ -69,6 +69,10 @@ public class LiquidGUI implements Interfaceable {
 		// sends requests to the Logger to begin to load or write a log file
 		if (i instanceof LiquidLogger) {
 			switch (request) {
+			case REQUEST_LOAD_CONFIG_FILE:
+				args = new String[1];
+				i.receive(this, request.LOAD_CONFIG_FILE, args);
+				break;
 			case REQUEST_LOAD_LOG_PARAM:
 				args = new String[1];
 				args[0] = variables.filename;
@@ -77,12 +81,12 @@ public class LiquidGUI implements Interfaceable {
 			case REQUEST_INIT_WRITE_LOG:
 				args = new String[1];
 				args[0] = variables.filename;
-				i.receive(this, GlobalVar.Request.INIT_WRITE_LOG, args);
+				i.receive(this, request.INIT_WRITE_LOG, args);
 				break;
 			case REQUEST_WRITE_LOG_PARAM:
 				args = variables.writeArray();
 				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_INIT_WRITE_LOG);
-				i.receive(this, GlobalVar.Request.WRITE_LOG_PARAM, args);
+				i.receive(this, request.WRITE_LOG_PARAM, args);
 				break;
 			default:}
 		}
@@ -126,6 +130,11 @@ public class LiquidGUI implements Interfaceable {
 		// receives information from the Logger to set parameters of the simulator
 		if (i instanceof LiquidLogger) {
 			switch (request) {
+			case SET_CONFIG:
+				for (int num = 0; num < args.length; num++) {
+					variables.liquidInfo.add(args[num]);
+				}
+				break;
 			case SET_LOG_PARAM:
 				variables.readArray(args);
 				param.logUpdate();

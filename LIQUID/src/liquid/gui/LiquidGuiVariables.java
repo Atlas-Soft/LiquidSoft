@@ -24,9 +24,9 @@ public class LiquidGuiVariables {
 	float enviroLength;
 	float enviroWidth;
 	ArrayList<String> objects;
+	ArrayList<String> liquidInfo;
 
 	// declares various parameters regarding the Engine
-	boolean changed;
 	LinkedList<String[]> savedStates;
 	LinkedList<String[]> undoStates;
 	String[] particles;
@@ -42,9 +42,9 @@ public class LiquidGuiVariables {
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects = new ArrayList<String>();
+		liquidInfo = new ArrayList<String>();
 		
 		// initializes parameters regarding the Engine
-		changed = false;
 		savedStates = new LinkedList<String[]>();
 		undoStates = new LinkedList<String[]>();
 		particles = new String[0];
@@ -109,7 +109,6 @@ public class LiquidGuiVariables {
 		undoStates.clear();
 		if (savedStates.size() > 1) {
 			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);
-			changed = true;
 		}
 	}
 	

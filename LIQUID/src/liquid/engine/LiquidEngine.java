@@ -34,7 +34,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
 				args = enviro.getParticleData();
-				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
+				i.receive(this, request.WRITE_LOG_DATA, args);
 				break;
 			default:
 				break;}
@@ -44,7 +44,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
-				i.receive(this, GlobalVar.Request.DISPLAY_SIM, args);
+				i.receive(this, request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:
 				args = new String[1];
@@ -53,11 +53,11 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					args[0] += enviro.meters.get(f).toString();
 					args[0] += "\n";
 				}
-				i.receive(this, GlobalVar.Request.PRINT_SIM, args);
+				i.receive(this, request.PRINT_SIM, args);
 				break;
 			case REQUEST_SIM_HAS_ENDED:
 				args = new String[0];
-				i.receive(this, GlobalVar.Request.SIM_HAS_ENDED, args);
+				i.receive(this, request.SIM_HAS_ENDED, args);
 				break;
 			default:
 				break;}

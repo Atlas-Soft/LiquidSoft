@@ -111,7 +111,7 @@ public class EnviroSensorsPanel extends JPanel {
 		params = new ArrayList<Float>();
 		params.add((Float) sensorX.getSelectedItem());
 		params.add((Float) sensorY.getSelectedItem());
-		LiquidApplication.getGUI().enviroeditor.checkBoundaries(sensorType, params, update);
+		LiquidApplication.getGUI().enviroeditor.addObject(sensorType, params, update);
 	}
 	
 	/**
