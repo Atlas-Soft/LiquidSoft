@@ -129,9 +129,7 @@ public class ParameterPanel extends JPanel {
 					String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
 					String liquid = (String) liqs.getSelectedItem();
 					if (tokens[0].equals(liquid)) {
-						System.out.println(origTemp + " HI");
 						origTemp = (float)temp.getSelectedItem();
-						System.out.println(origTemp + " TWO");
 						tempMin = Float.parseFloat(tokens[1]);
 						tempMax = Float.parseFloat(tokens[2]);
 						tempAndViscParam();
