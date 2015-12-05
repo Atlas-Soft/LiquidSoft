@@ -52,14 +52,14 @@ public class LiquidGUI implements Interfaceable {
 	 * Method defines requested interactions to the Logger and Engine.
 	 * 
 	 * Current Send Interactions:
-	 *  - REQUEST_LOAD_LOG_PARAM - sends the Logger the file name of the log file needed to be loaded
-	 *  - REQUEST_INIT_WRITE_LOG - sends the Logger a notice to initialize writing a log file
+	 *  - REQUEST_LOAD_LOG_PARAM  - sends the Logger the file name of the log file needed to be loaded
+	 *  - REQUEST_INIT_WRITE_LOG  - sends the Logger a notice to initialize writing a log file
 	 *  - REQUEST_WRITE_LOG_PARAM - sends the Logger the variables needed to write a log file
 	 *  
-	 *  - REQUEST_RUN_SIM - sends the Engine the variables needed to begin simulation
+	 *  - REQUEST_RUN_SIM   - sends the Engine the variables needed to begin simulation
 	 *  - REQUEST_PAUSE_SIM - sends the Engine a notice to pause the simulation
-	 *  - REQUEST_STEP_SIM - sends the Engine a notice to step through the simulation by a frame
-	 *  - REQUEST_END_SIM - sends the Engine a notice to end a simulation
+	 *  - REQUEST_STEP_SIM  - sends the Engine a notice to step through the simulation by a frame
+	 *  - REQUEST_END_SIM   - sends the Engine a notice to end a simulation
 	 */
 	@SuppressWarnings("static-access")
 	@Override
@@ -118,10 +118,11 @@ public class LiquidGUI implements Interfaceable {
 	 * Method defines requested interactions from the Logger and Engine.
 	 * 
 	 * Current Receive Interaction:
-	 *  - SET_LOG_PARAM - receives information from Logger to set parameters in the current environment
+	 *  - SET_CONFIG    - receives information from Logger to set up the liquid types
+	 *  - SET_LOG_PARAM - receives information from Logger to set up the parameters
 	 *  
-	 *  - DISPLAY_SIM - receives particle information from the Engine to display
-	 *  - PRINT_SIM - receives information from the Engine to print onto the console
+	 *  - DISPLAY_SIM   - receives particle information from the Engine to display
+	 *  - PRINT_SIM     - receives information from the Engine to print onto the console
 	 *  - SIM_HAS_ENDED - 
 	 */
 	@Override
@@ -132,8 +133,7 @@ public class LiquidGUI implements Interfaceable {
 			switch (request) {
 			case SET_CONFIG:
 				for (int num = 0; num < args.length; num++) {
-					variables.liquidInfo.add(args[num]);
-				}
+					variables.liquidInfo.add(args[num]);}
 				break;
 			case SET_LOG_PARAM:
 				variables.readArray(args);

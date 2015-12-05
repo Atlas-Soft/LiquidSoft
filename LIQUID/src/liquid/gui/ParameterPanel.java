@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -30,12 +31,16 @@ public class ParameterPanel extends JPanel {
 	String[] options = {"Water", "Glycerin"};
 	float tempMin = 0;
 	float tempMax = 100;
+	float viscMin = (float)1.787;
+	float viscMax = (float)0.282;
+	float incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
 	float origTemp = 21;
+	String origTempVisc = "21 \\ 1.47986";
+	DecimalFormat df = new DecimalFormat("#.#####");
 	
 	JComboBox<String> liqs; // a drop-down menu
 	JComboBox<Integer> time;
-	JComboBox<Float> temp;
-	JComboBox<Float> visc;
+	JComboBox<String> tempVisc;
 	JCheckBox replay;
 	JButton run;
 	JButton pause;
@@ -75,12 +80,8 @@ public class ParameterPanel extends JPanel {
 		l.setBounds(155,15,120,25);
 		add(l);
 		
-		l = new JLabel("Temperature (\u00b0C):");
-		l.setBounds(25,65,120,25);
-		add(l);
-
-		l = new JLabel("Viscocity:");
-		l.setBounds(155,65,120,25);
+		l = new JLabel("Temperature (\u00b0C) \\ Viscosity:");
+		l.setBounds(65,65,170,25);
 		add(l);
 
 		l = new JLabel("Environment Editor:");
@@ -103,8 +104,7 @@ public class ParameterPanel extends JPanel {
 		replay.setBounds(95,475,100,25);
 		add(replay);
 		
-		temp = new JComboBox<Float>();
-		visc = new JComboBox<Float>();
+		tempVisc = new JComboBox<String>();
 		liqsParam(); // populates the drop-down information for the liquid types
 		tempAndViscParam(); // populates the drop-down information for the temperature and viscosity
 		runButton(); // creates the Run button
@@ -129,9 +129,14 @@ public class ParameterPanel extends JPanel {
 					String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
 					String liquid = (String) liqs.getSelectedItem();
 					if (tokens[0].equals(liquid)) {
-						origTemp = (float)temp.getSelectedItem();
+						origTempVisc = (String)tempVisc.getSelectedItem();
+						String[] tokens2 = origTempVisc.split(" ");
+						origTemp = Float.parseFloat(tokens2[0]);
 						tempMin = Float.parseFloat(tokens[1]);
 						tempMax = Float.parseFloat(tokens[2]);
+						viscMin = Float.parseFloat(tokens[3]);
+						viscMax = Float.parseFloat(tokens[4]);
+						incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
 						tempAndViscParam();
 					}
 				}
@@ -147,30 +152,25 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void tempAndViscParam() {
 		// all items are first removed, then gets populated with items dependent on the melting/boiling points
-		temp.removeAllItems();
-		for (int i = (int)(tempMin+1); i <= (tempMax-1); i++) {
-			temp.addItem(Float.valueOf(i));}
+		tempVisc.removeAllItems();
+		float iVisc = viscMin;
+		for (int iTemp = (int)(tempMin+1); iTemp <= (tempMax-1); iTemp++) {
+			if (iVisc > viscMax) {
+				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(iVisc)));
+				iVisc+=incrementVal;
+			}
+		}
+			
 		if (origTemp >= tempMin && origTemp <= tempMax)
-			temp.setSelectedIndex((int)(origTemp-tempMin-1));
+			tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
 		else
-			temp.setSelectedIndex((int)(((tempMax-tempMin)/2)));
-		temp.setBounds(25,90,120,25);
-		temp.addActionListener(new ActionListener() {
+			tempVisc.setSelectedIndex((int)(((tempMax-tempMin)/2)));
+		tempVisc.setBounds(55,90,185,25);
+		tempVisc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				LiquidApplication.getGUI().variables.saveState();}
 		});
-		add(temp);
-		
-		visc.removeAllItems();
-		for (int i = 0; i <= 50; i++) {
-			visc.addItem(Float.valueOf(i));}
-		visc.setSelectedIndex(1);
-		visc.setBounds(155,90,120,25);
-		visc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.saveState();}
-		});
-		add(visc);
+		add(tempVisc);
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class ParameterPanel extends JPanel {
 					
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
-						LiquidApplication.getGUI().variables.savedStates.size() >= 1) {
+						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
 					run.setEnabled(false);
 					pause.setEnabled(true);
 					step.setEnabled(false);
@@ -305,6 +305,7 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void prepareSim(SetSim route, String filename) {
 		end.setEnabled(true);
+		String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
 		switch (route) {
 		case PAUSED: // when the simulation has been paused
 			return;
@@ -313,8 +314,8 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.simulating = true;
 			LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
 			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
-			LiquidApplication.getGUI().variables.temperature = (float) temp.getSelectedItem();
-			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
+			LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
+			LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
 		case NEW_SIM: // when NO file name is present
@@ -323,8 +324,8 @@ public class ParameterPanel extends JPanel {
 			LiquidApplication.getGUI().variables.filename = filename;
 			LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
 			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
-			LiquidApplication.getGUI().variables.temperature = (float) temp.getSelectedItem();
-			LiquidApplication.getGUI().variables.viscosity = (float) visc.getSelectedItem();
+			LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
+			LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
@@ -341,8 +342,7 @@ public class ParameterPanel extends JPanel {
 	public void logUpdate() {
 		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
-		temp.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
-		visc.setSelectedItem(LiquidApplication.getGUI().variables.viscosity);
+		tempVisc.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
 	}
 	
 	/**
@@ -351,8 +351,7 @@ public class ParameterPanel extends JPanel {
 	public void setEnabled(boolean enable) {
 		liqs.setEnabled(enable);
 		time.setEnabled(enable);
-		visc.setEnabled(enable);
-		temp.setEnabled(enable);
+		tempVisc.setEnabled(enable);
 		replay.setEnabled(enable);
 	}
 	
@@ -363,8 +362,7 @@ public class ParameterPanel extends JPanel {
 		origTemp = 21;
 		liqs.setSelectedIndex(0);
 		time.setSelectedIndex(300);
-		temp.setSelectedIndex((int)origTemp);
-		visc.setSelectedIndex(1);
+		tempVisc.setSelectedIndex((int)origTemp);
 		replay.setSelected(false);
 	}
 }

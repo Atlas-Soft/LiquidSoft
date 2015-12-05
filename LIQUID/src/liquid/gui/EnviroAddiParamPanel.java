@@ -116,6 +116,8 @@ public class EnviroAddiParamPanel extends JPanel {
 						GlobalVar.EnviroOptions.Flowmeters.toString())) {
 					LiquidApplication.getGUI().enviroeditor.sensors.createSensor(true);
 				}
+				LiquidApplication.getGUI().variables.saveState();
+				LiquidApplication.getGUI().sim.repaint();
 			}
         });
 		add(selectUpdate);
