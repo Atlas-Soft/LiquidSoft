@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
-
+//http://xkcd.com/1597/
 /**
  * Edited 11/20 - William Steele
  */
@@ -66,7 +66,7 @@ public class Flowmeter {
 
 		return new Vec2(avgx, avgy);
 	}
-
+	
 	/**
 	 * Determines if two Vec2 objects are within the bounds of each other
 	 * @param a the first Vec2 object
