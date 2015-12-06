@@ -37,6 +37,7 @@ public class ParameterPanel extends JPanel {
 	float origTemp = 21;
 	String origTempVisc = "21 \\ 1.47986";
 	DecimalFormat df = new DecimalFormat("#.#####");
+	boolean actualChange = true;
 	
 	JComboBox<String> liqs; // a drop-down menu
 	JComboBox<Integer> time;
@@ -95,7 +96,10 @@ public class ParameterPanel extends JPanel {
 		time.setBounds(155,40,120,25);
 		time.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.saveState();}
+				if (actualChange) {
+					LiquidApplication.getGUI().variables.runtime = (int)time.getSelectedItem();
+					LiquidApplication.getGUI().variables.saveState();}
+			}
 		});
 		add(time);
 		
@@ -124,23 +128,29 @@ public class ParameterPanel extends JPanel {
 		liqs.setBounds(25,40,120,25);
 		liqs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionevent) {
-				LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);
-				for (int i = 0; i < LiquidApplication.getGUI().variables.liquidInfo.size(); i++) {
-					String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
-					String liquid = (String) liqs.getSelectedItem();
-					if (tokens[0].equals(liquid)) {
-						origTempVisc = (String)tempVisc.getSelectedItem();
-						String[] tokens2 = origTempVisc.split(" ");
-						origTemp = Float.parseFloat(tokens2[0]);
-						tempMin = Float.parseFloat(tokens[1]);
-						tempMax = Float.parseFloat(tokens[2]);
-						viscMin = Float.parseFloat(tokens[3]);
-						viscMax = Float.parseFloat(tokens[4]);
-						incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
-						tempAndViscParam();
+				if (actualChange) {
+					if (LiquidApplication.getGUI().variables.liquidInfo.size() == 0) {
+						LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);}
+					for (int i = 0; i < LiquidApplication.getGUI().variables.liquidInfo.size(); i++) {
+						String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
+						String liquid = (String) liqs.getSelectedItem();
+						if (tokens[0].equals(liquid)) {
+							origTempVisc = (String)tempVisc.getSelectedItem();
+							String[] tokens2 = origTempVisc.split(" ");
+							origTemp = Float.parseFloat(tokens2[0]);
+							tempMin = Float.parseFloat(tokens[1]);
+							tempMax = Float.parseFloat(tokens[2]);
+							viscMin = Float.parseFloat(tokens[3]);
+							viscMax = Float.parseFloat(tokens[4]);
+							incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
+							actualChange = false;
+							tempAndViscParam();
+						}
 					}
+					actualChange = true;
+					LiquidApplication.getGUI().variables.liquid = (String)liqs.getSelectedItem();
+					LiquidApplication.getGUI().variables.saveState();
 				}
-				LiquidApplication.getGUI().variables.saveState();
 			}
 		});
 		add(liqs);
@@ -166,10 +176,18 @@ public class ParameterPanel extends JPanel {
 		else
 			tempVisc.setSelectedIndex((int)(((tempMax-tempMin)/2)));
 		tempVisc.setBounds(55,90,185,25);
-		tempVisc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.saveState();}
-		});
+		if (actualChange) {
+			tempVisc.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent actionEvent) {
+					if (actualChange) {
+						String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
+						LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
+						LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
+						LiquidApplication.getGUI().variables.saveState();
+					}
+				}
+			});
+		}
 		add(tempVisc);
 	}
 
@@ -337,12 +355,45 @@ public class ParameterPanel extends JPanel {
 	}
 	
 	/**
+	 * Method sets the parameters after the user has pressed the Undo button.
+	 */
+	public void setParam() {
+		actualChange = false;
+		for (int i = 0; i < LiquidApplication.getGUI().variables.liquidInfo.size(); i++) {
+			String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
+			String liquid = (String)LiquidApplication.getGUI().variables.liquid;
+			if (tokens[0].equals(liquid)) {
+				liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
+				//origTempVisc = (String)tempVisc.getSelectedItem();
+				//String[] tokens2 = origTempVisc.split(" ");
+				origTemp = LiquidApplication.getGUI().variables.temperature;
+				tempMin = Float.parseFloat(tokens[1]);
+				tempMax = Float.parseFloat(tokens[2]);
+				viscMin = Float.parseFloat(tokens[3]);
+				viscMax = Float.parseFloat(tokens[4]);
+				incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
+			}
+		}
+		tempVisc.removeAllItems();
+		float iVisc = viscMin;
+		for (int iTemp = (int)(tempMin+1); iTemp <= (tempMax-1); iTemp++) {
+			if (iVisc > viscMax) {
+				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(iVisc)));
+				iVisc+=incrementVal;
+			}
+		}
+		tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
+		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
+		actualChange = true;
+	}
+	
+	/**
 	 * The parameters in the parameter panel will get their values updated based on the information from the log file.
 	 */
 	public void logUpdate() {
 		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
-		tempVisc.setSelectedItem(LiquidApplication.getGUI().variables.temperature);
+		tempVisc.setSelectedIndex((int)(LiquidApplication.getGUI().variables.temperature-tempMin-1));
 	}
 	
 	/**
@@ -359,10 +410,25 @@ public class ParameterPanel extends JPanel {
 	 * The simulation will revert the parameters back to the original default settings.
 	 */
 	public void reset() {
+		actualChange = false;
+		tempMin = 0;
+		tempMax = 100;
+		viscMin = (float)1.787;
+		viscMax = (float)0.282;
+		incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
 		origTemp = 21;
+		tempVisc.removeAllItems();
+		float iVisc = viscMin;
+		for (int iTemp = (int)(tempMin+1); iTemp <= (tempMax-1); iTemp++) {
+			if (iVisc > viscMax) {
+				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(iVisc)));
+				iVisc+=incrementVal;
+			}
+		}
 		liqs.setSelectedIndex(0);
 		time.setSelectedIndex(300);
-		tempVisc.setSelectedIndex((int)origTemp);
+		tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
 		replay.setSelected(false);
+		actualChange = true;
 	}
 }

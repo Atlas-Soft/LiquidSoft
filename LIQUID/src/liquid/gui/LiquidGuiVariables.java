@@ -38,7 +38,11 @@ public class LiquidGuiVariables {
 		// initializes parameters regarding the GUI
 		simulating = false;
 		onlyFileName = "Untitled";
+		liquid = "Water";
 		selectedObject = 0;
+		temperature = 21;
+		viscosity = (float)1.47986;
+		runtime = 300;
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects = new ArrayList<String>();
@@ -116,11 +120,15 @@ public class LiquidGuiVariables {
 	 * Un-does the latest change made by the user.
 	 */
 	public void undo() {
+		if (LiquidApplication.getGUI().variables.liquidInfo.size() == 0) {
+			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);}
+
 		// if there are unsaved changes, the latest changes will get be popped
 		// from the linked list, and the newest set of parameters will be set
 		if (savedStates.size() > 1) {
 			undoStates.push(savedStates.pop());
-			readArray(savedStates.peek());}
+			readArray(savedStates.peek());
+			LiquidApplication.getGUI().param.setParam();}
 	}
 	
 	/**
@@ -131,7 +139,8 @@ public class LiquidGuiVariables {
 		// will be pushed back onto the saved state of parameters and be set
 		if (!undoStates.isEmpty()) {
 			savedStates.push(undoStates.pop());
-			readArray(savedStates.peek());}
+			readArray(savedStates.peek());
+			LiquidApplication.getGUI().param.setParam();}
 	}
 	
 	/**
@@ -141,7 +150,11 @@ public class LiquidGuiVariables {
 		simulating = false;
 		filename = null;
 		onlyFileName = "Untitled";
-		liquid = null;
+		liquid = "Water";
+		selectedObject = 0;
+		temperature = 21;
+		viscosity = (float)1.47986;
+		runtime = 300;
 		selectedObject = 0;
 		enviroLength = 500;
 		enviroWidth = 400;
