@@ -30,14 +30,9 @@ public class ParameterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	String[] options = {"Water", "Glycerin"};
 	float tempMin = 0;
-	float tempMax = 100;
-	float viscMin = (float)1.787;
-	float viscMax = (float)0.282;
-	float incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
 	float origTemp = 21;
-	String origTempVisc = "21 \\ 1.47986";
-	DecimalFormat df = new DecimalFormat("#.#####");
 	boolean actualChange = true;
+	DecimalFormat df = new DecimalFormat("#.#####");
 	
 	JComboBox<String> liqs; // a drop-down menu
 	JComboBox<Integer> time;
@@ -109,14 +104,17 @@ public class ParameterPanel extends JPanel {
 		add(replay);
 		
 		tempVisc = new JComboBox<String>();
-		liqsParam(); // populates the drop-down information for the liquid types
-		tempAndViscParam(); // populates the drop-down information for the temperature and viscosity
+		liqsParam(); // populates drop-down for liquid types
+		tempAndViscParam(0,100,(float)1.787,(float)0.282); // populates drop-down for temperature/viscosity
 		runButton(); // creates the Run button
 		pauseButton(); // creates the Pause button
 		stepButton(); // creates the Step button
 		endButton(); // creates the End button
 	}
 	
+	/**
+	 * Method adjusts the liquid drop-down. It also gathers information from the config file if not already done so yet.
+	 */
 	public void liqsParam() {
 		// creates drop-downs for the basic parameters
 		liqs = new JComboBox<String>(options);
@@ -129,25 +127,12 @@ public class ParameterPanel extends JPanel {
 		liqs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionevent) {
 				if (actualChange) {
+					// sends a request to load the config file from the Logger if not already done so
 					if (LiquidApplication.getGUI().variables.liquidInfo.size() == 0) {
 						LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);}
-					for (int i = 0; i < LiquidApplication.getGUI().variables.liquidInfo.size(); i++) {
-						String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
-						String liquid = (String) liqs.getSelectedItem();
-						if (tokens[0].equals(liquid)) {
-							origTempVisc = (String)tempVisc.getSelectedItem();
-							String[] tokens2 = origTempVisc.split(" ");
-							origTemp = Float.parseFloat(tokens2[0]);
-							tempMin = Float.parseFloat(tokens[1]);
-							tempMax = Float.parseFloat(tokens[2]);
-							viscMin = Float.parseFloat(tokens[3]);
-							viscMax = Float.parseFloat(tokens[4]);
-							incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
-							actualChange = false;
-							tempAndViscParam();
-						}
-					}
-					actualChange = true;
+					
+					// sets the liquid type as well as resets the values of the drop-down
+					setLiquidType();
 					LiquidApplication.getGUI().variables.liquid = (String)liqs.getSelectedItem();
 					LiquidApplication.getGUI().variables.saveState();
 				}
@@ -159,16 +144,19 @@ public class ParameterPanel extends JPanel {
 	/**
 	 * Method adjusts the temperature/viscosity parameters to be within the limitations of a liquid type, determined
 	 * by the config file. This prevents the simulation from running when a liquid has become a solid or a gas.
+	 * 
+	 * @param tempMin - melting point of the liquid
+	 * @param tempMax - boiling point of the liquid
+	 * @param viscMin - viscosity at the melting point
+	 * @param viscMax - viscosity at the boiling point
 	 */
-	public void tempAndViscParam() {
+	public void tempAndViscParam(float tempMin, float tempMax, float viscMin, float viscMax) {
 		// all items are first removed, then gets populated with items dependent on the melting/boiling points
 		tempVisc.removeAllItems();
-		float iVisc = viscMin;
 		for (int iTemp = (int)(tempMin+1); iTemp <= (tempMax-1); iTemp++) {
-			if (iVisc > viscMax) {
-				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(iVisc)));
-				iVisc+=incrementVal;
-			}
+			if (viscMin > viscMax) {
+				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(viscMin)));
+				viscMin+=((viscMax-viscMin)/(tempMax-tempMin-2));}
 		}
 			
 		if (origTemp >= tempMin && origTemp <= tempMax)
@@ -183,8 +171,7 @@ public class ParameterPanel extends JPanel {
 						String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
 						LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
 						LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
-						LiquidApplication.getGUI().variables.saveState();
-					}
+						LiquidApplication.getGUI().variables.saveState();}
 				}
 			});
 		}
@@ -201,8 +188,7 @@ public class ParameterPanel extends JPanel {
 		run.setBounds(25,510,115,25);
 		run.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				// for a paused simulation, it is still technically on-going.
-				// Specific parameters need to be set to continue simulating
+				// paused simulations are technically on-going; specific parameters need to be set to continue simulating
 				if (LiquidApplication.getGUI().variables.simulating) {
 					run.setEnabled(false);
 					pause.setEnabled(true);
@@ -227,8 +213,7 @@ public class ParameterPanel extends JPanel {
 						pause.setEnabled(true);
 						step.setEnabled(false);
 						prepareSim(SetSim.NEW_SIM, filename);
-						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);
-					}
+						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);}
 				}
 			}
 		});
@@ -323,27 +308,16 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void prepareSim(SetSim route, String filename) {
 		end.setEnabled(true);
-		String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
 		switch (route) {
 		case PAUSED: // when the simulation has been paused
 			return;
 		case YES_FILE: // when a file name is already present
-			LiquidApplication.getGUI().setEnable(false);
-			LiquidApplication.getGUI().variables.simulating = true;
-			LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
-			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
-			LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
-			LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
+			setParamToRun();
 			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
 			break;
 		case NEW_SIM: // when NO file name is present
-			LiquidApplication.getGUI().setEnable(false);
-			LiquidApplication.getGUI().variables.simulating = true;
+			setParamToRun();
 			LiquidApplication.getGUI().variables.filename = filename;
-			LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
-			LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
-			LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
-			LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
 			LiquidApplication.getGUI().variables.savedStates.clear();
 			LiquidApplication.getGUI().variables.saveState();
 			LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
@@ -355,35 +329,60 @@ public class ParameterPanel extends JPanel {
 	}
 	
 	/**
-	 * Method sets the parameters after the user has pressed the Undo button.
+	 * Method gathers information based on the liquid type selected. It then promptly resets the drop-down
+	 * values of the temperature/viscosity to prevent the simulation from running using a solid or a gas.
 	 */
-	public void setParam() {
-		actualChange = false;
+	public void setLiquidType() {
+		// searches for a matching liquid type
 		for (int i = 0; i < LiquidApplication.getGUI().variables.liquidInfo.size(); i++) {
 			String[] tokens = LiquidApplication.getGUI().variables.liquidInfo.get(i).split(" ");
-			String liquid = (String)LiquidApplication.getGUI().variables.liquid;
+			String liquid;
+			if (actualChange) 
+				liquid = (String)liqs.getSelectedItem();
+			else
+				liquid = (String)LiquidApplication.getGUI().variables.liquid;
+			
+			// liquid type matches, so gathers its freezing/boiling points and viscosity values
 			if (tokens[0].equals(liquid)) {
-				liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
-				//origTempVisc = (String)tempVisc.getSelectedItem();
-				//String[] tokens2 = origTempVisc.split(" ");
-				origTemp = LiquidApplication.getGUI().variables.temperature;
-				tempMin = Float.parseFloat(tokens[1]);
-				tempMax = Float.parseFloat(tokens[2]);
-				viscMin = Float.parseFloat(tokens[3]);
-				viscMax = Float.parseFloat(tokens[4]);
-				incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
-			}
+				
+				// if an actual change was made to the temperature drop-down, it then gathers the temperature
+				// set; otherwise, gets the previously-set temperature (when Undo/Redo has been pressed)
+				if (actualChange) {
+					tempMin = Float.parseFloat(tokens[1]);
+					String[] tokens2 = ((String)tempVisc.getSelectedItem()).split(" ");
+					origTemp = Float.parseFloat(tokens2[0]);}
+				else {
+					origTemp = LiquidApplication.getGUI().variables.temperature;}
+				
+				// resets the values of the temperature/viscosity based on the selected parameters
+				actualChange = false;
+				tempAndViscParam(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]),
+						Float.parseFloat(tokens[3]), Float.parseFloat(tokens[4]));}
 		}
-		tempVisc.removeAllItems();
-		float iVisc = viscMin;
-		for (int iTemp = (int)(tempMin+1); iTemp <= (tempMax-1); iTemp++) {
-			if (iVisc > viscMax) {
-				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(iVisc)));
-				iVisc+=incrementVal;
-			}
-		}
-		tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
+		actualChange = true;
+	}
+	
+	/**
+	 * Method sets the parameters to the selected values after the Run button has been pressed.
+	 */
+	public void setParamToRun() {
+		LiquidApplication.getGUI().setEnable(false);
+		LiquidApplication.getGUI().variables.simulating = true;
+		String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
+		LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
+		LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
+		LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
+		LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
+	}
+	
+	/**
+	 * Method sets the parameters after the user has pressed the Undo button.
+	 */
+	public void setUndoParam() {
+		actualChange = false;
+		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
 		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
+		setLiquidType();
 		actualChange = true;
 	}
 	
@@ -411,23 +410,10 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void reset() {
 		actualChange = false;
-		tempMin = 0;
-		tempMax = 100;
-		viscMin = (float)1.787;
-		viscMax = (float)0.282;
-		incrementVal = ((viscMax-viscMin)/(tempMax-tempMin-2));
-		origTemp = 21;
-		tempVisc.removeAllItems();
-		float iVisc = viscMin;
-		for (int iTemp = (int)(tempMin+1); iTemp <= (tempMax-1); iTemp++) {
-			if (iVisc > viscMax) {
-				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(iVisc)));
-				iVisc+=incrementVal;
-			}
-		}
+		tempAndViscParam(0,100,(float)1.787,(float)0.282);
 		liqs.setSelectedIndex(0);
 		time.setSelectedIndex(300);
-		tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
+		tempVisc.setSelectedIndex(20);
 		replay.setSelected(false);
 		actualChange = true;
 	}

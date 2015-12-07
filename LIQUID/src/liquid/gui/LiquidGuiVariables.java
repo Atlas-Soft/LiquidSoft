@@ -69,7 +69,7 @@ public class LiquidGuiVariables {
 		list.add(Float.toString(temperature));
 		list.add(Float.toString(viscosity));
 		list.add(Integer.toString(runtime));
-		list.add(Float.toString(enviroLength) + " " + Float.toString(enviroWidth));
+		list.add(Float.toString(enviroLength)+" "+Float.toString(enviroWidth));
 		
 		// adds information of all objects, like X-/Y-Coordinates
 		for (int i = 0; i < objects.size(); i++) {
@@ -112,8 +112,7 @@ public class LiquidGuiVariables {
 		savedStates.push(writeArray());
 		undoStates.clear();
 		if (savedStates.size() > 1) {
-			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);
-		}
+			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);}
 	}
 	
 	/**
@@ -128,7 +127,11 @@ public class LiquidGuiVariables {
 		if (savedStates.size() > 1) {
 			undoStates.push(savedStates.pop());
 			readArray(savedStates.peek());
-			LiquidApplication.getGUI().param.setParam();}
+			LiquidApplication.getGUI().param.setUndoParam();}
+		
+		// eliminates the '*' from the title when there are no more unsaved changes
+		if (savedStates.size() == 1) {
+			LiquidApplication.getGUI().frame.setTitle(onlyFileName+GlobalVar.title);}
 	}
 	
 	/**
@@ -140,7 +143,8 @@ public class LiquidGuiVariables {
 		if (!undoStates.isEmpty()) {
 			savedStates.push(undoStates.pop());
 			readArray(savedStates.peek());
-			LiquidApplication.getGUI().param.setParam();}
+			LiquidApplication.getGUI().param.setUndoParam();
+			LiquidApplication.getGUI().frame.setTitle("*"+onlyFileName+GlobalVar.title);}
 	}
 	
 	/**
