@@ -29,6 +29,7 @@ public class ParameterPanel extends JPanel {
 	// declares some of the parameter components, such as temperature and viscosity,
 	// as well as the buttons to allow the user to begin, pause, and end a simulation
 	private static final long serialVersionUID = 1L;
+	ArrayList<String> liquidInfo;
 	float tempMin = 0;
 	float origTemp = 21;
 	boolean actualChange = true;
@@ -42,8 +43,6 @@ public class ParameterPanel extends JPanel {
 	JButton pause;
 	JButton step;
 	JButton end;
-	
-	ArrayList<String> liquidInfo;
 	
 	// used to set up the simulation when it's a new simulation, a file name exists, or it's paused
 	enum SetSim{NEW_SIM, YES_FILE, PAUSED};
@@ -160,8 +159,10 @@ public class ParameterPanel extends JPanel {
 			
 		if (origTemp >= tempMin && origTemp <= tempMax)
 			tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
-		else
-			tempVisc.setSelectedIndex((int)(((tempMax-tempMin)/2)));
+		else if (origTemp < tempMin)
+			tempVisc.setSelectedIndex((int)tempMin);
+		else if (origTemp > tempMax)
+			tempVisc.setSelectedIndex((int)tempMax);
 		tempVisc.setBounds(55,90,185,25);
 		if (actualChange) {
 			tempVisc.addActionListener(new ActionListener() {
@@ -174,7 +175,6 @@ public class ParameterPanel extends JPanel {
 				}
 			});
 		}
-		actualChange = true;
 		add(tempVisc);
 	}
 
@@ -343,8 +343,6 @@ public class ParameterPanel extends JPanel {
 			else
 				liquid = (String)LiquidApplication.getGUI().variables.liquid;
 			
-			System.out.println(tokens[0]);
-			System.out.println(liquid);
 			// liquid type matches, so gathers its freezing/boiling points and viscosity values
 			if (tokens[0].equals(liquid)) {
 				
@@ -361,9 +359,9 @@ public class ParameterPanel extends JPanel {
 				actualChange = false;
 				tempAndViscParam(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]),
 						Float.parseFloat(tokens[3]), Float.parseFloat(tokens[4]));
-				}
-			
+			}
 		}
+		actualChange = true;
 	}
 	
 	/**

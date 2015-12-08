@@ -86,14 +86,15 @@ public class LiquidLogger implements Interfaceable {
 	 * Method defines requested interactions from the GUI and Engine.
 	 * 
 	 * Current Receive Interactions:
-	 *  - LOAD_CONFIG_FILE - 
+	 *  - LOAD_CONFIG_FILE - sends a self-request to find config file based on the given file name
 	 *  - LOAD_LOG_PARAM   - sends a self-request to find file based on the given file name
-	 *  - INIT_WRITE_LOG   - 
+	 *  - INIT_WRITE_LOG   - initializes the writer necessary to write the log file
 	 *  - WRITE_LOG_PARAM  - writes the log file beginning with the given file name
 	 */
 	@SuppressWarnings("static-access")
 	@Override
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
+		// sends requests to begin setting by the config filing 
 		if (i instanceof LiquidGUI) {
 			switch (request) {
 			case LOAD_CONFIG_FILE:
@@ -111,20 +112,22 @@ public class LiquidLogger implements Interfaceable {
 			case WRITE_LOG_PARAM:
 				fileWriter.writeLogParam(args);
 				break;
-			default:
-			}
+			default:}
 		}
 		
+		// gets data from the engine to write into the log file
 		if (i instanceof LiquidEngine){
 			switch (request) {
 			case WRITE_LOG_DATA:
 				fileWriter.writeLogData(args);
 				break;
-			default:
-			}
+			default:}
 		}
 	}
 	
+	/**
+	 * Method disposes the tools needed to write a log file so that it does not keep continually running.
+	 */
 	public void dispose() {
 		fileWriter.dispose();
 	}

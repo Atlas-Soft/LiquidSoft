@@ -110,7 +110,8 @@ public class EnviroPanel extends JPanel {
 		LiquidApplication.getGUI().enviroeditor.obstacles.xYParam(true);
 		LiquidApplication.getGUI().enviroeditor.obstacles.lenWidParam(true, true, 0);
 		LiquidApplication.getGUI().enviroeditor.sources.sourcesParam();
-		LiquidApplication.getGUI().enviroeditor.sensors.sensorsParam();
+		LiquidApplication.getGUI().enviroeditor.sensors.xYParam(true);
+		LiquidApplication.getGUI().enviroeditor.sensors.lenWidParam(true, true, 0);
 	}
 	
 	/**

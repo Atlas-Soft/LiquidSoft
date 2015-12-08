@@ -103,7 +103,8 @@ public class EnviroAddiParamPanel extends JPanel {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// updates an obstacle or drain item
 				if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
-						GlobalVar.EnviroOptions.Obstacles_And_Drains.toString())) {
+						GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
+						GlobalVar.EnviroOptions.Drains.toString())) {
 					LiquidApplication.getGUI().enviroeditor.obstacles.createObstacle(true);
 
 				// updates a source item
@@ -113,7 +114,8 @@ public class EnviroAddiParamPanel extends JPanel {
 				
 				// updates a flow meter item
 				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
-						GlobalVar.EnviroOptions.Flowmeters.toString())) {
+						GlobalVar.EnviroOptions.Flowmeters.toString() + " and " +
+						GlobalVar.EnviroOptions.Breakpoints.toString())) {
 					LiquidApplication.getGUI().enviroeditor.sensors.createSensor(true);
 				}
 			}

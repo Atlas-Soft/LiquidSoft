@@ -93,7 +93,7 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		obstacleY = new JComboBox<Float>();
 		obstacleL = new JComboBox<Float>();
 		obstacleW = new JComboBox<Float>();
-		xYParam(false);
+		xYParam(true);
 		lenWidParam(true, true, 0);
 		createButton(); // makes a Create button
 		resetObstacles();
@@ -192,11 +192,11 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	 */
 	public void createObstacle(boolean update) {
 		params = new ArrayList<Float>(5);
-		params.add((Float) obstacleX.getSelectedItem());
-		params.add((Float) obstacleY.getSelectedItem());
-		params.add((Float) obstacleL.getSelectedItem());
-		params.add((Float) obstacleW.getSelectedItem());
-		params.add((Float) obstacleRotation.getSelectedItem());
+		params.add((Float)obstacleX.getSelectedItem());
+		params.add((Float)obstacleY.getSelectedItem());
+		params.add((Float)obstacleL.getSelectedItem());
+		params.add((Float)obstacleW.getSelectedItem());
+		params.add((Float)obstacleRotation.getSelectedItem());
 		LiquidApplication.getGUI().enviroeditor.addObject(obstacleType, params, update);
 	}
 	

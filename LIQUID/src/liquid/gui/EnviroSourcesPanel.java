@@ -179,7 +179,7 @@ public class EnviroSourcesPanel extends JPanel {
 		sourceSpeed.setSelectedIndex(20);
 		sourceX.setSelectedIndex(0);
 		sourceY.setSelectedIndex(0);
-		sourceXComp.setSelectedIndex(150);
-		sourceYComp.setSelectedIndex(150);
+		sourceXComp.setSelectedIndex(75);
+		sourceYComp.setSelectedIndex(75);
 	}
 }

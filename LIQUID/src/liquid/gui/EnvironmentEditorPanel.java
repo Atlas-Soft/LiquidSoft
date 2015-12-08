@@ -56,21 +56,27 @@ public class EnvironmentEditorPanel extends JPanel {
 		// sets the overall drop-down options for the EnvironmentEditorPanel
 		select = new JComboBox<String>();
 		select.addItem(GlobalVar.EnviroOptions.Environment.toString());
-		select.addItem(GlobalVar.EnviroOptions.Obstacles_And_Drains.toString());
+		select.addItem(GlobalVar.EnviroOptions.Obstacles.toString() + " and " + GlobalVar.EnviroOptions.Drains.toString());
 		select.addItem(GlobalVar.EnviroOptions.Sources.toString());
-		select.addItem(GlobalVar.EnviroOptions.Flowmeters.toString());
+		select.addItem(GlobalVar.EnviroOptions.Flowmeters.toString() + " and " + GlobalVar.EnviroOptions.Breakpoints.toString());
 		select.setBounds(5,5,240,25);
 		select.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				// sets the drop-down option to be invisible if it is not currently selected 
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Environment.toString())) enviro.setVisible(true);
+				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Environment.toString()))
+					enviro.setVisible(true);
 				else enviro.setVisible(false);
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Obstacles_And_Drains.toString())) obstacles.setVisible(true);
+				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
+						GlobalVar.EnviroOptions.Drains.toString()))
+					obstacles.setVisible(true);
 				else obstacles.setVisible(false);
-				if(arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Sources.toString())) sources.setVisible(true);
+				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Sources.toString()))
+					sources.setVisible(true);
 				else sources.setVisible(false);
-				if(arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Flowmeters.toString())) sensors.setVisible(true);
+				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Flowmeters.toString() + " and " +
+						GlobalVar.EnviroOptions.Breakpoints.toString()))
+					sensors.setVisible(true);
 				else sensors.setVisible(false);
 			}
         });
@@ -147,7 +153,8 @@ public class EnvironmentEditorPanel extends JPanel {
 						tokens[0].equals(GlobalVar.ObsType.Circular.toString()) ||
 						tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
 						tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
-					select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles_And_Drains.toString());
+					select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
+						GlobalVar.EnviroOptions.Drains.toString());
 					obstacles.setVisible(true);
 					sources.setVisible(false);
 					sensors.setVisible(false);
@@ -162,8 +169,10 @@ public class EnvironmentEditorPanel extends JPanel {
 					sources.updateSources(tokens);
 			
 				// creates a flow meter if it's the last item
-				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
-					select.setSelectedItem(GlobalVar.EnviroOptions.Flowmeters.toString());
+				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString()) ||
+						tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
+					select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
+						GlobalVar.EnviroOptions.Drains.toString());
 					obstacles.setVisible(false);
 					sources.setVisible(false);
 					sensors.setVisible(true);
@@ -193,7 +202,6 @@ public class EnvironmentEditorPanel extends JPanel {
 	public void reset() {
 		enviroLenLimit = 500;
 		enviroWidLimit = 400;
-		
 		select.setSelectedItem(GlobalVar.EnviroOptions.Environment.toString());
 		enviro.resetEnviro();
 		obstacles.resetObstacles();
