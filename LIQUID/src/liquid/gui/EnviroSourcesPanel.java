@@ -92,7 +92,7 @@ public class EnviroSourcesPanel extends JPanel {
 		// each drop-down first gets all items removed from it, then gets
 		// populated with items all dependent on the environment boundaries
 		sourceSpeed.removeAllItems();
-		for (int i = 0; i <= 100; i++) {
+		for (int i = 0; i <= 50; i++) {
 			sourceSpeed.addItem(Float.valueOf(i));}
 		sourceSpeed.setBounds(125,30,(int)(this.getWidth()/2.2),25);
 		add(sourceSpeed);
@@ -110,13 +110,13 @@ public class EnviroSourcesPanel extends JPanel {
 		add(sourceY);
 		
 		sourceXComp.removeAllItems();
-		for (int i = -100; i <= 100; i++) {
+		for (int i = -50; i <= 50; i++) {
 			sourceXComp.addItem(Float.valueOf(i));}
 		sourceXComp.setBounds(5,135,(int)(this.getWidth()/2.2),25);
 		add(sourceXComp);
 		
 		sourceYComp.removeAllItems();
-		for (int i = -100; i <= 100; i++) {
+		for (int i = -50; i <= 50; i++) {
 			sourceYComp.addItem(Float.valueOf(i));}
 		sourceYComp.setBounds(125,135,(int)(this.getWidth()/2.2),25);
 		add(sourceYComp);
