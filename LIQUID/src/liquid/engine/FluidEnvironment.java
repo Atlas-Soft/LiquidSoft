@@ -114,19 +114,36 @@ public class FluidEnvironment {
 	 * Creates a Flow meter at the specified coordinates
 	 * @param x x-position of the new flow meter
 	 * @param y y-position of the new flow meter
+	 * @param ID Identifying number of the new flow meter
 	 */
 	public void addFlowmeter(float x, float y, int ID){
 		meters.add(new Flowmeter(world, new Vec2(x, y), ID));
 	}
-	
+	/**
+	 * Adds a breakpoint at the specified coordinates with the specified area
+	 * @param x x-position of the new breakpoint
+	 * @param y y-position of the new breakpoint
+	 * @param l length of the area this breakpoint monitors
+	 * @param w width of the area this breakpoint monitors
+	 * @param ID Identifying number of the new breakpoint
+	 */
 	public void addBreakpoint(float x, float y, float l, float w, int ID){
 		brkpts.add(new Breakpoint(world, new Vec2(x, y), l, w, ID));
 	}
-	
+	/**
+	 * Adds a new drain to the environment at coordinates specified in <code>shape</code>
+	 * @param shape the shape of the new drain; must be generated such that the position of the top left corner's Vec2 value is x,y
+	 */
 	public void addDrain(PolygonShape shape){
 		drains.add(new Drain(world, shape));
 	}
-
+	/**
+	 * adds a new particle to the simulation
+	 * @param x	x-position of the new particle
+	 * @param y y-position of the new particle
+	 * @param velx x-velocity of the new particle
+	 * @param vely y-velocity of the new particle
+	 */
 	public void addParticle(float x, float y, float velx, float vely){
 		CircleShape shape = new CircleShape();
 		shape.setRadius(5);
@@ -137,7 +154,10 @@ public class FluidEnvironment {
 		pd.shape = shape;
 		world.createParticleGroup(pd);
 	}
-
+	/**
+	 * gets the position and length of the velocity vector for each particle
+	 * @return array containing particle data in the form of:<br> <code>P (x) (y) (velocity)</code>
+	 */
 	public String[] getParticleData(){
 		String[] dataArray = new String[0];
 		dataList.clear();
