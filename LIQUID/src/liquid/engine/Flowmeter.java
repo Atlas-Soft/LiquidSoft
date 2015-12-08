@@ -10,7 +10,8 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 //http://xkcd.com/1597/
 /**
- * Edited 11/20 - William Steele
+ * V 1.0
+ * @author William Steele
  */
 public class Flowmeter {
 	private World myWorld;
@@ -18,9 +19,10 @@ public class Flowmeter {
 	private int myID;
 
 	/**
-	 * 
+	 * Creates a new flow meter monitoring the specified world at the specified location
 	 * @param imHere the world this flow meter is monitoring
 	 * @param loc the location this flow meter monitors
+	 * @param ID the identifying number for this flow meter
 	 */
 	public Flowmeter(World imHere, Vec2 loc, int ID){
 		myWorld = imHere;

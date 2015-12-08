@@ -36,7 +36,11 @@ public class FluidEnvironment {
 	DecimalFormat adj;
 
 	float delta;
-
+	/**
+	 * Creates a new fluid environment of the specified length and width
+	 * @param len the length of the environment
+	 * @param wid the width of the environment
+	 */
 	public FluidEnvironment(float len, float wid){
 		world = new World(new Vec2(0, 0));
 		sources = new ArrayList<Source>();
@@ -57,13 +61,18 @@ public class FluidEnvironment {
 		shape.createLoop(vertices, 4);
 		b.createFixture(shape, 0.0f);
 	}
-
+	/**
+	 * initializes details about this world's particles
+	 */
 	public void init(){
 		world.setParticleRadius(5f);
 		world.setParticleMaxCount(1500);
 		world.setParticleViscousStrength(1.0f);
 	}
-
+	/**
+	 * runs one step of the simulation
+	 * @param delta time, in milliseconds, since the last call to <code>update</code> 
+	 */
 	public void update(float delta){
 		this.delta = delta;
 		world.step(delta, 6, 3);
@@ -71,7 +80,13 @@ public class FluidEnvironment {
 		for(Drain d: drains)	d.update();
 		
 	}
-
+	/**
+	 * Adds an obstacle of the specified shape at the specified coordinates and rotated <code>r</code> degrees
+	 * @param s The shape of the new obstacle
+	 * @param x the x-position of the new obstacle
+	 * @param y the y-position of the new obstacle
+	 * @param r the rotation of the new obstacle, in degrees
+	 */
 	public void addObstacle(Shape s, float x, float y, float r){
 		Body b;
 		BodyDef bd = new BodyDef();
@@ -83,7 +98,14 @@ public class FluidEnvironment {
 		fd.shape = s;
 		b.createFixture(fd);
 	}
-
+	/**
+	 * Creates a particle source at the specified coordinates, with the specified velocity and flow speed
+	 * @param x x-position of the new source
+	 * @param y y-position of the new source
+	 * @param velx x-velocity of the new source
+	 * @param vely y-velocity of the new source
+	 * @param flow flow speed of the new source
+	 */
 	public void addSource(float x, float y, float velx, float vely, float flow){
 		sources.add(new Source(this, x, y, velx, vely, flow));
 	}

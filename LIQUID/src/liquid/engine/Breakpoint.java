@@ -10,7 +10,8 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 /**
- * Edited 11/20 - William Steele
+ * V 1.0
+ * @author William Steele
  */
 public class Breakpoint {
 	private World myWorld;
@@ -20,11 +21,11 @@ public class Breakpoint {
 	private int myID;
 
 	/**
-	 * 
+	 * Creates a new breakpoint monitoring the specified world in the specified area
 	 * @param imHere the world this breakpoint is monitoring
 	 * @param loc the center of the area this breakpoint monitors
 	 * @param width the width of the area this breakpoint monitors
-	 * @param 
+	 * @param ID The identifying number for this breakpoint
 	 */
 	public Breakpoint(World imHere, Vec2 loc, float width, float height, int ID){
 		myWorld = imHere;
