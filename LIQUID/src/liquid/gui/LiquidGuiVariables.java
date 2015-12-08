@@ -24,7 +24,6 @@ public class LiquidGuiVariables {
 	float enviroLength;
 	float enviroWidth;
 	ArrayList<String> objects;
-	ArrayList<String> liquidInfo;
 
 	// declares various parameters regarding the Engine
 	LinkedList<String[]> savedStates;
@@ -46,7 +45,6 @@ public class LiquidGuiVariables {
 		enviroLength = 500;
 		enviroWidth = 400;
 		objects = new ArrayList<String>();
-		liquidInfo = new ArrayList<String>();
 		
 		// initializes parameters regarding the Engine
 		savedStates = new LinkedList<String[]>();
@@ -119,8 +117,6 @@ public class LiquidGuiVariables {
 	 * Un-does the latest change made by the user.
 	 */
 	public void undo() {
-		if (LiquidApplication.getGUI().variables.liquidInfo.size() == 0) {
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);}
 
 		// if there are unsaved changes, the latest changes will get be popped
 		// from the linked list, and the newest set of parameters will be set

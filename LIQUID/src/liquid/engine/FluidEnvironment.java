@@ -61,7 +61,7 @@ public class FluidEnvironment {
 	public void init(){
 		world.setParticleRadius(5f);
 		world.setParticleMaxCount(1500);
-		world.setParticleViscousStrength(0.0f);
+		world.setParticleViscousStrength(1.0f);
 	}
 
 	public void update(float delta){

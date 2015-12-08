@@ -20,8 +20,9 @@ public class LiquidApplication {
 	 */
 	public LiquidApplication() {
 		engine = new LiquidEngine();
-		gui = new LiquidGUI();
 		logger = new LiquidLogger();
+		gui = new LiquidGUI();
+		
 	}
 	
 	/**

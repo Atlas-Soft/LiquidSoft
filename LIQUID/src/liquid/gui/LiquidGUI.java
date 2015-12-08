@@ -43,9 +43,11 @@ public class LiquidGUI implements Interfaceable {
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(sim = new SimulationPanel());
 		frame.add(param = new ParameterPanel());
+		send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);
 		param.add(enviroeditor = new EnvironmentEditorPanel());
 		frame.add(console = new ConsolePanel());
 		frame.setVisible(true);
+		
 	}
 	
 	/**
@@ -133,7 +135,8 @@ public class LiquidGUI implements Interfaceable {
 			switch (request) {
 			case SET_CONFIG:
 				for (int num = 0; num < args.length; num++) {
-					variables.liquidInfo.add(args[num]);}
+					param.liquidInfo.add(args[num]);}
+				param.initComponents();
 				break;
 			case SET_LOG_PARAM:
 				variables.readArray(args);
