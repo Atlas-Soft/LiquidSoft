@@ -36,6 +36,7 @@ public class FluidEnvironment {
 	DecimalFormat adj;
 
 	float delta;
+	float viscousStrength;
 	/**
 	 * Creates a new fluid environment of the specified length and width
 	 * @param len the length of the environment
@@ -67,7 +68,7 @@ public class FluidEnvironment {
 	public void init(){
 		world.setParticleRadius(5f);
 		world.setParticleMaxCount(1500);
-		world.setParticleViscousStrength(1.0f);
+		world.setParticleViscousStrength(viscousStrength);
 	}
 	/**
 	 * runs one step of the simulation

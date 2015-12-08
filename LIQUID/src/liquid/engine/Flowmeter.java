@@ -39,7 +39,7 @@ public class Flowmeter {
 		String send = " F" + myID + " ( X-Vel " + adj.format(curVel.x) + ", Y-Vel " + adj.format(curVel.y) +")";
 		return send;
 	}
-	
+
 	/**
 	 * Helper Method
 	 * Gets the average x and y velocities of particles within 10.0 units of this flowmeter's position
@@ -49,9 +49,11 @@ public class Flowmeter {
 		ArrayList<Vec2> vel = new ArrayList<Vec2>();
 		Vec2[] pos = myWorld.getParticlePositionBuffer();
 		Vec2 bounds = new Vec2(10.0f, 10.0f);	//To change boundaries to check, simply change parameters of constructor
-		for (int i = 0; i < pos.length; i++){
-			if(almostEqual(myLoc, pos[i], bounds)){
-				vel.add(myWorld.getParticleVelocityBuffer()[i]);	//may need to be changed to local variable depending on performance
+		if(pos != null){
+			for (int i = 0; i < pos.length; i++){
+				if(almostEqual(myLoc, pos[i], bounds)){
+					vel.add(myWorld.getParticleVelocityBuffer()[i]);	//may need to be changed to local variable depending on performance
+				}
 			}
 		}
 
@@ -68,7 +70,7 @@ public class Flowmeter {
 
 		return new Vec2(avgx, avgy);
 	}
-	
+
 	/**
 	 * Determines if two Vec2 objects are within the bounds of each other
 	 * @param a the first Vec2 object

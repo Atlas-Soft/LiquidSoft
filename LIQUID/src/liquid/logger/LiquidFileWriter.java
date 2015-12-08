@@ -43,7 +43,7 @@ public class LiquidFileWriter {
 	
 	/**
 	 * Used to add strings in args to one line of the log file
-	 * PRECONDITION: writetoLogFile() <b>MUST</b> be called successfully at some point prior to calling this function
+	 * PRECONDITION: initLogFile() <b>MUST</b> be called successfully at some point prior to calling this function
 	 * @param args an array of strings to be written to the log file
 	 */
 	public void writeLogData(String args[]){
@@ -59,7 +59,7 @@ public class LiquidFileWriter {
 	}
 	
 	/**
-	 * Closes file opened in writetoLogFile()
+	 * Closes file opened in initLogFile()
 	 */
 	public void dispose(){
 		try{

@@ -34,6 +34,9 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_WRITE_LOG_DATA:
 				args = enviro.getParticleData();
+				for (int f = 0; f < enviro.meters.size(); f++){
+					args[args.length-1] += enviro.meters.get(f).toString();
+				}
 				i.receive(this, request.WRITE_LOG_DATA, args);
 				break;
 			default:
@@ -169,6 +172,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		String[] tokens = args[6].split(" ");
 		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),
 				Float.parseFloat(tokens[1]));
+		tokens = args[4].split(" ");
+		enviro.viscousStrength = Float.parseFloat(tokens[0])/100;
 		float x, y, l, w, r;
 		int ID = 1;
 		for (int i = 7; i < args.length; i++) {
