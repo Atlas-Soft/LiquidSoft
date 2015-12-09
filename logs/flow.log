@@ -1,0 +1,14 @@
+C:\Users\billi\Documents\GitHub\AtlasSoft\logs\flow.log
+Water
+2
+21.0
+1.50788
+300
+500.0 200.0
+Rectangular 0.0 0.0 500.0 50.0 0.0
+Rectangular 0.0 150.0 500.0 50.0 0.0
+Rectangular 350.0 15.0 50.0 75.0 0.0
+Rectangular 350.0 110.0 50.0 75.0 0.0
+Rect_Drain 490.0 50.0 10.0 100.0 0.0
+Sources 25.0 100.0 -45.0 2.0 50.0
+break

@@ -169,7 +169,7 @@ public class FluidEnvironment {
 		try{
 			for(int i = 0; i < particlePos.length; i++){
 				if(particlePos[i].x + particlePos[i].y + particleVel[i].x + particleVel[i].y != 0.0 ){
-					data = "P " + adj.format(particlePos[i].x) + " " + adj.format(particlePos[i].y) + " " + adj.format(particleVel[i].length() + 1.0);
+					data = "P " + adj.format(particlePos[i].x) + " " + adj.format(particlePos[i].y) + " " + adj.format(particleVel[i].length() * 3 + 1.0);
 					dataList.add(data);
 				}
 			}
