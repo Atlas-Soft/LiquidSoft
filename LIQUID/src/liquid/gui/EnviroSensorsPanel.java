@@ -17,12 +17,15 @@ import liquid.core.LiquidApplication;
 
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements
- * linked to creating a sensor are present, such as the X-/Y-Coordinates. 
+ * linked to creating a sensor are present, such as the X-/Y-Coordinates.
  */
 public class EnviroSensorsPanel extends JPanel {
 
 	// list of components needed to create a sensor
 	private static final long serialVersionUID = 1L;
+	float origLength;
+	float origWidth;
+	
 	JComboBox<String> sensorType;		
 	JComboBox<Float> sensorX;
 	JComboBox<Float> sensorY;
@@ -30,8 +33,6 @@ public class EnviroSensorsPanel extends JPanel {
 	JComboBox<Float> sensorW;
 	ArrayList<Float> params;
 	JButton create;
-	float origLength;
-	float origWidth;
 	
 	/**
 	 * Constructor creates the Sensors section of the EnvironmentEditorPanel.
@@ -234,8 +235,6 @@ public class EnviroSensorsPanel extends JPanel {
 		sensorType.setSelectedIndex(0);
 		sensorX.setSelectedIndex(0);
 		sensorY.setSelectedIndex(0);
-		//sensorL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit/10));
-		//sensorW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit/8));
 		origLength = 50;
 		origWidth = 50;
 	}
