@@ -18,7 +18,7 @@ public class LiquidFileWriter {
 	/**
 	 * Method initializes the BufferedWriter component to begin writing
 	 * a log file, all beginning with the name of the log file.
-	 * @param fileName - name of log file
+	 * @param fileName - name of log file to write to
 	 */
 	public void initLogFile(String fileName) {
 		try {
@@ -30,7 +30,7 @@ public class LiquidFileWriter {
 	/**
 	 * Method writes the contents of the String[] onto a text file. This represents
 	 * the log file, which stores all parameter information for future replaying.
-	 * @param fileName - name of log file to store in
+	 * @param fileName - name of log file to write to
 	 * @param args     - the String[] of parameters
 	 */
 	public void writeLogParam(String args[]) {

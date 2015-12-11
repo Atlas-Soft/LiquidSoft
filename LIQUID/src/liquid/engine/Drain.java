@@ -5,29 +5,34 @@ import org.jbox2d.common.Transform;
 import org.jbox2d.dynamics.World;
 
 /**
- * V 1.0
+ * Class creates a drain object, which is designed to represent a "pipe" or an
+ * "exit"; in other words, the particle gets destroyed/removed from the simulation.
  * @author William Steele
+ * @version 3.0
  */
 public class Drain {
+	
+	// creates variables associated with removing a particle from the simulation
 	private World myWorld;
 	private PolygonShape myShape;
 	private Transform t;
+	
 	/**
-	 * Constructs a new drain at the location given in <code>shape</code>
-	 * @param theWorld The world that this drain will destroy particles from
-	 * @param shape The shape and location of this drain
+	 * Method constructs a new drain object at the location given in <code>shape</code>.
+	 * @param theWorld - the world this drain will destroy particles from
+	 * @param shape    - the shape and location of this drain
 	 */
-	public Drain(World theWorld, PolygonShape shape){
+	public Drain(World theWorld, PolygonShape shape) {
 		myWorld = theWorld;
 		myShape = shape;
 		t = new Transform();
 	}
-	/**
-	 * Checks for and destroys particles within <code>myShape</code>
-	 * Should be called once every frame of the simulation 
-	 */
-	public void update(){
-		myWorld.destroyParticlesInShape(myShape, t);
-	}
 	
+	/**
+	 * Method checks for and destroys particles within <code>myShape</code>. Updates should
+	 * be made once every frame of the simulation to remain up-to-date with the destruction. 
+	 */
+	public void update() {
+		myWorld.destroyParticlesInShape(myShape, t);
+	}	
 }

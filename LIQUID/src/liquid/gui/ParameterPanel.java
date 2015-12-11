@@ -185,13 +185,13 @@ public class ParameterPanel extends JPanel {
 				tempVisc.addItem(Float.valueOf(iTemp)+" \\ "+df.format(Float.valueOf(viscMin)));
 				viscMin+=((viscMax-viscMin)/(tempMax-tempMin-2));}
 		}
-			
-		if (origTemp >= tempMin && origTemp <= tempMax)
+		
+		if (origTemp >= tempMin && origTemp < tempMax)
 			tempVisc.setSelectedIndex((int)(origTemp-tempMin-1));
 		else if (origTemp < tempMin)
-			tempVisc.setSelectedIndex((int)tempMin);
-		else if (origTemp > tempMax)
-			tempVisc.setSelectedIndex((int)tempMax);
+			tempVisc.setSelectedIndex(0);
+		else if (origTemp >= tempMax)
+			tempVisc.setSelectedIndex((int)(tempMax-tempMin-2));
 		tempVisc.setBounds(55,90,185,25);
 		tempVisc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
