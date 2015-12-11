@@ -81,12 +81,13 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         
         // sets the color of the particles depending on the flow speed
         float x,y,l,w,r;
+
         if (LiquidApplication.getGUI().variables.simulating) {
         	for (int i = 1; i < LiquidApplication.getGUI().variables.particles.length; i++) {
         		String[] tokens = LiquidApplication.getGUI().variables.particles[i].split(" ");
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
-        		g2d.setColor(new Color(1-(1/(Float.parseFloat(tokens[3])*1.3f)),.25f,(1/(Float.parseFloat(tokens[3])*1.3f))));
+        		g2d.setColor(new Color(1-(1/(Float.parseFloat(tokens[3])*1.5f)),0.5f,(1/(Float.parseFloat(tokens[3])*1f))));
         		g2d.fill(new Ellipse2D.Float((x-2.5f),(y-2.5f),5,5));
         	}
         }

@@ -15,7 +15,8 @@ import liquid.core.LiquidApplication;
 
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
- * to creating a source are present, such as the force in the X/Y directions. 
+ * to creating a source are present, such as the force in the X/Y directions.
+ * @version 3.0
  */
 public class EnviroSourcesPanel extends JPanel {
 
@@ -75,13 +76,15 @@ public class EnviroSourcesPanel extends JPanel {
 		sourceType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
 		add(sourceType);
 		
+		// populates the drop-down information for the flow speed/X/Y/X-Force/Y-Force
 		sourceSpeed = new JComboBox<Float>();
 		sourceX = new JComboBox<Float>();
 		sourceY = new JComboBox<Float>();
 		sourceXComp = new JComboBox<Float>();
 		sourceYComp = new JComboBox<Float>();
-		sourcesParam(); // populates the drop-down information
+		sourcesParam();
 		createButton(); // makes a Create button
+		resetSources();
 	}
 	
 	/**
@@ -89,8 +92,7 @@ public class EnviroSourcesPanel extends JPanel {
 	 * a real-time update of the source parameters to prevent them from exceeding the environment's boundaries.
 	 */
 	public void sourcesParam() {
-		// each drop-down first gets all items removed from it, then gets
-		// populated with items all dependent on the environment boundaries
+		// all items are first removed, then populated with items dependent on the environment boundaries
 		sourceSpeed.removeAllItems();
 		for (int i = 0; i <= 60; i++) {
 			sourceSpeed.addItem(Float.valueOf(i));}
@@ -120,12 +122,10 @@ public class EnviroSourcesPanel extends JPanel {
 			sourceYComp.addItem(Float.valueOf(i));}
 		sourceYComp.setBounds(125,135,(int)(this.getWidth()/2.2),25);
 		add(sourceYComp);
-		
-		resetSources(); // sets the parameters even after the environment size changes
 	}
 	
 	/**
-	 * Method used to call the editor panel to make a Create button for Sources.
+	 * Method used to call the editor panel to make a Create button for sources.
 	 */
 	public void createButton() {
 		// button creates the source according to the parameters set
@@ -140,8 +140,8 @@ public class EnviroSourcesPanel extends JPanel {
 	}
 	
 	/**
-	 * Method packages data and sends it to the editor to check if the
-	 * parameters are valid, and if so to be added into the object list.
+	 * Method packages data and sends it to the editor to be added into the object list.
+	 * @param update - either adds a new object or updates a object's parameters
 	 */
 	public void createSource(boolean update) {
 		params = new ArrayList<Float>();
@@ -156,7 +156,6 @@ public class EnviroSourcesPanel extends JPanel {
 	/**
 	 * Method splits up the String[] of the log file in order to correctly set
 	 * the parameters of the Sources section of the EnvironmentEditorPanel.
-	 * 
 	 * @param tokens - String[] of the log file to split
 	 */
 	public void updateSources(String[] tokens) {

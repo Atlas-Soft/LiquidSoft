@@ -17,11 +17,16 @@ import liquid.core.LiquidApplication;
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
  * to creating an obstacle or drain are present, such as the X-/Y-Coordinates.
+ * @version 3.0
  */
 public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	
 	// list of components needed to create an obstacle or drain
 	private static final long serialVersionUID = 1L;
+	float origLength;
+	float origWidth;
+	boolean actualChange = true;
+	
 	JComboBox<String> obstacleType;
 	JComboBox<Float> obstacleRotation;
 	JComboBox<Float> obstacleX;
@@ -29,8 +34,6 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	JComboBox<Float> obstacleL;
 	JComboBox<Float> obstacleW;
 	ArrayList<Float> params;
-	float origLength;
-	float origWidth;
 	
 	/**
 	 * Constructor creates the Obstacles and Drains section of the EnvironmentEditorPanel.
@@ -88,13 +91,16 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		obstacleRotation.setBounds(125,30,(int)(this.getWidth()/2.2),25);
 		add(obstacleRotation);
 		
-		// populates the drop-down information for the X,Y,Length,Width
+		// populates the drop-down information for the X/Y/Length/Width
 		obstacleX = new JComboBox<Float>();
 		obstacleY = new JComboBox<Float>();
 		obstacleL = new JComboBox<Float>();
 		obstacleW = new JComboBox<Float>();
+		
+		actualChange = false;
 		xYParam(true);
 		lenWidParam(true, true, 0);
+		actualChange = true;
 		createButton(); // makes a Create button
 		resetObstacles();
 	}
@@ -102,34 +108,36 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	/**
 	 * Method adjusts the obstacle/drain's X-/Y-Coordinate to be within the environment's size. It also provides
 	 * a real-time update of the obstacle parameters to prevent them from exceeding the environment's boundaries.
-	 * 
 	 * @param enviroChange - determines when the environment size changes
 	 */
 	public void xYParam(boolean enviroChange) {
-		// drop-down is newly populated due to either an environment size change or a new Length chosen
+		// drop-down is newly populated due to an environment size change
 		obstacleX.setModel(new DefaultComboBoxModel<>());
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			obstacleX.addItem(Float.valueOf(i));}
 		obstacleX.setBounds(5,85,(int)(this.getWidth()/2.2),25);
+		
 		// used to adjust the Length drop-down to be within the environment size
 		obstacleX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionevent) {
-				if (!enviroChange) {
+				if (!enviroChange || actualChange) {
 					origLength = (float)obstacleL.getSelectedItem();
 					float num = (float)obstacleX.getSelectedItem();
-					lenWidParam(false, true, num);}}
+					lenWidParam(false, true, num);}
+			}
 		});
 		add(obstacleX);
 		
-		// drop-down is newly populated due to either an environment size change or a new Width chosen
+		// drop-down is newly populated due to an environment size change
 		obstacleY.setModel(new DefaultComboBoxModel<>());
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			obstacleY.addItem(Float.valueOf(i));}
 		obstacleY.setBounds(125,85,(int)(this.getWidth()/2.2),25);
+		
 		// used to adjust the Width drop-down to be within the environment size
 		obstacleY.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionevent) {
-				if (!enviroChange) {
+				if (!enviroChange || actualChange) {
 					origWidth = (float)obstacleW.getSelectedItem();
 					float num = (float)obstacleY.getSelectedItem();
 					lenWidParam(false, false, num);}}
@@ -140,7 +148,6 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	/**
 	 * Method adjusts the obstacle/drain's Length/Width to be within the environment's size. It also provides
 	 * a real-time update of the obstacle parameters to prevent them from exceeding the environment's boundaries.
-	 * 
 	 * @param enviroChange - determines when the environment size changes
 	 * @param length       - determines whether to change the Length or Width
 	 * @param limit        - the limit for the Length or Width
@@ -172,7 +179,7 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method used to call the editor panel to make a Create button for Obstacles.
+	 * Method used to call the editor panel to make a Create button for obstacles.
 	 */
 	public void createButton() {
 		// button creates the obstacle/drain according to the parameters set
@@ -187,8 +194,8 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method packages data and sends it to the editor to check if the
-	 * parameters are valid, and if so to be added into the object list.
+	 * Method packages data and sends it to the editor to be added into the object list.
+	 * @param update - either adds a new object or updates an object's parameters
 	 */
 	public void createObstacle(boolean update) {
 		params = new ArrayList<Float>(5);
@@ -201,9 +208,8 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method splits up the String[] of the log file in order to correctly set
-	 * the parameters of the Obstacles section of the EnvironmentEditorPanel.
-	 * 
+	 * Method splits up the String[] of the log file in order to correctly set the
+	 * parameters of the Obstacles and Drains section of the EnvironmentEditorPanel.
 	 * @param tokens - String[] of the log file to split
 	 */
 	public void updateObstacles(String[] tokens) {
@@ -219,16 +225,16 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method resets the parameters of the Obstacles section.
+	 * Method resets the parameters of the Obstacles and Drains section.
 	 */
 	public void resetObstacles() {
+		origLength = 50;
+		origWidth = 50;
 		obstacleType.setSelectedIndex(0);
 		obstacleRotation.setSelectedIndex(0);
 		obstacleX.setSelectedIndex(0);
 		obstacleY.setSelectedIndex(0);
 		obstacleL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit/10));
 		obstacleW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit/8));
-		origLength = 50;
-		origWidth = 50;
 	}
 }

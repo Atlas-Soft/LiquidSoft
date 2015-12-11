@@ -9,6 +9,7 @@ import liquid.core.LiquidApplication;
 /**
  * Class will store all of the parameters associated with the simulation. This
  * includes file name, liquid type, temperature, viscosity, and various others.
+ * @version 3.0
  */
 public class LiquidGuiVariables {
 	
@@ -56,7 +57,6 @@ public class LiquidGuiVariables {
 	/**
 	 * Stores all of the necessary parameters into an array list as String values, which
 	 * will then be passed from the GUI to the Logger and written into the log file.
-	 * 
 	 * @return - the string array of parameters
 	 */
 	public String[] writeArray() {
@@ -81,7 +81,6 @@ public class LiquidGuiVariables {
 	/**
 	 * Obtains an array list of necessary parameters from the Logger to be read. This
 	 * method will then set them as their respective native variables of this class.
-	 * 
 	 * @param args - array that holds parameter info
 	 */
 	public void readArray(String[] args) {
@@ -117,7 +116,6 @@ public class LiquidGuiVariables {
 	 * Un-does the latest change made by the user.
 	 */
 	public void undo() {
-
 		// if there are unsaved changes, the latest changes will get be popped
 		// from the linked list, and the newest set of parameters will be set
 		if (savedStates.size() > 1) {

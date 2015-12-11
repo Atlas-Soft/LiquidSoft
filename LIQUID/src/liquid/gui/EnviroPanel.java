@@ -14,6 +14,7 @@ import liquid.core.LiquidApplication;
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked to
  * creating the size of the environment are present, such as the length and width.
+ * @version 3.0
  */
 public class EnviroPanel extends JPanel {
 
@@ -46,10 +47,12 @@ public class EnviroPanel extends JPanel {
 		l.setBounds(125,50,(this.getWidth()/2),25);
 		add(l);
 		
+		// populates the drop-down information for the Length/Width
 		enviroLen = new JComboBox<Float>();
 		enviroWid = new JComboBox<Float>();
-		enviroParam(); // populates the drop-down information
+		enviroParam();
 		drawButton(); // creates the Draw button
+		resetEnviro();
 	}
 	
 	/**
@@ -67,8 +70,6 @@ public class EnviroPanel extends JPanel {
 			enviroWid.addItem(Float.valueOf(i));}
 		enviroWid.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		add(enviroWid);
-		
-		resetEnviro(); // sets the parameters even after the environment size changes
 	}
 	
 	/**
@@ -107,11 +108,17 @@ public class EnviroPanel extends JPanel {
 	 * Resets the limits to adjust the boundaries of creating various objects.
 	 */
 	public void updateLimits() {
+		LiquidApplication.getGUI().enviroeditor.obstacles.actualChange = false;
 		LiquidApplication.getGUI().enviroeditor.obstacles.xYParam(true);
 		LiquidApplication.getGUI().enviroeditor.obstacles.lenWidParam(true, true, 0);
+		LiquidApplication.getGUI().enviroeditor.obstacles.actualChange = true;
+		
 		LiquidApplication.getGUI().enviroeditor.sources.sourcesParam();
+		
+		LiquidApplication.getGUI().enviroeditor.sensors.actualChange = false;
 		LiquidApplication.getGUI().enviroeditor.sensors.xYParam(true);
 		LiquidApplication.getGUI().enviroeditor.sensors.lenWidParam(true, true, 0);
+		LiquidApplication.getGUI().enviroeditor.sensors.actualChange = true;
 	}
 	
 	/**

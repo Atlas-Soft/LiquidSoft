@@ -9,14 +9,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import liquid.core.LiquidApplication;
 
 /**
- * Class extracts the process of file creation. Here, it is set up to either load an old log file or create a new log file.
+ * Class extracts the process of file creation. It is set up to either create a new log file or load an old log file.
+ * @version 3.0
  */
 class LiquidFileChooser {
 	
 	/**
 	 * Sets up the file name by first making sure the 'logs' directory is present and filtering all files
-	 * expect ones that end in '.log'. Method can be used both to set up a new file or load an existing one.
-	 * 
+	 * expect ones that end in '.log'. Method is used both to set up a new file or load an existing one.
 	 * @param set - determines to save or load a file
 	 * @return    - the String name of the file
 	 */
@@ -47,7 +47,6 @@ class LiquidFileChooser {
 
 	/**
 	 * Method used to set up to load a log file. It returns the whole file name, including directory.
-	 * 
 	 * @param fileDialog - uses same JFileChooser to keep consistency
 	 * @return           - String name of the file
 	 */
@@ -62,7 +61,6 @@ class LiquidFileChooser {
 	/**
 	 * Method used to set up a save log file. It also determines whether or not the log file
 	 * is saved in the correct directory and whether or not it will override an existing file.
-	 * 
 	 * @param fileDialog - uses same JFileChooser to keep consistency
 	 * @return           - String name of the file
 	 */

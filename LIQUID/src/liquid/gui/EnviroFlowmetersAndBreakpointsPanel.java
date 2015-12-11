@@ -18,15 +18,17 @@ import liquid.core.LiquidApplication;
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements
  * linked to creating a sensor are present, such as the X-/Y-Coordinates.
+ * @version 3.0
  */
-public class EnviroSensorsPanel extends JPanel {
+public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 
 	// list of components needed to create a sensor
 	private static final long serialVersionUID = 1L;
 	float origLength;
 	float origWidth;
+	boolean actualChange = true;
 	
-	JComboBox<String> sensorType;		
+	JComboBox<String> sensorType;
 	JComboBox<Float> sensorX;
 	JComboBox<Float> sensorY;
 	JComboBox<Float> sensorL;
@@ -35,9 +37,9 @@ public class EnviroSensorsPanel extends JPanel {
 	JButton create;
 	
 	/**
-	 * Constructor creates the Sensors section of the EnvironmentEditorPanel.
+	 * Constructor creates the Flowmeters and Breakpoints section of the EnvironmentEditorPanel.
 	 */
-	public EnviroSensorsPanel() {
+	public EnviroFlowmetersAndBreakpointsPanel() {
 		initComponents();
 	}
 	
@@ -72,7 +74,7 @@ public class EnviroSensorsPanel extends JPanel {
 		widthLab.setVisible(false);
 		add(widthLab);
 		
-		// makes the drop-downs needed to creating sensors
+		// makes the drop-downs needed to creating flow meters and break points
 		sensorType = new JComboBox<String>();
 		sensorType.addItem(GlobalVar.EnviroOptions.Flowmeters.toString());
 		sensorType.addItem(GlobalVar.EnviroOptions.Breakpoints.toString());
@@ -86,8 +88,8 @@ public class EnviroSensorsPanel extends JPanel {
 					widthLab.setVisible(false);
 					sensorL.setVisible(false);
 					sensorW.setVisible(false);
-					create.setBounds(65,115,115,25);}
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
+					create.setBounds(65,115,115,25);
+				} else if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
 					lengthLab.setVisible(true);
 					widthLab.setVisible(true);
 					sensorL.setVisible(true);
@@ -97,61 +99,65 @@ public class EnviroSensorsPanel extends JPanel {
         });
 		add(sensorType);
 		
-		// populates the drop-down information for the X,Y,Length,Width
+		// populates the drop-down information for the X/Y/Length/Width
 		sensorX = new JComboBox<Float>();
 		sensorY = new JComboBox<Float>();
 		sensorL = new JComboBox<Float>();
 		sensorW = new JComboBox<Float>();
 		create = new JButton("Create");
+		sensorW.setVisible(false);
+		sensorL.setVisible(false);
+		
+		actualChange = false;
 		xYParam(true);
 		lenWidParam(true, true, 0);
-		createButton(); // creates the Create button
+		actualChange = true;
+		createButton(); // makes the Create button
+		resetSensors();
 	}
 	
 	/**
-	 * Method adjusts the sensor's settings to be within the limit of the environment's size. It also provides
-	 * a real-time update of the sensor parameters to prevent them from exceeding the environment's boundaries.
-	 * 
+	 * Method adjusts the flow meter/breakpoint's settings to be within the limit of the environment's size. It also provides
+	 * a real-time update of the flow meter/breakpoint parameters to prevent them from exceeding the environment's boundaries.
 	 * @param enviroChange - determines when the environment size changes
 	 */
 	public void xYParam(boolean enviroChange) {
-		// each drop-down first gets all items removed from it, then gets
-		// populated with items all dependent on the environment boundaries
+		// drop-down is newly populated due to an environment size change
 		sensorX.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
 			sensorX.addItem(Float.valueOf(i));}
 		sensorX.setBounds(5,75,(int)(this.getWidth()/2.2),25);
+		
 		// used to adjust the Length drop-down to be within the environment size
 		sensorX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionevent) {
-				if (!enviroChange) {
+				if (!enviroChange || actualChange) {
 					origLength = (float)sensorL.getSelectedItem();
 					float num = (float)sensorX.getSelectedItem();
 					lenWidParam(false, true, num);}}
 		});
 		add(sensorX);
 		
+		// drop-down is newly populated due to an environment size change
 		sensorY.removeAllItems();
 		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
 			sensorY.addItem(Float.valueOf(i));}
 		sensorY.setBounds(125,75,(int)(this.getWidth()/2.2),25);
+		
 		// used to adjust the Width drop-down to be within the environment size
 		sensorY.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent actionevent) {
-					if (!enviroChange) {
-						origWidth = (float)sensorW.getSelectedItem();
-						float num = (float)sensorY.getSelectedItem();
-						lenWidParam(false, false, num);}}
-				});
+			public void actionPerformed(ActionEvent actionevent) {
+				if (!enviroChange || actualChange) {
+					origWidth = (float)sensorW.getSelectedItem();
+					float num = (float)sensorY.getSelectedItem();
+					lenWidParam(false, false, num);}}
+		});
 		add(sensorY);
-		
-		resetSensors(); // sets the parameters even after the environment size changes
 	}
 	
 	/**
 	 * Method adjusts the breakpoint's Length/Width to be within the environment's size. It also provides a
 	 * real-time update of the breakpoint parameters to prevent them from exceeding the environment's boundaries.
-	 * 
 	 * @param enviroChange - determines when the environment size changes
 	 * @param length       - determines whether to change the Length or Width
 	 * @param limit        - the limit for the Length or Width
@@ -167,7 +173,6 @@ public class EnviroSensorsPanel extends JPanel {
 			else
 				sensorL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit-limit));
 			sensorL.setBounds(5,125,(int)(this.getWidth()/2.2),25);
-			sensorL.setVisible(false);
 			add(sensorL);}
 		
 		if (enviroChange || !length) {
@@ -180,15 +185,14 @@ public class EnviroSensorsPanel extends JPanel {
 			else
 				sensorW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit-limit));
 			sensorW.setBounds(125,125,(int)(this.getWidth()/2.2),25);
-			sensorW.setVisible(false);
 			add(sensorW);}
 	}
 	
 	/**
-	 *  Method used to call the editor panel to make a Create button for Sensors.
+	 *  Method used to call the editor panel to make a Create button for sensors.
 	 */
 	public void createButton() {
-		// button creates the obstacle according to the parameters set
+		// button creates the flow meter or breakpoint according to the parameters set
 		create.setBounds(60,115,(int)(this.getWidth()/2.2),25);
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -199,8 +203,8 @@ public class EnviroSensorsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method packages data and sends it to the editor to check if the
-	 * parameters are valid, and if so to be added into the object list.
+	 * Method packages data and sends it to the editor to be added into the object list.
+	 * @param update - either adds a new object or updates an object's parameters
 	 */
 	public void createSensor(boolean update) {
 		params = new ArrayList<Float>();
@@ -212,9 +216,8 @@ public class EnviroSensorsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method splits up the String[] of the log file in order to correctly set
-	 * the parameters of the Sensors section of the EnvironmentEditorPanel.
-	 * 
+	 * Method splits up the String[] of the log file in order to correctly set the
+	 * parameters of the Flowmeters and Breakpoints section of the EnvironmentEditorPanel.
 	 * @param tokens - String[] of the log file to split
 	 */
 	public void updateSensors(String[] tokens) {
@@ -229,13 +232,15 @@ public class EnviroSensorsPanel extends JPanel {
 	}
 	
 	/**
-	 * Method resets the parameters of the Sensors section.
+	 * Method resets the parameters of the Flowmeters and Breakpoints section.
 	 */
 	public void resetSensors() {
+		origLength = 25;
+		origWidth = 25;
 		sensorType.setSelectedIndex(0);
 		sensorX.setSelectedIndex(0);
 		sensorY.setSelectedIndex(0);
-		origLength = 50;
-		origWidth = 50;
+		sensorL.setSelectedIndex((int)origLength);
+		sensorW.setSelectedIndex((int)origWidth);
 	}
 }

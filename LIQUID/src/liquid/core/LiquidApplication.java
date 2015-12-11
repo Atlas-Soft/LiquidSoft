@@ -7,6 +7,7 @@ import liquid.logger.LiquidLogger;
 /**
  * The Liquid Application class initializes the Fluid Engine, GUI, and
  * Logger components. It also provides static access to these components.
+ * @version 3.0
  */
 public class LiquidApplication {
 	
@@ -22,7 +23,6 @@ public class LiquidApplication {
 		engine = new LiquidEngine();
 		logger = new LiquidLogger();
 		gui = new LiquidGUI();
-		
 	}
 	
 	/**
@@ -36,7 +36,6 @@ public class LiquidApplication {
 	
 	/**
 	 * Getter allows access to the Engine parts of the simulator.
-	 * 
 	 * @return engine - the Engine component
 	 */
 	public static LiquidEngine getEngine() {
@@ -45,7 +44,6 @@ public class LiquidApplication {
 	
 	/**
 	 * Getter allows access to the GUI parts of the simulator.
-	 * 
 	 * @return	gui - the GUI component
 	 */
 	public static LiquidGUI getGUI() {
@@ -54,7 +52,6 @@ public class LiquidApplication {
 	
 	/**
 	 * Getter allows access to the Logger parts of the simulator.
-	 * 
 	 * @return logger - the Logger component
 	 */
 	public static LiquidLogger getLogger() {

@@ -15,8 +15,9 @@ import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
- * Class stores the details of the EnvironmentEditorPanel section of the ParameterPanel class. Here,
- * users will be able to adjust environment size and create obstacles, drains, sources, or flow meters.
+ * Class stores the details of the EnvironmentEditorPanel section of the ParameterPanel class. Here, users
+ * will be able to adjust environment size and create obstacles, drains, sources, flow meters, or breakpoints.
+ * @version 3.0
  */
 public class EnvironmentEditorPanel extends JPanel {
 	
@@ -24,14 +25,13 @@ public class EnvironmentEditorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static float enviroLenLimit = 500;
 	static float enviroWidLimit = 400;
-	JComboBox<String> select;
 		
-	// creates the Environment, Obstacles and Drains, Forces, and Sensors parts of the panel
-	EnviroPanel enviro;
-	EnviroObstaclesAndDrainsPanel obstacles;
-	EnviroSourcesPanel sources;
-	EnviroSensorsPanel sensors;
-	EnviroAddiParamPanel addiParam;
+	JComboBox<String> select;
+	EnviroPanel enviro;							 // creates the Environment section
+	EnviroObstaclesAndDrainsPanel obstacles;	 // creates the Obstacles and Drains section
+	EnviroSourcesPanel sources;					 // creates the Sources section
+	EnviroFlowmetersAndBreakpointsPanel sensors; // creates the Flowmeters and Breakpoints section
+	EnviroAddiParamPanel addiParam;				 // creates the additional buttons (located on the bottom)
 	
 	/**
 	 * Constructor sets up the EnvironmentEditorPanel part of the ParameterPanel. It
@@ -64,20 +64,29 @@ public class EnvironmentEditorPanel extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				// sets the drop-down option to be invisible if it is not currently selected 
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Environment.toString()))
+				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Environment.toString())) {
 					enviro.setVisible(true);
-				else enviro.setVisible(false);
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
-						GlobalVar.EnviroOptions.Drains.toString()))
+					obstacles.setVisible(false);
+					sources.setVisible(false);
+					sensors.setVisible(false);
+				} else if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
+						GlobalVar.EnviroOptions.Drains.toString())) {
+					enviro.setVisible(false);
 					obstacles.setVisible(true);
-				else obstacles.setVisible(false);
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Sources.toString()))
+					sources.setVisible(false);
+					sensors.setVisible(false);
+				} else if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Sources.toString())) {
+					enviro.setVisible(false);
+					obstacles.setVisible(false);
 					sources.setVisible(true);
-				else sources.setVisible(false);
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Flowmeters.toString() + " and " +
-						GlobalVar.EnviroOptions.Breakpoints.toString()))
+					sensors.setVisible(false);
+				} else if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Flowmeters.toString() + " and " +
+						GlobalVar.EnviroOptions.Breakpoints.toString())) {
+					enviro.setVisible(false);
+					obstacles.setVisible(false);
+					sources.setVisible(false);
 					sensors.setVisible(true);
-				else sensors.setVisible(false);
+				}
 			}
         });
 		add(select);
@@ -97,8 +106,8 @@ public class EnvironmentEditorPanel extends JPanel {
 		sources.setVisible(false);
 		add(sources);
 		
-		// creates the Sensors section, which represents the EnviroSensorsPanel class
-		sensors = new EnviroSensorsPanel();
+		// creates the Flowmeters and Breakpoints section, which represents the EnviroFlowmetersAndBreakpointsPanel class
+		sensors = new EnviroFlowmetersAndBreakpointsPanel();
 		sensors.setVisible(false);
 		add(sensors);
 		
@@ -110,14 +119,14 @@ public class EnvironmentEditorPanel extends JPanel {
 	}
 	
 	/**
-	 * Method checks the boundaries of the environment and throws error messages
-	 * when the obstacle or drain will go out of the predefined environment size.
+	 * Method adds the object--obstacle, drain, source, flow meter, or breakpoint--when the Create button
+	 * has been pressed or updates the object's parameters when the Update button has been pressed. 
 	 * 
 	 * For the ArrayList<Float>:
-	 *  - 0 - X-Coordinate of Obstacle/Drain
-	 *  - 1 - Y-Coordinate of Obstacle/Drain
-	 *  - 2 - Length of Obstacle/Drain
-	 *  - 3 - Width of Obstacle/Drain
+	 *  - 0 - X-Coordinate of object
+	 *  - 1 - Y-Coordinate of object
+	 *  - 2 - Length of object
+	 *  - 3 - Width of object
 	 *  - 4 - Rotation of Obstacle/Drain
 	 */
 	public void addObject(JComboBox<String> type, ArrayList<Float> params, boolean update) {
@@ -145,7 +154,7 @@ public class EnvironmentEditorPanel extends JPanel {
 		enviroWidLimit = LiquidApplication.getGUI().variables.enviroWidth;
 		enviro.updateEnviro();
 		try {
-			// obtains the line of parameters associated the selected object
+			// obtains the line of parameters associated with the selected object
 			if (LiquidApplication.getGUI().variables.objects.size() != 0) {
 				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
 				// creates an obstacle if it's the last item
@@ -171,8 +180,8 @@ public class EnvironmentEditorPanel extends JPanel {
 				// creates a flow meter if it's the last item
 				} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString()) ||
 						tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
-					select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
-						GlobalVar.EnviroOptions.Drains.toString());
+					select.setSelectedItem(GlobalVar.EnviroOptions.Flowmeters.toString() + " and " +
+						GlobalVar.EnviroOptions.Breakpoints.toString());
 					obstacles.setVisible(false);
 					sources.setVisible(false);
 					sensors.setVisible(true);

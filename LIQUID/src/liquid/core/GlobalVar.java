@@ -2,6 +2,7 @@ package liquid.core;
 
 /**
  * Class is a placeholder for all of the global variables of the project.
+ * @version 3.0
  */
 public class GlobalVar {
 	
