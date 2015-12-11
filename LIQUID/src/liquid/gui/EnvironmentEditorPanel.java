@@ -50,7 +50,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * Sets up some of the components of the EnvironmentEditorPanel.
 	 */
 	public void initComponents() {
-		Font font = new Font("Verdana", Font.BOLD, 12);
+		Font font = new Font("Verdana",Font.BOLD,12);
 		setFont(font);
 		
 		// sets the overall drop-down options for the EnvironmentEditorPanel
@@ -194,6 +194,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	
 	/**
 	 * Method enables/disables the components of the EnvironmentEditorPanel.
+	 * @param enable - to enable/disable components
 	 */
 	public void setEnabled(boolean enable) {
 		for (Component x : getComponents()) {

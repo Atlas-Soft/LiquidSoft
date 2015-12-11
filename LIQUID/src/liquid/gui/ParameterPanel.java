@@ -17,12 +17,10 @@ import liquid.core.GlobalVar;
 import liquid.core.LiquidApplication;
 
 /**
- * Sets up some of the parameters to be used during the simulation, all changeable
- * by the user. This includes the type of liquid, temperature, viscosity, and run
- * time; but most importantly, it creates the Run, Pause, Step, and End buttons.
- * 
- * A replay check-box has also been added to indicate when a
- * simulation is running a previously saved set of parameters.
+ * Sets up some of the parameters to be used during the simulation, all changeable by the user. This includes the type of
+ * liquid, temperature, viscosity, and run time; but most importantly, it creates the Run, Pause, Step, and End buttons.
+ * <p>A replay check-box has also been added to indicate when a simulation is running a previously saved set of parameters.</p>
+ * @version 2.5
  */
 public class ParameterPanel extends JPanel {
 
@@ -33,7 +31,7 @@ public class ParameterPanel extends JPanel {
 	float tempMin = 0;
 	float origTemp = 21;
 	boolean actualChange = true;
-	DecimalFormat df = new DecimalFormat("#.#####");
+	DecimalFormat df = new DecimalFormat("0.0000");
 	
 	JComboBox<String> liqs; // a drop-down menu
 	JComboBox<Integer> time;
@@ -54,7 +52,6 @@ public class ParameterPanel extends JPanel {
 	public ParameterPanel() {
 		super();
 		liquidInfo = new ArrayList<String>();
-		//initComponents();
 		setLayout(null);
 		setBackground(Color.LIGHT_GRAY);
 		setBounds(500,0,300,640);
@@ -62,11 +59,11 @@ public class ParameterPanel extends JPanel {
 	}
 
 	/**
-	 * Initializes various parts of the parameters, such as the liquid type and run time, to a
-	 * previously-defined default setting. The buttons to begin and end a simulation are also created here.
+	 * Initializes various parts of the parameters, such as the liquid type and run time, to a previously-defined
+	 * default setting once the config file has been read. The buttons to begin/end simulations are also created here.
 	 */
     void initComponents() {
-		Font font = new Font("Verdana", Font.BOLD, 10);
+		Font font = new Font("Verdana",Font.BOLD,10);
 		setFont(font);
 
 		// creates labels for the previously defined set of parameters
@@ -105,31 +102,31 @@ public class ParameterPanel extends JPanel {
 		replay.setBounds(95,475,100,25);
 		add(replay);
 		
+		// populates the drop-down info for liquid types/temperature/viscosity as well as creating buttons
 		tempVisc = new JComboBox<String>();
-		liqsParam(); // populates drop-down for liquid types
-		tempAndViscParam(0,100,(float)1.787,(float)0.282); // populates drop-down for temperature/viscosity
-		runButton(); // creates the Run button
-		pauseButton(); // creates the Pause button
-		stepButton(); // creates the Step button
-		endButton(); // creates the End button
+		liqsParam();
+		tempAndViscParam(0,100,(float)1.787,(float)0.282);
+		runButton();
+		pauseButton();
+		stepButton();
+		endButton();
+		reset();
 	}
 	
 	/**
-	 * Method adjusts the liquid drop-down. It also gathers information from the config file if not already done so yet.
+	 * Method adjusts the liquid drop-down, which then adjusts the temperature/viscosity drop-down accordingly.
 	 */
 	public void liqsParam() {
 		// creates drop-downs for the basic parameters
 		liqs = new JComboBox<String>();
 		for (int i = 0; i < liquidInfo.size(); i++) {
 			String[] tokens = liquidInfo.get(i).split(" ");
-			liqs.addItem(tokens[0]);
-		}
-		liqs.setSelectedIndex(0);
+			liqs.addItem(tokens[0]);}
 		liqs.setBounds(25,40,120,25);
 		liqs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionevent) {
 				if (actualChange) {
-					// sets the liquid type as well as resets the values of the drop-down
+					// sets the liquid type as well as resets the values of the temperature/viscosity drop-down
 					setLiquidType();
 					LiquidApplication.getGUI().variables.liquid = (String)liqs.getSelectedItem();
 					LiquidApplication.getGUI().variables.saveState();
@@ -140,9 +137,41 @@ public class ParameterPanel extends JPanel {
 	}
 	
 	/**
+	 * Method gathers information based on the liquid type selected. It then promptly resets the drop-down
+	 * values of the temperature/viscosity to prevent the simulation from running using a solid or a gas.
+	 */
+	public void setLiquidType() {
+		// searches for a matching liquid type
+		for (int i = 0; i < liquidInfo.size(); i++) {
+			String[] tokens = liquidInfo.get(i).split(" ");
+			String liquid;
+			if (actualChange) 
+				liquid = (String)liqs.getSelectedItem();
+			else
+				liquid = (String)LiquidApplication.getGUI().variables.liquid;
+			
+			// liquid type matches, so gathers its freezing/boiling points and viscosity values
+			if (tokens[0].equals(liquid)) {
+				// if an actual change was made to the temperature drop-down, it then gathers the temperature
+				// set; otherwise, gets the previously-set temperature (when Undo/Redo has been pressed)
+				if (actualChange) {
+					tempMin = Float.parseFloat(tokens[1]);
+					origTemp = Float.parseFloat(((String)tempVisc.getSelectedItem()).split(" ")[0]);}
+				else {
+					origTemp = LiquidApplication.getGUI().variables.temperature;}
+				
+				// resets the values of the temperature/viscosity based on the selected parameters
+				actualChange = false;
+				tempAndViscParam(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]),
+						Float.parseFloat(tokens[3]), Float.parseFloat(tokens[4]));
+				actualChange = true;
+			}
+		}
+	}
+	
+	/**
 	 * Method adjusts the temperature/viscosity parameters to be within the limitations of a liquid type, determined
 	 * by the config file. This prevents the simulation from running when a liquid has become a solid or a gas.
-	 * 
 	 * @param tempMin - melting point of the liquid
 	 * @param tempMax - boiling point of the liquid
 	 * @param viscMin - viscosity at the melting point
@@ -164,17 +193,16 @@ public class ParameterPanel extends JPanel {
 		else if (origTemp > tempMax)
 			tempVisc.setSelectedIndex((int)tempMax);
 		tempVisc.setBounds(55,90,185,25);
-		if (actualChange) {
-			tempVisc.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent actionEvent) {
-					if (actualChange) {
-						String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
-						LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
-						LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
-						LiquidApplication.getGUI().variables.saveState();}
-				}
-			});
-		}
+		tempVisc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// sets the internal temperature/viscosity values when an actual change occurs
+				if (actualChange) {
+					String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
+					LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
+					LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
+					LiquidApplication.getGUI().variables.saveState();}
+			}
+		});
 		add(tempVisc);
 	}
 
@@ -254,7 +282,6 @@ public class ParameterPanel extends JPanel {
 				// when the simulation is paused, simply steps through one frame at a time
 				if (LiquidApplication.getGUI().variables.simulating) {
 					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
-					System.out.println("hi");
 					
 				// sets various parameters for a previously-saved simulation
 				} else if (LiquidApplication.getGUI().variables.filename != null &&
@@ -303,7 +330,6 @@ public class ParameterPanel extends JPanel {
 	/**
 	 * Used for the Step/Run button to extract setting various parameters when setting up a simulation. This includes
 	 * button enabling/disabling and sending notices to the Logger/Engine to write the log file and run simulation.
-	 * 
 	 * @param route    - determines the route to take
 	 * @param filename - to pass in the file name (for new simulations only)
 	 */
@@ -330,49 +356,14 @@ public class ParameterPanel extends JPanel {
 	}
 	
 	/**
-	 * Method gathers information based on the liquid type selected. It then promptly resets the drop-down
-	 * values of the temperature/viscosity to prevent the simulation from running using a solid or a gas.
-	 */
-	public void setLiquidType() {
-		// searches for a matching liquid type
-		for (int i = 0; i < liquidInfo.size(); i++) {
-			String[] tokens = liquidInfo.get(i).split(" ");
-			String liquid;
-			if (actualChange) 
-				liquid = (String)liqs.getSelectedItem();
-			else
-				liquid = (String)LiquidApplication.getGUI().variables.liquid;
-			
-			// liquid type matches, so gathers its freezing/boiling points and viscosity values
-			if (tokens[0].equals(liquid)) {
-				
-				// if an actual change was made to the temperature drop-down, it then gathers the temperature
-				// set; otherwise, gets the previously-set temperature (when Undo/Redo has been pressed)
-				if (actualChange) {
-					tempMin = Float.parseFloat(tokens[1]);
-					String[] tokens2 = ((String)tempVisc.getSelectedItem()).split(" ");
-					origTemp = Float.parseFloat(tokens2[0]);}
-				else {
-					origTemp = LiquidApplication.getGUI().variables.temperature;}
-				
-				// resets the values of the temperature/viscosity based on the selected parameters
-				actualChange = false;
-				tempAndViscParam(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]),
-						Float.parseFloat(tokens[3]), Float.parseFloat(tokens[4]));
-			}
-		}
-		actualChange = true;
-	}
-	
-	/**
 	 * Method sets the parameters to the selected values after the Run button has been pressed.
 	 */
 	public void setParamToRun() {
 		LiquidApplication.getGUI().setEnable(false);
 		LiquidApplication.getGUI().variables.simulating = true;
-		String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
 		LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
 		LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
+		String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
 		LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
 		LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
 	}
@@ -399,6 +390,7 @@ public class ParameterPanel extends JPanel {
 	
 	/**
 	 * Method will enable/disable the parameters defined in the parameter panel.
+	 * @param enable - to enable/disable components
 	 */
 	public void setEnabled(boolean enable) {
 		liqs.setEnabled(enable);
@@ -412,10 +404,11 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void reset() {
 		actualChange = false;
+		origTemp = 21;
 		tempAndViscParam(0,100,(float)1.787,(float)0.282);
 		liqs.setSelectedIndex(0);
 		time.setSelectedIndex(300);
-		tempVisc.setSelectedIndex(20);
+		tempVisc.setSelectedIndex((int)origTemp-1);
 		replay.setSelected(false);
 		actualChange = true;
 	}

@@ -1,7 +1,4 @@
-Things To Do:
-  - Engine Review Comments (All Classes) -- Lauren
-  - GUI Reivew Comments (LiquidGUI/ParameterPanel) -- Lauren
-  - Logger Review Comments (All Classes) -- Lauren
-  - Viscosity -- Raf/Lauren?
-  - Replay Checkbox -- Raf/Lauren?
-  - About (Optional) -- Raf
+Class not yet "completed," I think:
+  - LiquidGUI - anymore send/requests?
+  - ParameterPanel - replay functionality?
+  - SimulationPanel - breakpoint things - taken care of
