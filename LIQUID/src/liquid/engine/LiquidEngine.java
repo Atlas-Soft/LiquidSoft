@@ -37,6 +37,9 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				for (int f = 0; f < enviro.meters.size(); f++){
 					args[args.length-1] += enviro.meters.get(f).toString();
 				}
+				for (int b = 0; b < enviro.brkpts.size(); b++){
+					args[args.length-1] += enviro.brkpts.get(b).toString();
+				}
 				i.receive(this, request.WRITE_LOG_DATA, args);
 				break;
 			default:
@@ -54,6 +57,10 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				args[0] = "-Time " + (sec + 1) + ":\n";
 				for (int f = 0; f < enviro.meters.size(); f++){
 					args[0] += enviro.meters.get(f).toString();
+					args[0] += "\n";
+				}
+				for (int b = 0; b < enviro.brkpts.size(); b++){
+					args[0] += enviro.brkpts.get(b).toString();
 					args[0] += "\n";
 				}
 				i.receive(this, request.PRINT_SIM, args);
@@ -175,7 +182,8 @@ public class LiquidEngine implements Interfaceable, Runnable {
 		tokens = args[4].split(" ");
 		enviro.viscousStrength = Float.parseFloat(tokens[0])/100;
 		float x, y, l, w, r;
-		int ID = 1;
+		int FID = 1;
+		int BID = 1;
 		for (int i = 7; i < args.length; i++) {
 			tokens = args[i].split(" ");
 			if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString())) {
@@ -241,7 +249,14 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
-				enviro.addFlowmeter(x, y, ID++);
+				enviro.addFlowmeter(x, y, FID++);
+			}
+			else if (tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())){
+				x = Float.parseFloat(tokens[1]);
+				y = Float.parseFloat(tokens[2]);
+				l = Float.parseFloat(tokens[3]);
+				w = Float.parseFloat(tokens[4]);
+				enviro.addBreakpoint(x, y, l, w, BID++);
 			}
 		}
 		enviro.init();

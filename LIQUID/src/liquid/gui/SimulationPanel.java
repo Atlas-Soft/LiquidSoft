@@ -93,7 +93,8 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         }
         
         // creates objects when there are items in the String[] for objects
-        int id = 0;
+        int fid = 1;
+        int bid = 1;
         for (int i = 0; i < LiquidApplication.getGUI().variables.objects.size(); i++) {
         	String[] tokens = LiquidApplication.getGUI().variables.objects.get(i).split(" ");
         	
@@ -159,10 +160,17 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
-        		id++;
         		g2d.draw(new Ellipse2D.Float((x-10),(y-10),20,20));
         		g2d.drawString("F",(x-6),(y+5));
-        		g2d.drawString((id + ""),(x-1),(y+5));
+        		g2d.drawString((fid++ + ""),(x-1),(y+5));
+        	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())){
+        		x = environment.x+Float.parseFloat(tokens[1]);
+        		y = environment.y+Float.parseFloat(tokens[2]);
+        		l = Float.parseFloat(tokens[3]);
+        		w = Float.parseFloat(tokens[4]);
+        		g2d.draw(new Ellipse2D.Float((x-10),(y-10),20,20));
+        		g2d.drawString("B",(x-6),(y+5));
+        		g2d.drawString((bid++ + ""),(x-1),(y+5));
         	}
         }
 	}

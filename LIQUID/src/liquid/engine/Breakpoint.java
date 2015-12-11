@@ -44,7 +44,7 @@ public class Breakpoint {
 		String send = " B" + myID + " ( X-Vel " + adj.format(curVel.x) + ", Y-Vel " + adj.format(curVel.y) +")";
 		return send;
 	}
-	
+
 	/**
 	 * Helper Method
 	 * Gets the average x and y velocities of particles within an area of width * height centered around loc
@@ -53,10 +53,12 @@ public class Breakpoint {
 	private Vec2 pollVelocity(){
 		ArrayList<Vec2> vel = new ArrayList<Vec2>();
 		Vec2[] pos = myWorld.getParticlePositionBuffer();
-		Vec2 bounds = new Vec2(myWid/2, myHit/2);	//To change boundaries to check, simply change parameters of constructor
-		for (int i = 0; i < pos.length; i++){
-			if(almostEqual(myLoc, pos[i], bounds)){
-				vel.add(myWorld.getParticleVelocityBuffer()[i]);	//may need to be changed to local variable depending on performance
+		Vec2 bounds = new Vec2(myWid/2, myHit/2);
+		if (pos != null){
+			for (int i = 0; i < pos.length; i++){
+				if(almostEqual(myLoc, pos[i], bounds)){
+					vel.add(myWorld.getParticleVelocityBuffer()[i]);	//may need to be changed to local variable depending on performance
+				}
 			}
 		}
 
