@@ -1,6 +1,6 @@
-C:\Users\billi\Documents\GitHub\AtlasSoft\logs\flow.log
+C:\Users\Will\Documents\GitHub\AtlasSoft\logs/flow.log
 Water
-2
+7
 21.0
 1.50788
 300
@@ -11,4 +11,7 @@ Rectangular 350.0 15.0 50.0 75.0 0.0
 Rectangular 350.0 110.0 50.0 75.0 0.0
 Rect_Drain 490.0 50.0 10.0 100.0 0.0
 Sources 25.0 100.0 -45.0 2.0 50.0
+Breakpoints 115.0 0.0 5.0 200.0
+Flowmeters 170.0 100.0 5.0 100.0
 break
+0.0001 F1 ( X-Vel 0, Y-Vel 0) B1 ( X-Vel 0, Y-Vel 0) 
