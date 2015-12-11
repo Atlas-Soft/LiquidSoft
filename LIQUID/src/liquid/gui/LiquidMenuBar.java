@@ -120,8 +120,15 @@ public class LiquidMenuBar extends JMenuBar {
 		// creates the third main menu tab, which features the 'About' sub-tab
 		m = new JMenu("Help");
 		
-		// the 'About' feature provides screenshots to guide the user in setting up and running a simulation
+		// the 'About' feature provides license information
 		About = new JMenuItem("About");
+		About.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame, 
+						"This product is released under the GNU General Public License v3.\n" +
+						"Project LIQUID was created using the jBox2D library, a project led by Daniel Murphy.");
+			}
+		});
 		m.add(About);
 		add(m);
 	}
