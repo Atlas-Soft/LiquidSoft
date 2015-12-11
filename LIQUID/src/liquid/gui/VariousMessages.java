@@ -6,12 +6,12 @@ import liquid.core.LiquidApplication;
 
 /**
  * Class stores all of the JOptionPane messages for the other classes to use and display.
+ * @version 3.0
  */
 public class VariousMessages {
 
 	/**
 	 * Method prompts the user whether or not to actually exit the simulator.
-	 * 
 	 * @return - the yes or no option chosen
 	 */
 	public int exitSimulation() {
@@ -22,7 +22,6 @@ public class VariousMessages {
 	
 	/**
 	 * Method prompts the user whether or not to actually start a new simulation.
-	 * 
 	 * @return - the yes or no option chosen
 	 */
 	public int newSimulation() {
@@ -43,7 +42,6 @@ public class VariousMessages {
 	
 	/**
 	 * Method prompts the user whether or not to actually override the file selected.
-	 * 
 	 * @return - the yes or no option chosen
 	 */
 	public int fileOverride(String file) {

@@ -10,8 +10,8 @@ import liquid.gui.LiquidGUI;
 /**
  * LiquidLogger is the main class of the Logger component. Here, the methods to load or write a log file
  * are initialized. The config file is also read here and stored into a separate variable in the GUI.
- * 
- * This class interacts with both the GUI and Engine to pass/receive information for the log file.
+ * <p>This class interacts with both the GUI and Engine to pass/receive information for the log file.</p>
+ * @version 3.0
  */
 public class LiquidLogger implements Interfaceable {
 	
@@ -59,12 +59,10 @@ public class LiquidLogger implements Interfaceable {
 	
 	/**
 	 * Method defines requested interactions to the GUI.
-	 * 
-	 * Current Send Interactions:
-	 *  - REQUEST_SET_CONFIG    - gathers information from the config file to send to the GUI to use
-	 *  - REQUEST_SET_LOG_PARAM - obtains the necessary parameters to send to the GUI to set the simulation up
+	 * <p>Current Send Interactions:</p>
+	 * <p> - REQUEST_SET_CONFIG    - sends the GUI a request to store the config file information</p>
+	 * <p> - REQUEST_SET_LOG_PARAM - sends the GUI a request to store the log file parameter information</p>
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	public void send(Interfaceable i, GlobalVar.Request request) {
 		// sends a String[] of parameters for the GUI to use
@@ -72,11 +70,11 @@ public class LiquidLogger implements Interfaceable {
 			switch (request) {
 			case REQUEST_SET_CONFIG:
 				args = fileLoader.loadConfigFile(configFile);
-				i.receive(this, request.SET_CONFIG, args);
+				i.receive(this, GlobalVar.Request.SET_CONFIG, args);
 				break;
 			case REQUEST_SET_LOG_PARAM:
 				args = fileLoader.loadLogParam(currentFile);
-				i.receive(this, request.SET_LOG_PARAM, args);
+				i.receive(this, GlobalVar.Request.SET_LOG_PARAM, args);
 				break;
 			default:}
 		}
@@ -84,26 +82,25 @@ public class LiquidLogger implements Interfaceable {
 
 	/**
 	 * Method defines requested interactions from the GUI and Engine.
+	 * <p>Current Receive Interactions:</p>
+	 * <p> - LOAD_CONFIG_FILE - receives request to send a self-request to load config data based on file name</p>
+	 * <p> - LOAD_LOG_PARAM   - receives request to send a self-request to load parameters based on file name</p>
+	 * <p> - INIT_WRITE_LOG   - receives request to initialize process of writing a log file</p>
+	 * <p> - WRITE_LOG_PARAM  - receives request to write to log file with the given information</p>
 	 * 
-	 * Current Receive Interactions:
-	 *  - LOAD_CONFIG_FILE - sends a self-request to find config file based on the given file name
-	 *  - LOAD_LOG_PARAM   - sends a self-request to find file based on the given file name
-	 *  - INIT_WRITE_LOG   - initializes the writer necessary to write the log file
-	 *  - WRITE_LOG_PARAM  - writes the log file beginning with the given file name
+	 * <p> - WRITE_LOG_DATA - receives information from Engine to write to the log file</p>
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
-		// sends requests to begin setting by the config filing 
+		// receives requests to either load or write to a file
 		if (i instanceof LiquidGUI) {
 			switch (request) {
 			case LOAD_CONFIG_FILE:
-				args[0] = configFile;
-				send(i, request.REQUEST_SET_CONFIG);
+				send(i, GlobalVar.Request.REQUEST_SET_CONFIG);
 				break;
 			case LOAD_LOG_PARAM:
 				currentFile = args[0];
-				send(i, request.REQUEST_SET_LOG_PARAM);
+				send(i, GlobalVar.Request.REQUEST_SET_LOG_PARAM);
 				break;
 			case INIT_WRITE_LOG:
 				currentFile = args[0];
@@ -115,7 +112,7 @@ public class LiquidLogger implements Interfaceable {
 			default:}
 		}
 		
-		// gets data from the engine to write into the log file
+		// receives data from Engine to write into the log file
 		if (i instanceof LiquidEngine){
 			switch (request) {
 			case WRITE_LOG_DATA:

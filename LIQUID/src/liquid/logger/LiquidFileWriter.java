@@ -6,27 +6,32 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Class is used to write the actual log and config files for the simulation.
- * It also defines a method to set up a new file to save the simulation in.
+ * Class is used to write the log files of a simulation. This includes the parameters as well
+ * as the individual particles, flow meters, and breakpoints data, provided by the Engine.
+ * @version 3.0
  */
 public class LiquidFileWriter {
 
-	BufferedWriter bw;	//changed to class level variable to keep state of bw
+	// changed to class level variable to keep state of BufferedWriter
+	BufferedWriter bw;
 	
-	public void initLogFile(String fileName){
-		try{	
+	/**
+	 * Method initializes the BufferedWriter component to begin writing
+	 * a log file, all beginning with the name of the log file.
+	 * @param fileName - name of log file
+	 */
+	public void initLogFile(String fileName) {
+		try {
 			bw = new BufferedWriter(new FileWriter(new File(fileName)));
-		} catch (IOException e){
-			e.printStackTrace();
-		}
+		} catch (IOException e) {
+			e.printStackTrace();}
 	}
 	
 	/**
-	 * Method writes the contents of a String[] onto a text file. This'll
-	 * represent the log file, which stores all parameter information.
-	 * 
-	 * @param fileName - the file's name to store in
-	 * @param args    - the String[] of parameters
+	 * Method writes the contents of the String[] onto a text file. This represents
+	 * the log file, which stores all parameter information for future replaying.
+	 * @param fileName - name of log file to store in
+	 * @param args     - the String[] of parameters
 	 */
 	public void writeLogParam(String args[]) {
 		try {
@@ -37,34 +42,32 @@ public class LiquidFileWriter {
 			}
 			bw.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			e.printStackTrace();}
 	}
 	
 	/**
-	 * Used to add strings in args to one line of the log file
-	 * PRECONDITION: initLogFile() <b>MUST</b> be called successfully at some point prior to calling this function
-	 * @param args an array of strings to be written to the log file
+	 * Method used to add a string of data into the log file, all in one line. <p>PRECONDITION: initLogFile()
+	 * method <b>MUST</b> be called successfully at some point prior to calling this function.</p>
+	 * @param args - String[] to be written into the log file
 	 */
-	public void writeLogData(String args[]){
+	public void writeLogData(String args[]) {
 		try {
+			// loops through and prints out each part of the String[], all separated by a space
 			for (int i = 0; i < args.length; i++) {
 				bw.write(args[i] + " ");
 			}
 			bw.newLine();
 			bw.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			e.printStackTrace();}
 	}
 	
 	/**
-	 * Closes file opened in initLogFile()
+	 * Method disposes of the BufferedWriter previously-opened for the simulation.
 	 */
-	public void dispose(){
-		try{
+	public void dispose() {
+		try {
 			bw.close();
-		}
-		catch (Exception e){}
+		} catch (Exception e) {}
 	}
 }

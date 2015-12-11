@@ -15,8 +15,8 @@ import liquid.core.LiquidApplication;
 /**
  * Class creates the menu bar along the top of the simulator. This is in relation to other programs,
  * where you can create a new program or view the specifics of the program (the "About" section).
- * 
- * For our simulation, you can also load a log file to "replay" it or undo/redo the last move performed.
+ * For our program, you can also load a log file to "replay" it or undo/redo the last move performed.
+ * @version 3.0
  */
 public class LiquidMenuBar extends JMenuBar {
 
@@ -28,7 +28,6 @@ public class LiquidMenuBar extends JMenuBar {
 	JMenuItem Undo;
 	JMenuItem Redo;
 	JMenuItem About;
-	String log_filename;
 	
 	/**
 	 * Constructor for the menu bar. Creates the menu across the top of the simulator.
@@ -39,11 +38,10 @@ public class LiquidMenuBar extends JMenuBar {
 	}
 	
 	/**
-	 * Initializes the various components of the menu bar, such as the
-	 * main menu tabs and sub-tabs, as well as their functionalities.
+	 * Initializes the various components of the menu bar, as well as defining their functionalities.
 	 */
 	private void initComponents() {
-		Font font = new Font("Verdana", Font.BOLD, 12);
+		Font font = new Font("Verdana",Font.BOLD,12);
 		setFont(font);
 		
 		// creates the first main menu tab, which features 'New', 'Load...', and 'Exit'
@@ -120,7 +118,7 @@ public class LiquidMenuBar extends JMenuBar {
 		// creates the third main menu tab, which features the 'About' sub-tab
 		m = new JMenu("Help");
 		
-		// the 'About' feature provides screenshots to guide the user in setting up and running a simulation
+		// the 'About' feature provides information about the development of the program
 		About = new JMenuItem("About");
 		m.add(About);
 		add(m);
@@ -128,6 +126,7 @@ public class LiquidMenuBar extends JMenuBar {
 	
 	/**
 	 * Method enables/disables the appropriate main menu tabs.
+	 * @param enable - to enable/disable components
 	 */
 	public void setEnabled(boolean enable) {
 		New.setEnabled(enable);

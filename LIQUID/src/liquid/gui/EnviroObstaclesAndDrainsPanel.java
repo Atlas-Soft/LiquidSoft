@@ -3,6 +3,8 @@ package liquid.gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -82,6 +84,17 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		obstacleType.addItem(GlobalVar.ObsType.Rect_Drain.toString());
 		obstacleType.addItem(GlobalVar.ObsType.Circ_Drain.toString());
 		obstacleType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
+		obstacleType.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				// sets the rotation drop-down option to be disabled for drains 
+				if (arg0.getItem().toString().equals(GlobalVar.ObsType.Rectangular.toString()) ||
+						arg0.getItem().toString().equals(GlobalVar.ObsType.Circular.toString())) {
+					obstacleRotation.setEnabled(true);
+				} else if (arg0.getItem().toString().equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
+						arg0.getItem().equals(GlobalVar.ObsType.Circ_Drain.toString())) {
+					obstacleRotation.setEnabled(false);}
+			}
+        });
 		add(obstacleType);
 		
 		obstacleRotation = new JComboBox<Float>();

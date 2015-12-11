@@ -82,7 +82,7 @@ public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 		sensorType.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
-				// sets the drop-down option to be invisible if it is not currently selected 
+				// sets the Length/Width drop-down options to be invisible for flow meters
 				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
 					lengthLab.setVisible(false);
 					widthLab.setVisible(false);

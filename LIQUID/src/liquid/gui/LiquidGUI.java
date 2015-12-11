@@ -7,12 +7,10 @@ import liquid.engine.LiquidEngine;
 import liquid.logger.LiquidLogger;
 
 /**
- * LiquidGUI is the central class of the GUI, where all components of the GUI are
- * initialized here and available for other components to access them when necessary.
- * 
- * This class also interfaces between the Logger and Engine.
- * 
- * @version	2.0
+ * LiquidGUI is the central class of the GUI, where all components of the GUI are initialized
+ * here and available for other components to access them when necessary. <p>This class also
+ * interfaces between the Logger and Engine to pass various parameter information.</p>
+ * @version	2.5
  */
 public class LiquidGUI implements Interfaceable {
 	
@@ -43,27 +41,27 @@ public class LiquidGUI implements Interfaceable {
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(sim = new SimulationPanel());
 		frame.add(param = new ParameterPanel());
-		send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);
 		param.add(enviroeditor = new EnvironmentEditorPanel());
 		frame.add(console = new ConsolePanel());
-		frame.setVisible(true);
 		
+		// loads the liquid type information into the system
+		send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_LOAD_CONFIG_FILE);
+		frame.setVisible(true);
 	}
 	
 	/**
 	 * Method defines requested interactions to the Logger and Engine.
-	 * 
-	 * Current Send Interactions:
-	 *  - REQUEST_LOAD_LOG_PARAM  - sends the Logger the file name of the log file needed to be loaded
-	 *  - REQUEST_INIT_WRITE_LOG  - sends the Logger a notice to initialize writing a log file
-	 *  - REQUEST_WRITE_LOG_PARAM - sends the Logger the variables needed to write a log file
+	 * <p>Current Send Interactions:</p>
+	 * <p> - REQUEST_LOAD_CONFIG_FILE - sends the Logger a request to load config file information</p> 
+	 * <p> - REQUEST_LOAD_LOG_PARAM   - sends the Logger a request to load parameters from the log file</p>
+	 * <p> - REQUEST_INIT_WRITE_LOG   - sends the Logger a request to initialize writing a log file</p>
+	 * <p> - REQUEST_WRITE_LOG_PARAM  - sends the Logger the variables needed to write a log file</p>
 	 *  
-	 *  - REQUEST_RUN_SIM   - sends the Engine the variables needed to begin simulation
-	 *  - REQUEST_PAUSE_SIM - sends the Engine a notice to pause the simulation
-	 *  - REQUEST_STEP_SIM  - sends the Engine a notice to step through the simulation by a frame
-	 *  - REQUEST_END_SIM   - sends the Engine a notice to end a simulation
+	 * <p> - REQUEST_RUN_SIM   - sends the Engine the variables needed to begin simulation</p>
+	 * <p> - REQUEST_PAUSE_SIM - sends the Engine a request to pause the simulation</p>
+	 * <p> - REQUEST_STEP_SIM  - sends the Engine a request to step through the simulation by a frame</p>
+	 * <p> - REQUEST_END_SIM   - sends the Engine a request to end a simulation</p>
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	public void send(Interfaceable i, GlobalVar.Request request) {
 		String[] args;
@@ -73,22 +71,22 @@ public class LiquidGUI implements Interfaceable {
 			switch (request) {
 			case REQUEST_LOAD_CONFIG_FILE:
 				args = new String[1];
-				i.receive(this, request.LOAD_CONFIG_FILE, args);
+				i.receive(this, GlobalVar.Request.LOAD_CONFIG_FILE, args);
 				break;
 			case REQUEST_LOAD_LOG_PARAM:
 				args = new String[1];
 				args[0] = variables.filename;
-				i.receive(this, request.LOAD_LOG_PARAM, args);
+				i.receive(this, GlobalVar.Request.LOAD_LOG_PARAM, args);
 				break;
 			case REQUEST_INIT_WRITE_LOG:
 				args = new String[1];
 				args[0] = variables.filename;
-				i.receive(this, request.INIT_WRITE_LOG, args);
+				i.receive(this, GlobalVar.Request.INIT_WRITE_LOG, args);
 				break;
 			case REQUEST_WRITE_LOG_PARAM:
 				args = variables.writeArray();
 				send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_INIT_WRITE_LOG);
-				i.receive(this, request.WRITE_LOG_PARAM, args);
+				i.receive(this, GlobalVar.Request.WRITE_LOG_PARAM, args);
 				break;
 			default:}
 		}
@@ -98,19 +96,19 @@ public class LiquidGUI implements Interfaceable {
 			switch (request) {
 			case REQUEST_RUN_SIM:
 				args = variables.writeArray();
-				i.receive(this, request.RUN_SIM, args);
+				i.receive(this, GlobalVar.Request.RUN_SIM, args);
 				break;
 			case REQUEST_PAUSE_SIM:
 				args = new String[0];
-				i.receive(this, request.PAUSE_SIM, args);
+				i.receive(this, GlobalVar.Request.PAUSE_SIM, args);
 				break;
 			case REQUEST_STEP_SIM:
 				args = variables.writeArray();
-				i.receive(this, request.STEP_SIM, args);
+				i.receive(this, GlobalVar.Request.STEP_SIM, args);
 				break;
 			case REQUEST_END_SIM:
 				args = new String[0];
-				i.receive(this, request.END_SIM, args);
+				i.receive(this, GlobalVar.Request.END_SIM, args);
 				break;
 			default:}
 		}
@@ -118,14 +116,13 @@ public class LiquidGUI implements Interfaceable {
 	
 	/**
 	 * Method defines requested interactions from the Logger and Engine.
-	 * 
-	 * Current Receive Interaction:
-	 *  - SET_CONFIG    - receives information from Logger to set up the liquid types
-	 *  - SET_LOG_PARAM - receives information from Logger to set up the parameters
+	 * <p>Current Receive Interaction:</p>
+	 * <p> - SET_CONFIG    - receives information from Logger to set up liquid type information</p>
+	 * <p> - SET_LOG_PARAM - receives information from Logger to set up parameters</p>
 	 *  
-	 *  - DISPLAY_SIM   - receives particle information from the Engine to display
-	 *  - PRINT_SIM     - receives information from the Engine to print onto the console
-	 *  - SIM_HAS_ENDED - 
+	 * <p> - DISPLAY_SIM   - receives particle information from Engine to display</p>
+	 * <p> - PRINT_SIM     - receives information from Engine to print onto the console</p>
+	 * <p> - SIM_HAS_ENDED - receives information from Engine that simulation has finished</p>
 	 */
 	@Override
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
@@ -143,7 +140,7 @@ public class LiquidGUI implements Interfaceable {
 				param.logUpdate();
 				enviroeditor.setSelectedObject();
 				sim.repaint();
-				console.print_to_Console("[Log File Loaded.]\n");
+				console.print_to_Console("["+LiquidApplication.getGUI().variables.onlyFileName+" File Loaded.]\n");
 				break;
 			default:}
 		}
@@ -171,7 +168,6 @@ public class LiquidGUI implements Interfaceable {
 	
 	/**
 	 * Method sends a request to the individual GUI components to disable parameters.
-	 * 
 	 * @param enable - to enable/disable components
 	 */
 	public void setEnable(boolean enable) {
