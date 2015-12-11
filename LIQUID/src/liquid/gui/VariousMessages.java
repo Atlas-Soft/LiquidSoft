@@ -49,4 +49,10 @@ public class VariousMessages {
 				"Are you sure you want to overwrite the log file '"+ file + "'?", "Overwrite File?",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	}
+	
+//	public void about(){
+//		JOptionPane.showMessageDialog(LiquidApplication.getGUI().frame, 
+//			"This product is released under the GNU General Purpose License v3.\n" +
+//			"Project LIQUID was created using the jBox2D library, a project led by Daniel Murphy.");
+//	}
 }
