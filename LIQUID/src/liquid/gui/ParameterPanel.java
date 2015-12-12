@@ -19,8 +19,8 @@ import liquid.core.LiquidApplication;
 /**
  * Sets up some of the parameters to be used during the simulation, all changeable by the user. This includes the type of
  * liquid, temperature, viscosity, and run time; but most importantly, it creates the Run, Pause, Step, and End buttons.
+ * 
  * <p>A replay check-box has also been added to indicate when a simulation is running a previously saved set of parameters.</p>
- * @version 2.5
  */
 public class ParameterPanel extends JPanel {
 

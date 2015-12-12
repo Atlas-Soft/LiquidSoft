@@ -10,8 +10,8 @@ import liquid.gui.LiquidGUI;
 /**
  * LiquidLogger is the main class of the Logger component. Here, the methods to load or write a log file
  * are initialized. The config file is also read here and stored into a separate variable in the GUI.
+ * 
  * <p>This class interacts with both the GUI and Engine to pass/receive information for the log file.</p>
- * @version 3.0
  */
 public class LiquidLogger implements Interfaceable {
 	

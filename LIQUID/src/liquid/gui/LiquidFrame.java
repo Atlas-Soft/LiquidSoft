@@ -8,7 +8,6 @@ import liquid.core.LiquidApplication;
 
 /**
  * Class creates the overall frame of the simulator.
- * @version 3.0
  */
 public class LiquidFrame extends JFrame {
 

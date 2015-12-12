@@ -20,7 +20,6 @@ import liquid.core.LiquidApplication;
 /**
  * Class creates a panel to display the simulation itself. All objects created in the
  * EnvironmentEditorPanel (if any present) will be drawn into the current simulation.
- * @version 2.5
  */
 public class SimulationPanel extends JPanel implements MouseListener, MouseMotionListener {
 	
@@ -162,16 +161,18 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
         		g2d.draw(new Ellipse2D.Float((x-10),(y-10),20,20));
         		g2d.drawString("F",(x-6),(y+5));
         		g2d.drawString((FID++ +""),(x-1),(y+5));
+        	
+        	// in this instance, creates a breakpoint
         	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
         		x = environment.x+Float.parseFloat(tokens[1]);
         		y = environment.y+Float.parseFloat(tokens[2]);
         		l = Float.parseFloat(tokens[3]);
         		w = Float.parseFloat(tokens[4]);
-        		g2d.draw(new Rectangle2D.Float(x, y, l, w));
+        		g2d.draw(new Rectangle2D.Float(x,y,l,w));
         		x += .5 * l;
         		y += .5 * w;
         		g2d.drawString("B",(x-6),(y+5));
-        		g2d.drawString((BID++ + ""),(x-1),(y+5));
+        		g2d.drawString((BID++ +""),(x-1),(y+5));
         	}
         }
 	}

@@ -9,7 +9,6 @@ import liquid.core.LiquidApplication;
 /**
  * Class will store all of the parameters associated with the simulation. This
  * includes file name, liquid type, temperature, viscosity, and various others.
- * @version 3.0
  */
 public class LiquidGuiVariables {
 	

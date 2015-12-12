@@ -13,7 +13,6 @@ import liquid.core.LiquidApplication;
 /**
  * Class creates the additional parameters of the EnvironmentEditorPanel. This is currently
  * located at the bottom of the panel, where it is shared by all drop-down options.
- * @version 3.0
  */
 public class EnviroAddiParamPanel extends JPanel {
 	

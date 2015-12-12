@@ -16,7 +16,7 @@ import liquid.core.LiquidApplication;
  * Class creates the menu bar along the top of the simulator. This is in relation to other programs,
  * where you can create a new program or view the specifics of the program (the "About" section).
  * 
- * For our simulation, you can also load a log file to "replay" it or undo/redo the last move performed.
+ * <p>For our simulation, you can also load a log file to "replay" it or undo/redo the last move performed.</p>
  */
 public class LiquidMenuBar extends JMenuBar {
 

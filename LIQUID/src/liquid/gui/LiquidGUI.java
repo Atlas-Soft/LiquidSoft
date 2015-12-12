@@ -8,9 +8,9 @@ import liquid.logger.LiquidLogger;
 
 /**
  * LiquidGUI is the central class of the GUI, where all components of the GUI are initialized
- * here and available for other components to access them when necessary. <p>This class also
- * interfaces between the Logger and Engine to pass various parameter information.</p>
- * @version	2.5
+ * here and available for other components to access them when necessary.
+ * 
+ * <p>This class also interfaces between the Logger and Engine to pass various parameter information.</p>
  */
 public class LiquidGUI implements Interfaceable {
 	

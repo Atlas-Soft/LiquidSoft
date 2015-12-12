@@ -6,7 +6,6 @@ import liquid.core.LiquidApplication;
 
 /**
  * Class stores all of the JOptionPane messages for the other classes to use and display.
- * @version 3.0
  */
 public class VariousMessages {
 

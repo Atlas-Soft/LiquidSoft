@@ -10,7 +10,6 @@ import liquid.core.LiquidApplication;
 
 /**
  * Class extracts the process of file creation. It is set up to either create a new log file or load an old log file.
- * @version 3.0
  */
 class LiquidFileChooser {
 	

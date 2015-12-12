@@ -17,7 +17,6 @@ import liquid.core.LiquidApplication;
 /**
  * Class stores the details of the EnvironmentEditorPanel section of the ParameterPanel class. Here, users
  * will be able to adjust environment size and create obstacles, drains, sources, flow meters, or breakpoints.
- * @version 3.0
  */
 public class EnvironmentEditorPanel extends JPanel {
 	

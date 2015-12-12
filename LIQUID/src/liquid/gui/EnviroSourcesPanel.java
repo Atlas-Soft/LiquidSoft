@@ -16,7 +16,6 @@ import liquid.core.LiquidApplication;
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked
  * to creating a source are present, such as the force in the X/Y directions.
- * @version 3.0
  */
 public class EnviroSourcesPanel extends JPanel {
 

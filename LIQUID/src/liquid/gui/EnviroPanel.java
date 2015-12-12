@@ -14,7 +14,6 @@ import liquid.core.LiquidApplication;
 /**
  * Class is a branch of the EnvironmentEditorPanel. Here, all elements linked to
  * creating the size of the environment are present, such as the length and width.
- * @version 3.0
  */
 public class EnviroPanel extends JPanel {
 

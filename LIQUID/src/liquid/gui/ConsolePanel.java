@@ -10,7 +10,6 @@ import javax.swing.JTextArea;
 
 /**
  * Class contains a text box area used to print textual information about the simulation.
- * @version 3.0
  */
 public class ConsolePanel extends JPanel {
 	

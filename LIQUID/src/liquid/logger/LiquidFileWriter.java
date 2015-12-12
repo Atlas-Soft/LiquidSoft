@@ -8,7 +8,6 @@ import java.io.IOException;
 /**
  * Class is used to write the log files of a simulation. This includes the parameters as well
  * as the individual particles, flow meters, and breakpoints data, provided by the Engine.
- * @version 3.0
  */
 public class LiquidFileWriter {
 

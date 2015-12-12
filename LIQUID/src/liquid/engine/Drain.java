@@ -8,7 +8,6 @@ import org.jbox2d.dynamics.World;
  * Class creates a drain object, which is designed to represent a "pipe" or an
  * "exit"; in other words, the particle gets destroyed/removed from the simulation.
  * @author William Steele
- * @version 3.0
  */
 public class Drain {
 	

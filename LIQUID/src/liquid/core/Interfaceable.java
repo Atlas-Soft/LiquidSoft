@@ -4,7 +4,6 @@ package liquid.core;
  * When implemented, Interfaceable allows a component of the simulation to interact
  * with other components of the simulation that have also implemented this interface.
  * @author Rafael Zamora
- * @version 3.0
  */
 public interface Interfaceable {
 	

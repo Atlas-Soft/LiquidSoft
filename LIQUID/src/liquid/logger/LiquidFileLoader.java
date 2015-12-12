@@ -8,7 +8,6 @@ import java.util.ArrayList;
 /**
  * Class is used to load the config file information for the current program. It also loads
  * the parameters of log files to, in a sense, "replay" that particular saved simulation.
- * @version 3.0
  */
 public class LiquidFileLoader {
 	
