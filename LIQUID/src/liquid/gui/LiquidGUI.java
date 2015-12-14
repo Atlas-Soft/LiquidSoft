@@ -51,16 +51,16 @@ public class LiquidGUI implements Interfaceable {
 	
 	/**
 	 * Method defines requested interactions to the Logger and Engine.
-	 * <p>Current Send Interactions:</p>
-	 * <p> - REQUEST_LOAD_CONFIG_FILE - sends the Logger a request to load config file information</p> 
-	 * <p> - REQUEST_LOAD_LOG_PARAM   - sends the Logger a request to load parameters from the log file</p>
-	 * <p> - REQUEST_INIT_WRITE_LOG   - sends the Logger a request to initialize writing a log file</p>
-	 * <p> - REQUEST_WRITE_LOG_PARAM  - sends the Logger the variables needed to write a log file</p>
-	 *  
-	 * <p> - REQUEST_RUN_SIM   - sends the Engine the variables needed to begin simulation</p>
-	 * <p> - REQUEST_PAUSE_SIM - sends the Engine a request to pause the simulation</p>
-	 * <p> - REQUEST_STEP_SIM  - sends the Engine a request to step through the simulation by a frame</p>
-	 * <p> - REQUEST_END_SIM   - sends the Engine a request to end a simulation</p>
+	 * <p>Current Send Interactions:
+	 * <br> - REQUEST_LOAD_CONFIG_FILE - sends the Logger a request to load config file information
+	 * <br> - REQUEST_LOAD_LOG_PARAM   - sends the Logger a request to load parameters from the log file
+	 * <br> - REQUEST_INIT_WRITE_LOG   - sends the Logger a request to initialize writing a log file
+	 * <br> - REQUEST_WRITE_LOG_PARAM  - sends the Logger the variables needed to write a log file
+	 * <br>
+	 * <br> - REQUEST_RUN_SIM   - sends the Engine the variables needed to begin simulation
+	 * <br> - REQUEST_PAUSE_SIM - sends the Engine a request to pause the simulation
+	 * <br> - REQUEST_STEP_SIM  - sends the Engine a request to step through the simulation by a frame
+	 * <br> - REQUEST_END_SIM   - sends the Engine a request to end a simulation
 	 */
 	@Override
 	public void send(Interfaceable i, GlobalVar.Request request) {
@@ -116,13 +116,13 @@ public class LiquidGUI implements Interfaceable {
 	
 	/**
 	 * Method defines requested interactions from the Logger and Engine.
-	 * <p>Current Receive Interaction:</p>
-	 * <p> - SET_CONFIG    - receives information from Logger to set up liquid type information</p>
-	 * <p> - SET_LOG_PARAM - receives information from Logger to set up parameters</p>
-	 *  
-	 * <p> - DISPLAY_SIM   - receives particle information from Engine to display</p>
-	 * <p> - PRINT_SIM     - receives information from Engine to print onto the console</p>
-	 * <p> - SIM_HAS_ENDED - receives information from Engine that simulation has finished</p>
+	 * <p>Current Receive Interactions:
+	 * <br> - SET_CONFIG    - receives information from Logger to set up liquid type information
+	 * <br> - SET_LOG_PARAM - receives information from Logger to set up parameters
+	 * <br>
+	 * <br> - DISPLAY_SIM   - receives particle information from Engine to display
+	 * <br> - PRINT_SIM     - receives information from Engine to print onto the console
+	 * <br> - SIM_HAS_ENDED - receives information from Engine that simulation has finished
 	 */
 	@Override
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {

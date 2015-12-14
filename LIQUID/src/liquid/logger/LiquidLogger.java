@@ -59,9 +59,9 @@ public class LiquidLogger implements Interfaceable {
 	
 	/**
 	 * Method defines requested interactions to the GUI.
-	 * <p>Current Send Interactions:</p>
-	 * <p> - REQUEST_SET_CONFIG    - sends the GUI a request to store the config file information</p>
-	 * <p> - REQUEST_SET_LOG_PARAM - sends the GUI a request to store the log file parameter information</p>
+	 * <p>Current Send Interactions:
+	 * <br> - REQUEST_SET_CONFIG    - sends the GUI a request to store the config file information
+	 * <br> - REQUEST_SET_LOG_PARAM - sends the GUI a request to store the log file parameter information
 	 */
 	@Override
 	public void send(Interfaceable i, GlobalVar.Request request) {
@@ -82,13 +82,13 @@ public class LiquidLogger implements Interfaceable {
 
 	/**
 	 * Method defines requested interactions from the GUI and Engine.
-	 * <p>Current Receive Interactions:</p>
-	 * <p> - LOAD_CONFIG_FILE - receives request to send a self-request to load config data based on file name</p>
-	 * <p> - LOAD_LOG_PARAM   - receives request to send a self-request to load parameters based on file name</p>
-	 * <p> - INIT_WRITE_LOG   - receives request to initialize process of writing a log file</p>
-	 * <p> - WRITE_LOG_PARAM  - receives request to write to log file with the given information</p>
-	 * 
-	 * <p> - WRITE_LOG_DATA - receives information from Engine to write to the log file</p>
+	 * <p>Current Receive Interactions:
+	 * <br> - LOAD_CONFIG_FILE - receives request to send a self-request to load config data based on file name
+	 * <br> - LOAD_LOG_PARAM   - receives request to send a self-request to load parameters based on file name
+	 * <br> - INIT_WRITE_LOG   - receives request to initialize process of writing a log file
+	 * <br> - WRITE_LOG_PARAM  - receives request to write to log file with the given information
+	 * <br>
+	 * <br> - WRITE_LOG_DATA - receives information from Engine to write to the log file
 	 */
 	@Override
 	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
