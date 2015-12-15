@@ -145,10 +145,10 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	 */
 	public void initSim(String[] args) {
 		// sets necessary parameters for Engine to compute
-		enviro.viscousStrength = Float.parseFloat(args[4])/100;
 		runtime = Integer.parseInt(args[5]);
 		String[] tokens = args[6].split(" ");
-		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]), Float.parseFloat(tokens[1]));
+		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),Float.parseFloat(tokens[1]));
+		enviro.viscousStrength = Float.parseFloat(args[4])/100;
 		
 		// creates objects for Engine to create/calculate when items are present in the String[]
 		float x,y,l,w,r;
