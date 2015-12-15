@@ -29,7 +29,6 @@ public class LiquidFileWriter {
 	/**
 	 * Method writes the contents of the String[] onto a text file. This represents
 	 * the log file, which stores all parameter information for future replaying.
-	 * @param fileName - name of log file to write to
 	 * @param args     - the String[] of parameters
 	 */
 	public void writeLogParam(String args[]) {

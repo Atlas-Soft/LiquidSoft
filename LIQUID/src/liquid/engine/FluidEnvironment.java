@@ -66,8 +66,8 @@ public class FluidEnvironment {
 	 * Initializes the particle details for the simulation. This includes the radius, max count, and viscous strength.
 	 */
 	public void init() {
-		world.setParticleRadius(5f);
-		world.setParticleMaxCount(1500);
+		world.setParticleRadius(3.0f);
+		world.setParticleMaxCount(2000);
 		world.setParticleViscousStrength(viscousStrength);
 	}
 	
