@@ -121,7 +121,7 @@ public class EnvironmentEditorPanel extends JPanel {
 	 * Method adds the object--obstacle, drain, source, flow meter, or breakpoint--when the Create button
 	 * has been pressed or updates the object's parameters when the Update button has been pressed. 
 	 * 
-	 * For the ArrayList<Float>:
+	 * For the ArrayList params:
 	 *  - 0 - X-Coordinate of object
 	 *  - 1 - Y-Coordinate of object
 	 *  - 2 - Length of object
