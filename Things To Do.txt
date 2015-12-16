@@ -1,4 +1,0 @@
-Class not yet "completed," I think:
-  - LiquidGUI - anymore send/requests?
-  - ParameterPanel - replay functionality?
-  - SimulationPanel - breakpoint things - taken care of
