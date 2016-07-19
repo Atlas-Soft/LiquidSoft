@@ -5,6 +5,7 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
 import liquid.core.GlobalVar;
+import liquid.core.GlobalVar.ObjectType;
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 import liquid.gui.LiquidGUI;
@@ -157,7 +158,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			tokens = args[i].split(" ");
 			
 			// creates object based on type, in this instance a rectangular obstacle
-			if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString())) {
+			if (tokens[0].equals(ObjectType.Rectangular.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -168,7 +169,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addObstacle(shape,((l/2)+x),((w/2)+y),r);
 			
 			// in this instance, a circular obstacle
-			} else if (tokens[0].equals(GlobalVar.ObsType.Circular.toString())) {
+			} else if (tokens[0].equals(ObjectType.Circular.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -182,7 +183,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addObstacle(shape,((l/2)+x),((w/2)+y),r);
 			
 			// in this instance, a rectangular drain
-			} else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())) {
+			} else if (tokens[0].equals(ObjectType.Rect_Drain.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -197,7 +198,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addDrain(shape);
 			
 			// in this instance, a circular drain
-			} else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
+			} else if (tokens[0].equals(ObjectType.Circ_Drain.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);

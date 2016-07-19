@@ -8,236 +8,146 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar;
-import liquid.core.LiquidApplication;
-
 /**
- * Class creates a panel to display the simulation itself. All objects created in the
- * EnvironmentEditorPanel (if any present) will be drawn into the current simulation.
+ * SimulationPanel class creates a panel (currently located in the upper lefthand corner) to display the simulation itself. All objects created
+ * in the EnvironmentEditorPanels--if any present--will be drawn into the current simulation, such as obstacles, drains, sources, breakpoints &
+ * flowmeters. Once a simulation begins, liquid particles of various colors appear starting from the source(s) & function according to an object.
  */
 public class SimulationPanel extends JPanel implements MouseListener, MouseMotionListener {
-	
-	// variables used to display and determine the X/Y location
 	private static final long serialVersionUID = 1L;
-	private float x;
-	private float y;
-	private JLabel xLabel;
-	private JLabel yLabel;
 	private Rectangle2D.Float environment;
+	private Graphics2D g2d;
+	SimulationPanelMouse simPanelMouse = new SimulationPanelMouse();	
+
+	// ArrayLists store all rectangular/circular shapes & their indexes respectively
+	ArrayList<Rectangle2D> rectList; ArrayList<String> rectIndexList;
+	ArrayList<Ellipse2D> circList;   ArrayList<String> circIndexList;
 	
 	/**
-	 * Constructor for the SimulationPanel. It is currently located on the lower left-hand side of the simulator. 
+	 * Constructor for the SimulationPanel sets up various settings for the panel, currently located in the upper lefthand corner of the simulator. 
 	 */
 	public SimulationPanel() {
-		super();
-		initComponents();
+		super(); initComponents();
+		
+		// allows manual setup of layout settings
 		setLayout(null);
-		setBackground(Color.white);
-		setBounds(0,0,501,401);
-		addMouseListener(this);
-		addMouseMotionListener(this);
+		setBackground(Color.WHITE); setBounds(0,0,501,401);
+
+		// allows user to interact with & move objects using a mouse
+		addMouseListener(this); addMouseMotionListener(this);
 		setVisible(true);
 	}
 	
 	/**
-	 * Initializes the components of the SimulationPanel.
+	 * Method initializes the basic components of the SimulationPanel class.
 	 */
 	private void initComponents() {
-		Font font = new Font("Verdana",Font.BOLD,12);
-		setFont(font);
-		
+		setFont(new Font("Verdana",Font.BOLD,12));
 		environment = new Rectangle2D.Float();
-		
-		// creates labels to show the user the current X/Y location
-		xLabel = new JLabel("X: -");
-		xLabel.setBounds(5,0,50,20);
-		add(xLabel);
-		
-		yLabel = new JLabel("Y: -");
-		yLabel.setBounds(5,20,50,20);
-		add(yLabel);
 	}
 	
 	/**
-	 * Method creates all components in the simulation panel. This includes the color of a particle,
-	 * as well as the various objects--obstacles, drains, sources, flow meters, and breakpoints
-	 * @param g - graphics to be casted to a 2D graphics
-	 */
-	public void render(Graphics g) {
-		// creates the actual rectangular simulation panel
-		Graphics2D g2d = (Graphics2D) g;
-		float len = LiquidApplication.getGUI().variables.enviroLength;
-        float wid = LiquidApplication.getGUI().variables.enviroWidth;
-        environment.setRect(((500/2)-(len/2)),((400/2)-(wid/2)),len,wid);
-        g2d.setColor(Color.BLACK);
-        g2d.draw(environment);
-        
-        // sets the color of the particles depending on the flow speed
-        float x,y,l,w,r;
-        if (LiquidApplication.getGUI().variables.simulating) {
-        	for (int i = 1; i < LiquidApplication.getGUI().variables.particles.length; i++) {
-        		String[] tokens = LiquidApplication.getGUI().variables.particles[i].split(" ");
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		g2d.setColor(new Color(1-(1/(Float.parseFloat(tokens[3])*1.3f)),0.25f,(1/(Float.parseFloat(tokens[3])*1.3f))));
-        		g2d.fill(new Ellipse2D.Float((x-2.5f),(y-2.5f),5,5));
-        	}
-        }
-        
-        // creates objects when there are items in the String[] for objects
-        int FID = 1;
-        int BID = 1;
-        for (int i = 0; i < LiquidApplication.getGUI().variables.objects.size(); i++) {
-        	String[] tokens = LiquidApplication.getGUI().variables.objects.get(i).split(" ");
-        	
-        	// sets the currently selected object to be the color green
-        	if (i == LiquidApplication.getGUI().variables.selectedObject && !LiquidApplication.getGUI().variables.simulating) g2d.setColor(Color.GREEN);
-        	else g2d.setColor(Color.BLACK);
-        	
-        	// creates an object based on the type, in this instance a rectangular obstacle
-        	if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString())) {
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		l = Float.parseFloat(tokens[3]);
-        		w = Float.parseFloat(tokens[4]);
-        		r = Float.parseFloat(tokens[5]);
-        		g2d.rotate(Math.toRadians(r),x+(l/2),y+(w/2));
-        		g2d.fill(new Rectangle2D.Float(x,y,l,w));
-        		g2d.rotate(Math.toRadians(-r),x+(l/2),y+(w/2));    
-        		
-        	// in this instance, creates a rectangular drain
-        	} else if (tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString())) {
-           		x = environment.x+Float.parseFloat(tokens[1]);
-           		y = environment.y+Float.parseFloat(tokens[2]);
-           		l = Float.parseFloat(tokens[3]);
-           		w = Float.parseFloat(tokens[4]);
-           		r = Float.parseFloat(tokens[5]);
-           		g2d.rotate(Math.toRadians(r),x+(l/2),y+(w/2));
-           		g2d.draw(new Rectangle2D.Float(x,y,l,w));
-           		g2d.rotate(Math.toRadians(-r),x+(l/2),y+(w/2)); 
-            	
-        	// in this instance, creates a circular obstacle
-        	} else if (tokens[0].equals(GlobalVar.ObsType.Circular.toString())) {
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		l = Float.parseFloat(tokens[3]);
-        		w = Float.parseFloat(tokens[4]);
-        		r = Float.parseFloat(tokens[5]);
-           		g2d.rotate(Math.toRadians(r),x+(l/2),y+(w/2));
-        		g2d.fill(new Ellipse2D.Float(x,y,l,w));
-        		g2d.rotate(Math.toRadians(-r),x+(l/2),y+(w/2)); 
-        	
-        	// in this instance, creates a circular drain
-        	} else if (tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		l = Float.parseFloat(tokens[3]);
-        		w = Float.parseFloat(tokens[4]);
-        		r = Float.parseFloat(tokens[5]);
-           		g2d.rotate(Math.toRadians(r),x+(l/2),y+(w/2));
-        		g2d.draw(new Ellipse2D.Float(x,y,l,w));
-        		g2d.rotate(Math.toRadians(-r),x+(l/2),y+(w/2)); 
-        	
-        	// in this instance, creates a source
-        	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		l = Float.parseFloat(tokens[3]);
-        		w = Float.parseFloat(tokens[4]);
-        		g2d.draw(new Ellipse2D.Float((x-10),(y-10),20,20));
-        		g2d.drawString("S",(x-3),(y+5));
-        		g2d.draw(new Line2D.Float(x,y,(x+l),(y+w)));
-        	
-        	// in this instance, creates a flow meter
-        	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		g2d.draw(new Ellipse2D.Float((x-10),(y-10),20,20));
-        		g2d.drawString("F",(x-6),(y+5));
-        		g2d.drawString((FID++ +""),(x-1),(y+5));
-        	
-        	// in this instance, creates a breakpoint
-        	} else if (tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
-        		x = environment.x+Float.parseFloat(tokens[1]);
-        		y = environment.y+Float.parseFloat(tokens[2]);
-        		l = Float.parseFloat(tokens[3]);
-        		w = Float.parseFloat(tokens[4]);
-        		g2d.draw(new Rectangle2D.Float(x,y,l,w));
-        		x += .5 * l;
-        		y += .5 * w;
-        		g2d.drawString("B",(x-6),(y+5));
-        		g2d.drawString((BID++ +""),(x-1),(y+5));
-        	}
-        }
-	}
-	
-	/**
-	 * Method is the paint component, which does the actually drawing in the simulation panel.
+	 * Method represents the paint component, which does the actually drawing in the SimulationPanel class.
 	 */
 	public void paintComponent(Graphics g) {
-        super.paintComponent(g); 
-		render(g);
+		super.paintComponent(g);
+		g2d = (Graphics2D) g;
+
+		// begins initialization process of environment, particles & objects
+		SimulationPanelRender sumPanelRender = new SimulationPanelRender();
+		sumPanelRender.render(g2d,environment);
     }
+	
+	/**
+	  * Method repaints the simulation panel whenever the mouse merely clicks on an object.
+	  * The details have been extracted into another class to prevent clustering of code.
+	  */
+	@Override
+	public void mouseClicked(MouseEvent mouse) {
+		if (simPanelMouse.mouseClicked(mouse,environment,rectList,rectIndexList,circList,circIndexList)) repaint();}
 
 	/**
-	 * Method represents a placeholder for the implementation of mouse clicking.
+	 * Method repaints the simulation panel whenever the mouse begins to drag an object.
+	 * The details have been extracted into another class to prevent clustering of code.
 	 */
 	@Override
-	public void mouseClicked(MouseEvent arg0) {}
+	public void mouseDragged(MouseEvent mouse) {
+		if (simPanelMouse.mouseDragged(mouse)) repaint();}
+	
+	/*** Method represents a placeholder for the implementation of the mouse entering the SimulationPanel. */
+	@Override
+	public void mouseEntered(MouseEvent mouse) {}
+
+	/*** Method represents a placeholder for the implementation of the mouse exiting the SimulationPanel. */
+	@Override
+	public void mouseExited(MouseEvent mouse) {}
+	
+	/*** Method represents a placeholder for the implementation of the mouse moving in the SimulationPanel. */
+	@Override
+	public void mouseMoved(MouseEvent mouse) {}
+	
+	/**
+	 * Method represents resulted actions whenever the mouse presses an object. The
+	 * details have been extracted into another class to prevent clustering of code.
+	 */
+	@Override
+	public void mousePressed(MouseEvent mouse) {
+		simPanelMouse.mousePressed(mouse,environment,rectList,rectIndexList,circList,circIndexList);}
 
 	/**
-	 * Method represents a placeholder for the implementation of when the mouse enters a component.
+	 * Method represents resulted actions whenever the mouse releases an object. The
+	 * details have been extracted into another class to prevent clustering of code.
 	 */
 	@Override
-	public void mouseEntered(MouseEvent arg0) {}
-
+	public void mouseReleased(MouseEvent mouse) {
+		simPanelMouse.mouseReleased(mouse);}
+	
 	/**
-	 * Method sets the X/Y location text to be "-" when the mouse moves out of the simulation panel.
+	 * Setter method creates a new instance of the rectangular objects list.
 	 */
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		xLabel.setText("X: -");
-		yLabel.setText("Y: -");
-	}
-
+	public void setRectList() {rectList = new ArrayList<Rectangle2D>();}
+	
 	/**
-	 * Method represents a placeholder for the implementation of when the mouse presses something.
+	 * Getter method returns the rectangular objects list.
+	 * @return - the rectangular objects list
 	 */
-	@Override
-	public void mousePressed(MouseEvent arg0) {}
-
+	public ArrayList<Rectangle2D> getRectList() {return rectList;}
+	
 	/**
-	 * Method represents a placeholder for the implementation of when the mouse releases something.
+	 * Setter method creates a new instance of the rectangular objects' indexes list.
 	 */
-	@Override
-	public void mouseReleased(MouseEvent arg0) {}
-
+	public void setRectIndexList() {rectIndexList = new ArrayList<String>();}
+	
 	/**
-	 * Method represents a placeholder for the implementation of when the mouse drags something.
+	 * Getter method returns the rectangular objects' indexes list.
+	 * @return - the rectangular objects' indexes list
 	 */
-	@Override
-	public void mouseDragged(MouseEvent arg0) {}
-
+	public ArrayList<String> getRectIndexList() {return rectIndexList;}
+	
 	/**
-	 * Method sets the X/Y location text to be the X-/Y-Coordinates relative to the environment's size.
+	 * Setter method creates a new instance of the circular objects list.
 	 */
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// for instances when the mouse is outside the specified environment
-		if (!environment.contains(arg0.getPoint())) {
-			xLabel.setText("X: -");
-			yLabel.setText("Y: -");
-		} else {
-			x = arg0.getX()-environment.x;
-			y = arg0.getY()-environment.y;
-			xLabel.setText("X: "+x);
-			yLabel.setText("Y: "+y);	
-		}
-	}
+	public void setCircList() {circList = new ArrayList<Ellipse2D>();}
+	
+	/**
+	 * Getter method returns the circular objects list.
+	 * @return - the circular objects list
+	 */
+	public ArrayList<Ellipse2D> getCircList() {return circList;}
+	
+	/**
+	 * Setter method creates a new instance of the circular objects' indexes list.
+	 */
+	public void setCircIndexList() {circIndexList = new ArrayList<String>();}
+	
+	/**
+	 * Getter method returns the circular objects' indexes list.
+	 * @return - the circular objects' indexes list
+	 */
+	public ArrayList<String> getCircIndexList() {return circIndexList;}
 }

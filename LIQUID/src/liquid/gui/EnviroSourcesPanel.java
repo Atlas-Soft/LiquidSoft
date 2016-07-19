@@ -144,11 +144,11 @@ public class EnviroSourcesPanel extends JPanel {
 	 */
 	public void createSource(boolean update) {
 		params = new ArrayList<Float>();
-		params.add((Float) sourceX.getSelectedItem());
-		params.add((Float) sourceY.getSelectedItem());
-		params.add((Float) sourceXComp.getSelectedItem());
-		params.add((Float) sourceYComp.getSelectedItem());
-		params.add((Float) sourceSpeed.getSelectedItem());
+		params.add((Float)sourceX.getSelectedItem());
+		params.add((Float)sourceY.getSelectedItem());
+		params.add((Float)sourceXComp.getSelectedItem());
+		params.add((Float)sourceYComp.getSelectedItem());
+		params.add((Float)sourceSpeed.getSelectedItem());
 		LiquidApplication.getGUI().enviroeditor.addObject(sourceType, params, update);
 	}
 	

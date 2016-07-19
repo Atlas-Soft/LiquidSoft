@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import liquid.core.GlobalVar;
+import liquid.core.GlobalVar.ObjectType;
 import liquid.core.LiquidApplication;
 
 /**
@@ -157,10 +158,10 @@ public class EnvironmentEditorPanel extends JPanel {
 			if (LiquidApplication.getGUI().variables.objects.size() != 0) {
 				String[] tokens = LiquidApplication.getGUI().variables.objects.get(LiquidApplication.getGUI().variables.selectedObject).split(" ");
 				// creates an obstacle if it's the last item
-				if (tokens[0].equals(GlobalVar.ObsType.Rectangular.toString()) ||
-						tokens[0].equals(GlobalVar.ObsType.Circular.toString()) ||
-						tokens[0].equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
-						tokens[0].equals(GlobalVar.ObsType.Circ_Drain.toString())) {
+				if (tokens[0].equals(ObjectType.Rectangular.toString()) ||
+						tokens[0].equals(ObjectType.Circular.toString()) ||
+						tokens[0].equals(ObjectType.Rect_Drain.toString()) ||
+						tokens[0].equals(ObjectType.Circ_Drain.toString())) {
 					select.setSelectedItem(GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
 						GlobalVar.EnviroOptions.Drains.toString());
 					obstacles.setVisible(true);

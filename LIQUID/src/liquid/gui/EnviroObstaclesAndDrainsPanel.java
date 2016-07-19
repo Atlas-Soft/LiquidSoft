@@ -13,7 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar;
+import liquid.core.GlobalVar.ObjectType;
 import liquid.core.LiquidApplication;
 
 /**
@@ -78,19 +78,19 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		
 		// adds the obstacle/drain types to the drop-down list
 		obstacleType = new JComboBox<String>();
-		obstacleType.addItem(GlobalVar.ObsType.Rectangular.toString());
-		obstacleType.addItem(GlobalVar.ObsType.Circular.toString());
-		obstacleType.addItem(GlobalVar.ObsType.Rect_Drain.toString());
-		obstacleType.addItem(GlobalVar.ObsType.Circ_Drain.toString());
+		obstacleType.addItem(ObjectType.Rectangular.toString());
+		obstacleType.addItem(ObjectType.Circular.toString());
+		obstacleType.addItem(ObjectType.Rect_Drain.toString());
+		obstacleType.addItem(ObjectType.Circ_Drain.toString());
 		obstacleType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
 		obstacleType.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				// sets the rotation drop-down option to be disabled for drains 
-				if (arg0.getItem().toString().equals(GlobalVar.ObsType.Rectangular.toString()) ||
-						arg0.getItem().toString().equals(GlobalVar.ObsType.Circular.toString())) {
+				if (arg0.getItem().toString().equals(ObjectType.Rectangular.toString()) ||
+						arg0.getItem().toString().equals(ObjectType.Circular.toString())) {
 					obstacleRotation.setEnabled(true);
-				} else if (arg0.getItem().toString().equals(GlobalVar.ObsType.Rect_Drain.toString()) ||
-						arg0.getItem().equals(GlobalVar.ObsType.Circ_Drain.toString())) {
+				} else if (arg0.getItem().toString().equals(ObjectType.Rect_Drain.toString()) ||
+						arg0.getItem().equals(ObjectType.Circ_Drain.toString())) {
 					obstacleRotation.setEnabled(false);}
 			}
         });

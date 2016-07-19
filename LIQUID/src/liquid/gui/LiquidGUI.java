@@ -16,7 +16,7 @@ public class LiquidGUI implements Interfaceable {
 	
 	// initializes all classes of the GUI
 	VariousMessages message;
-	LiquidGuiVariables variables;
+	LiquidGUIVariables variables;
 	LiquidFrame frame;
 	LiquidMenuBar menubar;
 	SimulationPanel sim;
@@ -36,7 +36,7 @@ public class LiquidGUI implements Interfaceable {
 	 */
 	private void initComponents() {
 		message = new VariousMessages();
-		variables = new LiquidGuiVariables();
+		variables = new LiquidGUIVariables();
 		frame = new LiquidFrame();
 		frame.setJMenuBar(menubar = new LiquidMenuBar());
 		frame.add(sim = new SimulationPanel());
