@@ -2,7 +2,7 @@ package liquid.logger;
 
 import java.io.File;
 
-import liquid.core.GlobalVar;
+import liquid.core.GlobalVariables;
 import liquid.core.Interfaceable;
 import liquid.engine.LiquidEngine;
 import liquid.gui.LiquidGUI;
@@ -16,8 +16,9 @@ import liquid.gui.LiquidGUI;
 public class LiquidLogger implements Interfaceable {
 	
 	// initializes the variables to load or write a log file, as well as the file name of the current simulation
-	private LiquidFileLoader fileLoader;
-	private LiquidFileWriter fileWriter;
+	private LoadTextData fileLoader;
+	private WriteDataToText fileWriter;
+	private FileSelection fileChooser;
 	private String currentFile;
 	private String configFile;
 	String[] args;
@@ -34,8 +35,9 @@ public class LiquidLogger implements Interfaceable {
 	 * the log and config files are located in the correct directory and contains the correct ending and/or name.
 	 */
 	private void initComponents() {
-		fileLoader = new LiquidFileLoader();
-		fileWriter = new LiquidFileWriter();
+		fileLoader = new LoadTextData();
+		fileWriter = new WriteDataToText();
+		fileChooser = new FileSelection();
 		
 		// checks for a folder name called 'logs' in the AtlasSoft folder
 		File f = new File("../logs");
@@ -64,17 +66,25 @@ public class LiquidLogger implements Interfaceable {
 	 * <br> - REQUEST_SET_LOG_PARAM - sends the GUI a request to store the log file parameter information
 	 */
 	@Override
-	public void send(Interfaceable i, GlobalVar.Request request) {
+	public void send(Interfaceable i, GlobalVariables.Request request) {
 		// sends a String[] of parameters for the GUI to use
 		if (i instanceof LiquidGUI) {
 			switch (request) {
 			case REQUEST_SET_CONFIG:
 				args = fileLoader.loadConfigFile(configFile);
-				i.receive(this, GlobalVar.Request.SET_CONFIG, args);
+				i.receive(this, GlobalVariables.Request.SET_CONFIG, args);
 				break;
 			case REQUEST_SET_LOG_PARAM:
 				args = fileLoader.loadLogParam(currentFile);
-				i.receive(this, GlobalVar.Request.SET_LOG_PARAM, args);
+				i.receive(this, GlobalVariables.Request.SET_LOG_PARAM, args);
+				break;
+			case REQUEST_SET_SAVE_FILE:
+				args[0] = fileChooser.setUpFile(GlobalVariables.FileAction.Save);
+				i.receive(this,GlobalVariables.Request.SET_SAVE_FILE,args);
+				break;
+			case REQUEST_SET_LOAD_FILE:
+				args[0] = fileChooser.setUpFile(GlobalVariables.FileAction.Load);
+				i.receive(this,GlobalVariables.Request.SET_LOAD_FILE,args);
 				break;
 			default:}
 		}
@@ -91,16 +101,16 @@ public class LiquidLogger implements Interfaceable {
 	 * <br> - WRITE_LOG_DATA - receives information from Engine to write to the log file
 	 */
 	@Override
-	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
+	public void receive(Interfaceable i, GlobalVariables.Request request, String[] args) {
 		// receives requests to either load or write to a file
 		if (i instanceof LiquidGUI) {
 			switch (request) {
 			case LOAD_CONFIG_FILE:
-				send(i, GlobalVar.Request.REQUEST_SET_CONFIG);
+				send(i, GlobalVariables.Request.REQUEST_SET_CONFIG);
 				break;
 			case LOAD_LOG_PARAM:
 				currentFile = args[0];
-				send(i, GlobalVar.Request.REQUEST_SET_LOG_PARAM);
+				send(i, GlobalVariables.Request.REQUEST_SET_LOG_PARAM);
 				break;
 			case INIT_WRITE_LOG:
 				currentFile = args[0];
@@ -108,6 +118,12 @@ public class LiquidLogger implements Interfaceable {
 				break;
 			case WRITE_LOG_PARAM:
 				fileWriter.writeLogParam(args);
+				break;
+			case SAVE_FILE:
+				send(i,GlobalVariables.Request.REQUEST_SET_SAVE_FILE);
+				break;
+			case LOAD_FILE:
+				send(i,GlobalVariables.Request.REQUEST_SET_LOAD_FILE);
 				break;
 			default:}
 		}

@@ -4,8 +4,9 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
-import liquid.core.GlobalVar;
-import liquid.core.GlobalVar.ObjectType;
+import liquid.core.GlobalVariables;
+import liquid.core.GlobalVariables.LoggerItems;
+import liquid.core.GlobalVariables.ObjectType;
 import liquid.core.Interfaceable;
 import liquid.core.LiquidApplication;
 import liquid.gui.LiquidGUI;
@@ -46,7 +47,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	 * <br> - REQUEST_WRITE_LOG_DATA - sends the Logger a request to write current flow meter/breakpoint data
 	 */
 	@Override
-	public void send(Interfaceable i, GlobalVar.Request request) {
+	public void send(Interfaceable i, GlobalVariables.Request request) {
 		String[] args;
 		
 		// sends requests to the GUI to display particle information onto the appropriate panels
@@ -54,7 +55,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			switch (request) {
 			case REQUEST_DISPLAY_SIM:
 				args = enviro.getParticleData();
-				i.receive(this, GlobalVar.Request.DISPLAY_SIM, args);
+				i.receive(this, GlobalVariables.Request.DISPLAY_SIM, args);
 				break;
 			case REQUEST_PRINT_SIM:
 				args = new String[1];
@@ -64,11 +65,11 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					args[0] += enviro.meters.get(f).toString()+"\n";}
 				for (int b = 0; b < enviro.brkpts.size(); b++) {
 					args[0] += enviro.brkpts.get(b).toString()+"\n";}
-				i.receive(this, GlobalVar.Request.PRINT_SIM, args);
+				i.receive(this, GlobalVariables.Request.PRINT_SIM, args);
 				break;
 			case REQUEST_SIM_HAS_ENDED:
 				args = new String[0];
-				i.receive(this, GlobalVar.Request.SIM_HAS_ENDED, args);
+				i.receive(this, GlobalVariables.Request.SIM_HAS_ENDED, args);
 				break;
 			default:
 				break;}
@@ -83,7 +84,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 					args[args.length-1] += enviro.meters.get(f).toString();}
 				for (int b = 0; b < enviro.brkpts.size(); b++) {
 					args[args.length-1] += enviro.brkpts.get(b).toString();}
-				i.receive(this, GlobalVar.Request.WRITE_LOG_DATA, args);
+				i.receive(this, GlobalVariables.Request.WRITE_LOG_DATA, args);
 				break;
 			default:}
 		}
@@ -99,7 +100,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public void receive(Interfaceable i, GlobalVar.Request request, String[] args) {
+	public void receive(Interfaceable i, GlobalVariables.Request request, String[] args) {
 		
 		// receives notices from the GUi regarding the status of the simulation
 		if (i instanceof LiquidGUI) {
@@ -146,19 +147,19 @@ public class LiquidEngine implements Interfaceable, Runnable {
 	 */
 	public void initSim(String[] args) {
 		// sets necessary parameters for Engine to compute
-		runtime = Integer.parseInt(args[5]);
-		String[] tokens = args[6].split(" ");
-		enviro = new FluidEnvironment(Float.parseFloat(tokens[0]),Float.parseFloat(tokens[1]));
-		enviro.viscousStrength = Float.parseFloat(args[4])/100;
+		runtime = Integer.parseInt(args[LiquidApplication.getGUI().getFileVariables().readArrayIndex(LoggerItems.runtime)]);
+		enviro = new FluidEnvironment(Float.parseFloat(args[LiquidApplication.getGUI().getFileVariables().readArrayIndex(LoggerItems.environmentWidth)]),
+				Float.parseFloat(args[LiquidApplication.getGUI().getFileVariables().readArrayIndex(LoggerItems.environmentHeight)]));
+		enviro.viscousStrength = Float.parseFloat(args[LiquidApplication.getGUI().getFileVariables().readArrayIndex(LoggerItems.viscosity)])/100;
 		
 		// creates objects for Engine to create/calculate when items are present in the String[]
 		float x,y,l,w,r;
 		int FID = 1, BID = 1;
 		for (int i = 7; i < args.length; i++) {
-			tokens = args[i].split(" ");
+			String[] tokens = args[i].split(" ");
 			
 			// creates object based on type, in this instance a rectangular obstacle
-			if (tokens[0].equals(ObjectType.Rectangular.toString())) {
+			if (tokens[0].equals(ObjectType.Rectangle.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -169,7 +170,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addObstacle(shape,((l/2)+x),((w/2)+y),r);
 			
 			// in this instance, a circular obstacle
-			} else if (tokens[0].equals(ObjectType.Circular.toString())) {
+			} else if (tokens[0].equals(ObjectType.Circle.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -183,7 +184,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addObstacle(shape,((l/2)+x),((w/2)+y),r);
 			
 			// in this instance, a rectangular drain
-			} else if (tokens[0].equals(ObjectType.Rect_Drain.toString())) {
+			} else if (tokens[0].equals(ObjectType.Rectangle_Drain.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -198,7 +199,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addDrain(shape);
 			
 			// in this instance, a circular drain
-			} else if (tokens[0].equals(ObjectType.Circ_Drain.toString())) {
+			} else if (tokens[0].equals(ObjectType.Circle_Drain.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -211,7 +212,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addDrain(shape);
 			
 			// in this instance, a source
-			} else if (tokens[0].equals(GlobalVar.EnviroOptions.Sources.toString())) {
+			} else if (tokens[0].equals(GlobalVariables.EnviroOptions.Sources.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -220,13 +221,13 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				enviro.addSource(x,y,l,w,r);
 				
 			// in this instance, a flow meter
-			} else if (tokens[0].equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
+			} else if (tokens[0].equals(GlobalVariables.EnviroOptions.Flowmeters.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				enviro.addFlowmeter(x,y,FID++);
 			
 			// in this instance, a breakpoint
-			} else if (tokens[0].equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
+			} else if (tokens[0].equals(GlobalVariables.EnviroOptions.Breakpoints.toString())) {
 				x = Float.parseFloat(tokens[1]);
 				y = Float.parseFloat(tokens[2]);
 				l = Float.parseFloat(tokens[3]);
@@ -274,13 +275,13 @@ public class LiquidEngine implements Interfaceable, Runnable {
 			
 			// sends data to the GUI/Logger to display/write after each frame of the simulation
 			enviro.update(delta);
-			send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_DISPLAY_SIM);
-			send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_DATA);
+			send(LiquidApplication.getGUI(), GlobalVariables.Request.REQUEST_DISPLAY_SIM);
+			send(LiquidApplication.getLogger(), GlobalVariables.Request.REQUEST_WRITE_LOG_DATA);
 			
 			// prints out the FPS information for testing purposes
 			if (lastFpsTime >= 1000000000) {
 				System.out.println("(FPS: "+fps+")");
-				send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_PRINT_SIM);
+				send(LiquidApplication.getGUI(), GlobalVariables.Request.REQUEST_PRINT_SIM);
 				sec += 1;
 				lastFpsTime = 0;
 				fps = 0;
@@ -294,7 +295,7 @@ public class LiquidEngine implements Interfaceable, Runnable {
 				wasPaused = true;
 				loop.suspend();}
 		}
-		send(LiquidApplication.getGUI(), GlobalVar.Request.REQUEST_SIM_HAS_ENDED);
+		send(LiquidApplication.getGUI(), GlobalVariables.Request.REQUEST_SIM_HAS_ENDED);
 	}
 	
 	/**

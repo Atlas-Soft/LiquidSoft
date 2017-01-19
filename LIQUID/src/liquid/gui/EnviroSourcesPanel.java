@@ -10,7 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar;
+import liquid.core.GlobalVariables;
 import liquid.core.LiquidApplication;
 
 /**
@@ -71,7 +71,7 @@ public class EnviroSourcesPanel extends JPanel {
 		
 		// makes the drop-downs needed to create sources
 		sourceType = new JComboBox<String>();
-		sourceType.addItem(GlobalVar.EnviroOptions.Sources.toString());
+		sourceType.addItem(GlobalVariables.EnviroOptions.Sources.toString());
 		sourceType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
 		add(sourceType);
 		
@@ -99,13 +99,13 @@ public class EnviroSourcesPanel extends JPanel {
 		add(sourceSpeed);
 		
 		sourceX.removeAllItems();
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroLenLimit; i++) {
 			sourceX.addItem(Float.valueOf(i));}
 		sourceX.setBounds(5,85,(int)(this.getWidth()/2.2),25);
 		add(sourceX);
 		
 		sourceY.removeAllItems();
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroWidLimit; i++) {
 			sourceY.addItem(Float.valueOf(i));}
 		sourceY.setBounds(125,85,(int)(this.getWidth()/2.2),25);
 		add(sourceY);
@@ -143,13 +143,19 @@ public class EnviroSourcesPanel extends JPanel {
 	 * @param update - either adds a new object or updates a object's parameters
 	 */
 	public void createSource(boolean update) {
+//		if ((x+l) < -10) {
+//			x = -10-l;
+//			System.out.println("Less than");}
+//		else if ((x+l) > (environment.width-10)) {
+//			x = environment.width-10-l;
+//			System.out.println("Greater than");}
 		params = new ArrayList<Float>();
 		params.add((Float)sourceX.getSelectedItem());
 		params.add((Float)sourceY.getSelectedItem());
 		params.add((Float)sourceXComp.getSelectedItem());
 		params.add((Float)sourceYComp.getSelectedItem());
 		params.add((Float)sourceSpeed.getSelectedItem());
-		LiquidApplication.getGUI().enviroeditor.addObject(sourceType, params, update);
+		LiquidApplication.getGUI().getEditorPanel().addObject(sourceType, params, update);
 	}
 	
 	/**

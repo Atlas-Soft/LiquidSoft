@@ -13,7 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar.ObjectType;
+import liquid.core.GlobalVariables.ObjectType;
 import liquid.core.LiquidApplication;
 
 /**
@@ -78,19 +78,19 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		
 		// adds the obstacle/drain types to the drop-down list
 		obstacleType = new JComboBox<String>();
-		obstacleType.addItem(ObjectType.Rectangular.toString());
-		obstacleType.addItem(ObjectType.Circular.toString());
-		obstacleType.addItem(ObjectType.Rect_Drain.toString());
-		obstacleType.addItem(ObjectType.Circ_Drain.toString());
+		obstacleType.addItem(ObjectType.Rectangle.toString());
+		obstacleType.addItem(ObjectType.Circle.toString());
+		obstacleType.addItem(ObjectType.Rectangle_Drain.toString());
+		obstacleType.addItem(ObjectType.Circle_Drain.toString());
 		obstacleType.setBounds(5,30,(int)(this.getWidth()/2.2),25);
 		obstacleType.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				// sets the rotation drop-down option to be disabled for drains 
-				if (arg0.getItem().toString().equals(ObjectType.Rectangular.toString()) ||
-						arg0.getItem().toString().equals(ObjectType.Circular.toString())) {
+				if (arg0.getItem().toString().equals(ObjectType.Rectangle.toString()) ||
+						arg0.getItem().toString().equals(ObjectType.Circle.toString())) {
 					obstacleRotation.setEnabled(true);
-				} else if (arg0.getItem().toString().equals(ObjectType.Rect_Drain.toString()) ||
-						arg0.getItem().equals(ObjectType.Circ_Drain.toString())) {
+				} else if (arg0.getItem().toString().equals(ObjectType.Rectangle_Drain.toString()) ||
+						arg0.getItem().equals(ObjectType.Circle_Drain.toString())) {
 					obstacleRotation.setEnabled(false);}
 			}
         });
@@ -125,7 +125,7 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 	public void xYParam(boolean enviroChange) {
 		// drop-down is newly populated due to an environment size change
 		obstacleX.setModel(new DefaultComboBoxModel<>());
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroLenLimit; i++) {
 			obstacleX.addItem(Float.valueOf(i));}
 		obstacleX.setBounds(5,85,(int)(this.getWidth()/2.2),25);
 		
@@ -142,7 +142,7 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		
 		// drop-down is newly populated due to an environment size change
 		obstacleY.setModel(new DefaultComboBoxModel<>());
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroWidLimit; i++) {
 			obstacleY.addItem(Float.valueOf(i));}
 		obstacleY.setBounds(125,85,(int)(this.getWidth()/2.2),25);
 		
@@ -168,24 +168,24 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		if (enviroChange || length) {
 			// drop-down is newly populated due to either an environment size change or a new X-Coordinate chosen
 			obstacleL.removeAllItems();
-			for (int i = 0; i <= (EnvironmentEditorPanel.enviroLenLimit-limit); i++) {
+			for (int i = 0; i <= (EditorPanel.enviroLenLimit-limit); i++) {
 				obstacleL.addItem(Float.valueOf(i));}
-			if (origLength <= (EnvironmentEditorPanel.enviroLenLimit-limit))
+			if (origLength <= (EditorPanel.enviroLenLimit-limit))
 				obstacleL.setSelectedIndex((int)origLength);
 			else
-				obstacleL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit-limit));
+				obstacleL.setSelectedIndex((int)(EditorPanel.enviroLenLimit-limit));
 			obstacleL.setBounds(5,135,(int)(this.getWidth()/2.2),25);
 			add(obstacleL);}
 		
 		if (enviroChange || !length) {
 			// drop-down is newly populated due to either an environment size change or a new Y-Coordinate chosen
 			obstacleW.removeAllItems();
-			for (int i = 0; i <= (EnvironmentEditorPanel.enviroWidLimit-limit); i++) {
+			for (int i = 0; i <= (EditorPanel.enviroWidLimit-limit); i++) {
 				obstacleW.addItem(Float.valueOf(i));}
-			if (origWidth <= (EnvironmentEditorPanel.enviroWidLimit-limit))
+			if (origWidth <= (EditorPanel.enviroWidLimit-limit))
 				obstacleW.setSelectedIndex((int)origWidth);
 			else
-				obstacleW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit-limit));
+				obstacleW.setSelectedIndex((int)(EditorPanel.enviroWidLimit-limit));
 			obstacleW.setBounds(125,135,(int)(this.getWidth()/2.2),25);
 			add(obstacleW);}
 	}
@@ -216,7 +216,7 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		params.add((Float)obstacleL.getSelectedItem());
 		params.add((Float)obstacleW.getSelectedItem());
 		params.add((Float)obstacleRotation.getSelectedItem());
-		LiquidApplication.getGUI().enviroeditor.addObject(obstacleType, params, update);
+		LiquidApplication.getGUI().getEditorPanel().addObject(obstacleType, params, update);
 	}
 	
 	/**
@@ -246,7 +246,7 @@ public class EnviroObstaclesAndDrainsPanel extends JPanel {
 		obstacleRotation.setSelectedIndex(0);
 		obstacleX.setSelectedIndex(0);
 		obstacleY.setSelectedIndex(0);
-		obstacleL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit/10));
-		obstacleW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit/8));
+		obstacleL.setSelectedIndex((int)(EditorPanel.enviroLenLimit/10));
+		obstacleW.setSelectedIndex((int)(EditorPanel.enviroWidLimit/8));
 	}
 }

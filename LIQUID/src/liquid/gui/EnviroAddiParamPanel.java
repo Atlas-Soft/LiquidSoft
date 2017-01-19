@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar;
+import liquid.core.GlobalVariables;
 import liquid.core.LiquidApplication;
 
 /**
@@ -57,14 +57,14 @@ public class EnviroAddiParamPanel extends JPanel {
 		selectPrev.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// if multiple objects are present, then the simulator will select the previous item
-				if (LiquidApplication.getGUI().variables.selectedObject > 0) {
-					LiquidApplication.getGUI().variables.selectedObject -= 1;
+				if (LiquidApplication.getGUI().getFileVariables().getSelectedObject() > 0) {
+					LiquidApplication.getGUI().getFileVariables().setSelectedObject(LiquidApplication.getGUI().getFileVariables().getSelectedObject()-1);
 				} else {
-					LiquidApplication.getGUI().variables.selectedObject = LiquidApplication.getGUI().variables.objects.size()-1;
+					LiquidApplication.getGUI().getFileVariables().setSelectedObject(LiquidApplication.getGUI().getFileVariables().getObjects().size()-1);
 				}
-				LiquidApplication.getGUI().enviroeditor.setSelectedObject();
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
+				LiquidApplication.getGUI().getEditorPanel().setSelectedObjectPanel();
+				LiquidApplication.getGUI().getApplicationState().saveState();
+				LiquidApplication.getGUI().getSimulationPanel().repaint();
 			}
 		});
 		add(selectPrev);
@@ -79,14 +79,14 @@ public class EnviroAddiParamPanel extends JPanel {
 		ActionListener next = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// if multiple objects are present, then the simulator will select the next item
-				if (LiquidApplication.getGUI().variables.selectedObject < LiquidApplication.getGUI().variables.objects.size()-1) {
-					LiquidApplication.getGUI().variables.selectedObject += 1;
+				if (LiquidApplication.getGUI().getFileVariables().getSelectedObject() < LiquidApplication.getGUI().getFileVariables().getObjects().size()-1) {
+					LiquidApplication.getGUI().getFileVariables().setSelectedObject(LiquidApplication.getGUI().getFileVariables().getSelectedObject()+1);
 				} else {
-					LiquidApplication.getGUI().variables.selectedObject = 0;
+					LiquidApplication.getGUI().getFileVariables().setSelectedObject(0);
 				}
-				LiquidApplication.getGUI().enviroeditor.setSelectedObject();
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
+				LiquidApplication.getGUI().getEditorPanel().setSelectedObjectPanel();
+				LiquidApplication.getGUI().getApplicationState().saveState();
+				LiquidApplication.getGUI().getSimulationPanel().repaint();
 			}
 		};
 		selectNext.addActionListener(next);
@@ -102,21 +102,21 @@ public class EnviroAddiParamPanel extends JPanel {
 		selectUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// updates an obstacle or drain item
-				if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
-						GlobalVar.EnviroOptions.Obstacles.toString() + " and " +
-						GlobalVar.EnviroOptions.Drains.toString())) {
-					LiquidApplication.getGUI().enviroeditor.obstacles.createObstacle(true);
+				if (LiquidApplication.getGUI().getEditorPanel().select.getSelectedItem().equals(
+						GlobalVariables.EnviroOptions.Obstacles.toString() + " and " +
+						GlobalVariables.EnviroOptions.Drains.toString())) {
+					LiquidApplication.getGUI().getEditorPanel().obstacles.createObstacle(true);
 
 				// updates a source item
-				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
-						GlobalVar.EnviroOptions.Sources.toString())) {
-					LiquidApplication.getGUI().enviroeditor.sources.createSource(true);
+				} else if (LiquidApplication.getGUI().getEditorPanel().select.getSelectedItem().equals(
+						GlobalVariables.EnviroOptions.Sources.toString())) {
+					LiquidApplication.getGUI().getEditorPanel().sources.createSource(true);
 				
 				// updates a flow meter item
-				} else if (LiquidApplication.getGUI().enviroeditor.select.getSelectedItem().equals(
-						GlobalVar.EnviroOptions.Flowmeters.toString() + " and " +
-						GlobalVar.EnviroOptions.Breakpoints.toString())) {
-					LiquidApplication.getGUI().enviroeditor.sensors.createSensor(true);
+				} else if (LiquidApplication.getGUI().getEditorPanel().select.getSelectedItem().equals(
+						GlobalVariables.EnviroOptions.Flowmeters.toString() + " and " +
+						GlobalVariables.EnviroOptions.Breakpoints.toString())) {
+					LiquidApplication.getGUI().getEditorPanel().sensors.createSensor(true);
 				}
 			}
         });
@@ -130,15 +130,15 @@ public class EnviroAddiParamPanel extends JPanel {
 		delete.setBounds(125,34,(int)(this.getWidth()/2.2),25);
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				LiquidApplication.getGUI().variables.objects.remove(LiquidApplication.getGUI().variables.selectedObject);
+				LiquidApplication.getGUI().getFileVariables().getObjects().remove(LiquidApplication.getGUI().getFileVariables().getSelectedObject());
 				
 				// additional parameters get disabled when there are no objects present
-				if (LiquidApplication.getGUI().variables.objects.size() == 0) {
+				if (LiquidApplication.getGUI().getFileVariables().getObjects().size() == 0) {
 					setEnabled(false);
 				}
-				LiquidApplication.getGUI().variables.selectedObject = 0;
-				LiquidApplication.getGUI().variables.saveState();
-				LiquidApplication.getGUI().sim.repaint();
+				LiquidApplication.getGUI().getFileVariables().setSelectedObject(0);
+				LiquidApplication.getGUI().getApplicationState().saveState();
+				LiquidApplication.getGUI().getSimulationPanel().repaint();
 			}
         });
 		add(delete);

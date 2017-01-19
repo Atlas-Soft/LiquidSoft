@@ -13,6 +13,8 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.particle.ParticleGroupDef;
 import org.jbox2d.particle.ParticleType;
 
+import liquid.core.LiquidApplication;
+
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -176,7 +178,11 @@ public class FluidEnvironment {
 		String data = "";
 		try {
 			for (int i = 0; i < particlePos.length; i++) {
-				if ((particlePos[i].x+particlePos[i].y+particleVel[i].x+particleVel[i].y) != 0.0) {
+				if ((particlePos[i].x+particlePos[i].y+particleVel[i].x+particleVel[i].y) != 0.0 &&
+						particlePos[i].x <= LiquidApplication.getGUI().getFileVariables().getEnvironmentWidth() &&
+						particlePos[i].y <= LiquidApplication.getGUI().getFileVariables().getEnvironmentHeight() &&
+						particlePos[i].x >= 0 &&
+						particlePos[i].y >= 0) {
 					data = "P "+adj.format(particlePos[i].x)+" "+adj.format(particlePos[i].y)+" "+adj.format(particleVel[i].length()*3+1.0);
 					dataList.add(data);}
 			}

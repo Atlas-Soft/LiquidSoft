@@ -1,19 +1,17 @@
 package liquid.gui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar;
+import liquid.core.GlobalVariables;
 import liquid.core.LiquidApplication;
 
 /**
@@ -37,13 +35,8 @@ public class ParameterPanel extends JPanel {
 	JComboBox<Integer> time;
 	JComboBox<String> tempVisc;
 	JCheckBox replay;
-	JButton run;
-	JButton pause;
-	JButton step;
-	JButton end;
 	
-	// used to set up the simulation when it's a new simulation, a file name exists, or it's paused
-	enum SetSim{NEW_SIM, YES_FILE, PAUSED};
+	ParameterPanelButtons paramPanelButtons = new ParameterPanelButtons();
 
 	/**
 	 * Constructor for the parameter panels. Currently, it is located on the right side
@@ -63,8 +56,8 @@ public class ParameterPanel extends JPanel {
 	 * default setting once the config file has been read. The buttons to begin/end simulations are also created here.
 	 */
     void initComponents() {
-		Font font = new Font("Verdana",Font.BOLD,10);
-		setFont(font);
+		//Font font = new Font("Verdana",Font.BOLD,10);
+		setFont(GlobalVariables.font);
 
 		// creates labels for the previously defined set of parameters
 		JLabel l = new JLabel("Liquid Type:");
@@ -91,8 +84,8 @@ public class ParameterPanel extends JPanel {
 		time.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				if (actualChange) {
-					LiquidApplication.getGUI().variables.runtime = (int)time.getSelectedItem();
-					LiquidApplication.getGUI().variables.saveState();}
+					LiquidApplication.getGUI().getFileVariables().setRuntime((int)time.getSelectedItem());
+					LiquidApplication.getGUI().getApplicationState().saveState();}
 			}
 		});
 		add(time);
@@ -106,10 +99,11 @@ public class ParameterPanel extends JPanel {
 		tempVisc = new JComboBox<String>();
 		liqsParam();
 		tempAndViscParam(0,100,(float)1.787,(float)0.282);
-		runButton();
-		pauseButton();
-		stepButton();
-		endButton();
+		add(paramPanelButtons.runButton());
+		add(paramPanelButtons.pauseButton());
+		add(paramPanelButtons.stepButton());
+		add(paramPanelButtons.endButton());
+		paramPanelButtons.setEnabledButtons(true,false,true,false);
 		reset();
 	}
 	
@@ -128,8 +122,8 @@ public class ParameterPanel extends JPanel {
 				if (actualChange) {
 					// sets the liquid type as well as resets the values of the temperature/viscosity drop-down
 					setLiquidType();
-					LiquidApplication.getGUI().variables.liquid = (String)liqs.getSelectedItem();
-					LiquidApplication.getGUI().variables.saveState();
+					LiquidApplication.getGUI().getFileVariables().setLiquid((String)liqs.getSelectedItem());
+					LiquidApplication.getGUI().getApplicationState().saveState();
 				}
 			}
 		});
@@ -148,7 +142,7 @@ public class ParameterPanel extends JPanel {
 			if (actualChange) 
 				liquid = (String)liqs.getSelectedItem();
 			else
-				liquid = (String)LiquidApplication.getGUI().variables.liquid;
+				liquid = (String)LiquidApplication.getGUI().getFileVariables().getLiquid();
 			
 			// liquid type matches, so gathers its freezing/boiling points and viscosity values
 			if (tokens[0].equals(liquid)) {
@@ -158,7 +152,7 @@ public class ParameterPanel extends JPanel {
 					tempMin = Float.parseFloat(tokens[1]);
 					origTemp = Float.parseFloat(((String)tempVisc.getSelectedItem()).split(" ")[0]);}
 				else {
-					origTemp = LiquidApplication.getGUI().variables.temperature;}
+					origTemp = LiquidApplication.getGUI().getFileVariables().getTemperature();}
 				
 				// resets the values of the temperature/viscosity based on the selected parameters
 				actualChange = false;
@@ -193,138 +187,25 @@ public class ParameterPanel extends JPanel {
 		else if (origTemp >= tempMax)
 			tempVisc.setSelectedIndex((int)(tempMax-tempMin-2));
 		tempVisc.setBounds(55,90,185,25);
-		tempVisc.addActionListener(new ActionListener() {
+		
+		for (ActionListener actionListener : tempVisc.getActionListeners())
+			tempVisc.removeActionListener(actionListener);
+		
+		tempVisc.addActionListener(tempAndViscActionListener());
+		add(tempVisc);
+	}
+	
+	public ActionListener tempAndViscActionListener() {
+		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				// sets the internal temperature/viscosity values when an actual change occurs
 				if (actualChange) {
 					String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
-					LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
-					LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
-					LiquidApplication.getGUI().variables.saveState();}
-			}
-		});
-		add(tempVisc);
-	}
-
-	/**
-	 * Method creates the Run button of the ParameterPanel class, which will begin a
-	 * simulation when all of the conditions have been met, such as a correct log file.
-	 */
-	public void runButton() {
-		// the 'Run' button works only when there is a log file present to record the data
-		run = new JButton("Run");
-		run.setBounds(25,510,115,25);
-		run.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				// paused simulations are technically on-going; specific parameters need to be set to continue simulating
-				if (LiquidApplication.getGUI().variables.simulating) {
-					run.setEnabled(false);
-					pause.setEnabled(true);
-					step.setEnabled(false);
-					prepareSim(SetSim.PAUSED, null);
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);
-					
-				// sets various parameters for a previously-saved simulation
-				} else if (LiquidApplication.getGUI().variables.filename != null &&
-						LiquidApplication.getGUI().variables.savedStates.size() <= 1) {
-					run.setEnabled(false);
-					pause.setEnabled(true);
-					step.setEnabled(false);
-					prepareSim(SetSim.YES_FILE, null);
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);
-				
-				// for new simulations, path calls Logger to set a valid log file name
-				} else {
-					String filename = LiquidFileChooser.setUpFile("SAVE");
-					if (filename != null) {
-						run.setEnabled(false);
-						pause.setEnabled(true);
-						step.setEnabled(false);
-						prepareSim(SetSim.NEW_SIM, filename);
-						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_RUN_SIM);}
-				}
-			}
-		});
-		add(run);
-	}
-	
-	/**
-	 * Method creates the Pause button, which will pause the simulation. During
-	 * this time, however, the user is unable to change any parameter details.
-	 */
-	public void pauseButton() {
-		// the 'Pause' button stops the simulation, but no parameter configurations are allowed during this state
-		pause = new JButton("Pause");
-		pause.setBounds(155,510,115,25);
-		pause.setEnabled(false);
-		pause.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				run.setEnabled(true);
-				pause.setEnabled(false);
-				step.setEnabled(true);
-				LiquidApplication.getGUI().console.print_to_Console("[Simulation Paused.]\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_PAUSE_SIM);
-			}
-		});
-		add(pause);
-	}
-	
-	/**
-	 * Method creates the Step button, which will proceed through the simulation one frame at a time.
-	 * Once pressed, the simulation is technically running, so no parameter configurations are allowed. 
-	 */
-	public void stepButton() {
-		// the 'Step' button proceeds through the simulation one frame at a time
-		step = new JButton("Step");
-		step.setBounds(25,545,115,25);
-		step.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				// when the simulation is paused, simply steps through one frame at a time
-				if (LiquidApplication.getGUI().variables.simulating) {
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
-					
-				// sets various parameters for a previously-saved simulation
-				} else if (LiquidApplication.getGUI().variables.filename != null &&
-						LiquidApplication.getGUI().variables.savedStates.size() >= 1) {
-					prepareSim(SetSim.YES_FILE, null);
-					LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);
-
-				// for new simulations, path calls Logger to set a valid log file name
-				} else {
-					String filename = LiquidFileChooser.setUpFile("SAVE");
-					if (filename != null){
-						prepareSim(SetSim.NEW_SIM, filename);
-						LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_STEP_SIM);}
-				}
-			}
-		});
-		add(step);
-	}
-	
-	/**
-	 * Method creates the End button, which ends the simulation. Once pressed, the log file will be
-	 * complete for replay, and any changes made will prompt the user to specify the log file name again.
-	 */
-	public void endButton() {
-		// the 'End' button dismisses the simulation
-		end = new JButton("End");
-		end.setBounds(155,545,115,25);
-		end.setEnabled(false);
-		end.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				run.setEnabled(true);
-				pause.setEnabled(false);
-				step.setEnabled(true);
-				end.setEnabled(false);
-				LiquidApplication.getGUI().setEnable(true);
-				LiquidApplication.getGUI().variables.simulating = false;
-				LiquidApplication.getGUI().variables.particles = new String[0];
-				LiquidApplication.getGUI().sim.repaint();
-				LiquidApplication.getGUI().console.print_to_Console("[Simulation Ended.]\n");
-				LiquidApplication.getGUI().send(LiquidApplication.getEngine(), GlobalVar.Request.REQUEST_END_SIM);
-			}
-		});
-		add(end);
+					LiquidApplication.getGUI().getFileVariables().setTemperature(Float.parseFloat(tokens[0]));
+					LiquidApplication.getGUI().getFileVariables().setViscosity(Float.parseFloat(tokens[2]));
+					LiquidApplication.getGUI().getApplicationState().saveState();}
+		}};
+		return actionListener;
 	}
 
 	/**
@@ -333,26 +214,12 @@ public class ParameterPanel extends JPanel {
 	 * @param route    - determines the route to take
 	 * @param filename - to pass in the file name (for new simulations only)
 	 */
-	public void prepareSim(SetSim route, String filename) {
-		end.setEnabled(true);
-		switch (route) {
-		case PAUSED: // when the simulation has been paused
-			return;
-		case YES_FILE: // when a file name is already present
-			setParamToRun();
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
-			break;
-		case NEW_SIM: // when NO file name is present
-			setParamToRun();
-			LiquidApplication.getGUI().variables.filename = filename;
-			LiquidApplication.getGUI().variables.savedStates.clear();
-			LiquidApplication.getGUI().variables.saveState();
-			LiquidApplication.getGUI().frame.setTitle(LiquidApplication.getGUI().variables.onlyFileName+GlobalVar.title);
-			LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVar.Request.REQUEST_WRITE_LOG_PARAM);
-			break;
-		default:
-		}
-		LiquidApplication.getGUI().console.print_to_Console("[Simulation Started.]\n");
+	public void recordParametersToLogFile(boolean newParameters) {
+		
+		if (newParameters)
+			LiquidApplication.getGUI().getApplicationState().reset();
+		
+		LiquidApplication.getGUI().send(LiquidApplication.getLogger(), GlobalVariables.Request.REQUEST_WRITE_LOG_PARAM);
 	}
 	
 	/**
@@ -360,12 +227,12 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void setParamToRun() {
 		LiquidApplication.getGUI().setEnable(false);
-		LiquidApplication.getGUI().variables.simulating = true;
-		LiquidApplication.getGUI().variables.liquid = (String) liqs.getSelectedItem();
-		LiquidApplication.getGUI().variables.runtime = (int) time.getSelectedItem();
+		LiquidApplication.getGUI().getFileVariables().setSimulating(true);
+		LiquidApplication.getGUI().getFileVariables().setLiquid((String)liqs.getSelectedItem());
+		LiquidApplication.getGUI().getFileVariables().setRuntime((int)time.getSelectedItem());
 		String[] tokens = ((String)tempVisc.getSelectedItem()).split(" ");
-		LiquidApplication.getGUI().variables.temperature = Float.parseFloat(tokens[0]);
-		LiquidApplication.getGUI().variables.viscosity = Float.parseFloat(tokens[2]);
+		LiquidApplication.getGUI().getFileVariables().setTemperature(Float.parseFloat(tokens[0]));
+		LiquidApplication.getGUI().getFileVariables().setViscosity(Float.parseFloat(tokens[2]));
 	}
 	
 	/**
@@ -373,8 +240,8 @@ public class ParameterPanel extends JPanel {
 	 */
 	public void setUndoParam() {
 		actualChange = false;
-		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
-		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
+		liqs.setSelectedItem(LiquidApplication.getGUI().getFileVariables().getLiquid());
+		time.setSelectedItem(LiquidApplication.getGUI().getFileVariables().getRuntime());
 		setLiquidType();
 		actualChange = true;
 	}
@@ -383,9 +250,9 @@ public class ParameterPanel extends JPanel {
 	 * The parameters in the parameter panel will get their values updated based on the information from the log file.
 	 */
 	public void logUpdate() {
-		liqs.setSelectedItem(LiquidApplication.getGUI().variables.liquid);
-		time.setSelectedItem(LiquidApplication.getGUI().variables.runtime);
-		tempVisc.setSelectedIndex((int)(LiquidApplication.getGUI().variables.temperature-tempMin-1));
+		liqs.setSelectedItem(LiquidApplication.getGUI().getFileVariables().getLiquid());
+		time.setSelectedItem(LiquidApplication.getGUI().getFileVariables().getRuntime());
+		tempVisc.setSelectedIndex((int)(LiquidApplication.getGUI().getFileVariables().getTemperature()-tempMin-1));
 	}
 	
 	/**
@@ -412,4 +279,6 @@ public class ParameterPanel extends JPanel {
 		replay.setSelected(false);
 		actualChange = true;
 	}
+	
+	public ParameterPanelButtons getParameterPanelButtons() {return paramPanelButtons;}
 }

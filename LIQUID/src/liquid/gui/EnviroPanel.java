@@ -60,12 +60,12 @@ public class EnviroPanel extends JPanel {
 	 */
 	public void enviroParam() {
 		// makes drop-downs for creating an environment
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroLenLimit; i++) {
 			enviroLen.addItem(Float.valueOf(i));}
 		enviroLen.setBounds(5,75,(int)(this.getWidth()/2.2),25);
 		add(enviroLen);
 					
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroWidLimit; i++) {
 			enviroWid.addItem(Float.valueOf(i));}
 		enviroWid.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		add(enviroWid);
@@ -81,13 +81,13 @@ public class EnviroPanel extends JPanel {
 		draw.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
 			// sets the length/width according to the drop-downs
-			LiquidApplication.getGUI().variables.enviroLength = (float) enviroLen.getSelectedItem();
-			LiquidApplication.getGUI().variables.enviroWidth = (float) enviroWid.getSelectedItem();
-			LiquidApplication.getGUI().variables.saveState();
-			LiquidApplication.getGUI().sim.repaint();
+			LiquidApplication.getGUI().getFileVariables().setEnvironmentWidth((float)enviroLen.getSelectedItem());
+			LiquidApplication.getGUI().getFileVariables().setEnvironmentHeight((float)enviroWid.getSelectedItem());
+			LiquidApplication.getGUI().getApplicationState().saveState();
+			LiquidApplication.getGUI().getSimulationPanel().repaint();
 			
-			EnvironmentEditorPanel.enviroLenLimit = (float) enviroLen.getSelectedItem();
-			EnvironmentEditorPanel.enviroWidLimit = (float) enviroWid.getSelectedItem();
+			EditorPanel.enviroLenLimit = (float) enviroLen.getSelectedItem();
+			EditorPanel.enviroWidLimit = (float) enviroWid.getSelectedItem();
 			updateLimits(); // resets the boundary limits
 			}
 		});
@@ -98,8 +98,8 @@ public class EnviroPanel extends JPanel {
 	 * Method sets the parameters of the Environment section of the EnvironmentEditorPanel.
 	 */
 	public void updateEnviro() {
-		enviroLen.setSelectedItem(LiquidApplication.getGUI().variables.enviroLength);
-		enviroWid.setSelectedItem(LiquidApplication.getGUI().variables.enviroWidth);
+		enviroLen.setSelectedItem(LiquidApplication.getGUI().getFileVariables().getEnvironmentWidth());
+		enviroWid.setSelectedItem(LiquidApplication.getGUI().getFileVariables().getEnvironmentHeight());
 		updateLimits();
 	}
 	
@@ -107,24 +107,24 @@ public class EnviroPanel extends JPanel {
 	 * Resets the limits to adjust the boundaries of creating various objects.
 	 */
 	public void updateLimits() {
-		LiquidApplication.getGUI().enviroeditor.obstacles.actualChange = false;
-		LiquidApplication.getGUI().enviroeditor.obstacles.xYParam(true);
-		LiquidApplication.getGUI().enviroeditor.obstacles.lenWidParam(true, true, 0);
-		LiquidApplication.getGUI().enviroeditor.obstacles.actualChange = true;
+		LiquidApplication.getGUI().getEditorPanel().obstacles.actualChange = false;
+		LiquidApplication.getGUI().getEditorPanel().obstacles.xYParam(true);
+		LiquidApplication.getGUI().getEditorPanel().obstacles.lenWidParam(true, true, 0);
+		LiquidApplication.getGUI().getEditorPanel().obstacles.actualChange = true;
 		
-		LiquidApplication.getGUI().enviroeditor.sources.sourcesParam();
+		LiquidApplication.getGUI().getEditorPanel().sources.sourcesParam();
 		
-		LiquidApplication.getGUI().enviroeditor.sensors.actualChange = false;
-		LiquidApplication.getGUI().enviroeditor.sensors.xYParam(true);
-		LiquidApplication.getGUI().enviroeditor.sensors.lenWidParam(true, true, 0);
-		LiquidApplication.getGUI().enviroeditor.sensors.actualChange = true;
+		LiquidApplication.getGUI().getEditorPanel().sensors.actualChange = false;
+		LiquidApplication.getGUI().getEditorPanel().sensors.xYParam(true);
+		LiquidApplication.getGUI().getEditorPanel().sensors.lenWidParam(true, true, 0);
+		LiquidApplication.getGUI().getEditorPanel().sensors.actualChange = true;
 	}
 	
 	/**
 	 * Method resets the parameters of the Environment section.
 	 */
 	public void resetEnviro() {
-		enviroLen.setSelectedItem(EnvironmentEditorPanel.enviroLenLimit);
-		enviroWid.setSelectedItem(EnvironmentEditorPanel.enviroWidLimit);
+		enviroLen.setSelectedItem(EditorPanel.enviroLenLimit);
+		enviroWid.setSelectedItem(EditorPanel.enviroWidLimit);
 	}
 }

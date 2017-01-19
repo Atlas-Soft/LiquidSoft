@@ -44,6 +44,6 @@ public class Source {
 		timer += delta;
 		if (timer >= 60/flowspeed) {
 			timer = 0;
-			enviro.addParticle(pos.x,pos.y,force.x,force.y);}
+			enviro.addParticle((pos.x+10),(pos.y+10),force.x,force.y);}
 	}
 }

@@ -12,7 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import liquid.core.GlobalVar;
+import liquid.core.GlobalVariables;
 import liquid.core.LiquidApplication;
 
 /**
@@ -75,20 +75,20 @@ public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 		
 		// makes the drop-downs needed to creating flow meters and break points
 		sensorType = new JComboBox<String>();
-		sensorType.addItem(GlobalVar.EnviroOptions.Flowmeters.toString());
-		sensorType.addItem(GlobalVar.EnviroOptions.Breakpoints.toString());
+		sensorType.addItem(GlobalVariables.EnviroOptions.Flowmeters.toString());
+		sensorType.addItem(GlobalVariables.EnviroOptions.Breakpoints.toString());
 		sensorType.setBounds(110,15,(int)(this.getWidth()/2),25);
 		sensorType.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				// sets the Length/Width drop-down options to be invisible for flow meters
-				if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Flowmeters.toString())) {
+				if (arg0.getItem().toString().equals(GlobalVariables.EnviroOptions.Flowmeters.toString())) {
 					lengthLab.setVisible(false);
 					widthLab.setVisible(false);
 					sensorL.setVisible(false);
 					sensorW.setVisible(false);
 					create.setBounds(65,115,115,25);
-				} else if (arg0.getItem().toString().equals(GlobalVar.EnviroOptions.Breakpoints.toString())) {
+				} else if (arg0.getItem().toString().equals(GlobalVariables.EnviroOptions.Breakpoints.toString())) {
 					lengthLab.setVisible(true);
 					widthLab.setVisible(true);
 					sensorL.setVisible(true);
@@ -123,7 +123,7 @@ public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 	public void xYParam(boolean enviroChange) {
 		// drop-down is newly populated due to an environment size change
 		sensorX.removeAllItems();
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroLenLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroLenLimit; i++) {
 			sensorX.addItem(Float.valueOf(i));}
 		sensorX.setBounds(5,75,(int)(this.getWidth()/2.2),25);
 		
@@ -139,7 +139,7 @@ public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 		
 		// drop-down is newly populated due to an environment size change
 		sensorY.removeAllItems();
-		for (int i = 0; i <= EnvironmentEditorPanel.enviroWidLimit; i++) {
+		for (int i = 0; i <= EditorPanel.enviroWidLimit; i++) {
 			sensorY.addItem(Float.valueOf(i));}
 		sensorY.setBounds(125,75,(int)(this.getWidth()/2.2),25);
 		
@@ -165,24 +165,24 @@ public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 		if (enviroChange || length) {
 			// drop-down is newly populated due to either an environment size change or a new X-Coordinate chosen
 			sensorL.removeAllItems();
-			for (int i = 0; i <= (EnvironmentEditorPanel.enviroLenLimit-limit); i++) {
+			for (int i = 0; i <= (EditorPanel.enviroLenLimit-limit); i++) {
 				sensorL.addItem(Float.valueOf(i));}
-			if (origLength <= (EnvironmentEditorPanel.enviroLenLimit-limit))
+			if (origLength <= (EditorPanel.enviroLenLimit-limit))
 				sensorL.setSelectedIndex((int)origLength);
 			else
-				sensorL.setSelectedIndex((int)(EnvironmentEditorPanel.enviroLenLimit-limit));
+				sensorL.setSelectedIndex((int)(EditorPanel.enviroLenLimit-limit));
 			sensorL.setBounds(5,125,(int)(this.getWidth()/2.2),25);
 			add(sensorL);}
 		
 		if (enviroChange || !length) {
 			// drop-down is newly populated due to either an environment size change or a new Y-Coordinate chosen
 			sensorW.removeAllItems();
-			for (int i = 0; i <= (EnvironmentEditorPanel.enviroWidLimit-limit); i++) {
+			for (int i = 0; i <= (EditorPanel.enviroWidLimit-limit); i++) {
 				sensorW.addItem(Float.valueOf(i));}
-			if (origWidth <= (EnvironmentEditorPanel.enviroWidLimit-limit))
+			if (origWidth <= (EditorPanel.enviroWidLimit-limit))
 				sensorW.setSelectedIndex((int)origWidth);
 			else
-				sensorW.setSelectedIndex((int)(EnvironmentEditorPanel.enviroWidLimit-limit));
+				sensorW.setSelectedIndex((int)(EditorPanel.enviroWidLimit-limit));
 			sensorW.setBounds(125,125,(int)(this.getWidth()/2.2),25);
 			add(sensorW);}
 	}
@@ -209,9 +209,15 @@ public class EnviroFlowmetersAndBreakpointsPanel extends JPanel {
 		params = new ArrayList<Float>();
 		params.add((Float)sensorX.getSelectedItem());
 		params.add((Float)sensorY.getSelectedItem());
-		params.add((Float)sensorL.getSelectedItem());
-		params.add((Float)sensorW.getSelectedItem());
-		LiquidApplication.getGUI().enviroeditor.addObject(sensorType, params, update);
+		
+		if (sensorType.getSelectedItem().toString().equals(GlobalVariables.ObjectType.Flowmeters.toString())) {
+			params.add(20f);
+			params.add(20f);}
+		else {
+			params.add((Float)sensorL.getSelectedItem());
+			params.add((Float)sensorW.getSelectedItem());}
+		
+		LiquidApplication.getGUI().getEditorPanel().addObject(sensorType, params, update);
 	}
 	
 	/**
