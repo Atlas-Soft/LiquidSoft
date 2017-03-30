@@ -14,9 +14,9 @@
 
 ## Getting Started
 
-### Requirements
+### Requirements:
 
-### Setup and Installation
+### Setup and Installation:
 
 ## License
 LiquidSoft is under the MIT License.
